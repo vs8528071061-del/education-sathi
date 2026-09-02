@@ -62,17 +62,16 @@
       </a>
 
       <!-- Quick Location Selector Dropdown -->
-      <div class="nav-location-picker d-none-sm">
+      <div class="nav-location-picker d-none-md">
         <i class="fa-solid fa-location-dot text-danger"></i>
         <select id="headerLocationSelect" onchange="handleLocationChange(this.value)">
-          <option value="all">📍 Pan India (All 36 States/UTs)</option>
-          <option value="madhya-pradesh" selected>🇮🇳 Madhya Pradesh (HQ)</option>
-          <option value="uttar-pradesh">🇮🇳 Uttar Pradesh</option>
-          <option value="maharashtra">🇮🇳 Maharashtra</option>
-          <option value="karnataka">🇮🇳 Karnataka</option>
-          <option value="rajasthan">🇮🇳 Rajasthan</option>
-          <option value="delhi">🇮🇳 Delhi NCR</option>
-          <option value="tamil-nadu">🇮🇳 Tamil Nadu</option>
+          <option value="madhya-pradesh" selected>MP (HQ)</option>
+          <option value="all">Pan India</option>
+          <option value="uttar-pradesh">Uttar Pradesh</option>
+          <option value="maharashtra">Maharashtra</option>
+          <option value="karnataka">Karnataka</option>
+          <option value="delhi">Delhi NCR</option>
+          <option value="rajasthan">Rajasthan</option>
         </select>
       </div>
 
@@ -80,9 +79,9 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#home" class="nav-item active" data-target="home"><i class="fa-solid fa-house"></i> Home</a></li>
         <li><a href="#destinations" class="nav-item" data-target="destinations"><i class="fa-solid fa-earth-asia"></i> 36 States</a></li>
-        <li><a href="#medical-courses" class="nav-item special-badge-link" data-target="medical-courses"><i class="fa-solid fa-stethoscope"></i> Medical <span class="nav-pill pulse">NEET</span></a></li>
+        <li><a href="#medical-courses" class="nav-item" data-target="medical-courses"><i class="fa-solid fa-stethoscope"></i> Medical</a></li>
         <li><a href="#courses" class="nav-item" data-target="courses"><i class="fa-solid fa-book-open"></i> Courses</a></li>
-        <li><a href="#scholarships" class="nav-item special-badge-link" data-target="scholarships"><i class="fa-solid fa-award"></i> Scholarships <span class="nav-pill gold">Portal</span></a></li>
+        <li><a href="#scholarships" class="nav-item" data-target="scholarships"><i class="fa-solid fa-award"></i> Scholarships</a></li>
         <li><a href="#ai-assistant" class="nav-item ai-pill-link" data-target="ai-assistant"><i class="fa-solid fa-robot"></i> Ask AI</a></li>
         <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-gauge-high"></i> Admin</a></li>
       </ul>
@@ -97,10 +96,10 @@
           <i class="fa-solid fa-moon"></i>
         </button>
         <button class="btn btn-primary btn-sm btn-counsel shadow-glow" onclick="openCounselModal()">
-          <i class="fa-solid fa-phone-volume"></i> Free Consultation
+          <i class="fa-solid fa-headset"></i> Free Consult
         </button>
         <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open mobile menu">
-          <i class="fa-solid fa-bars-staggered"></i>
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
     </div>
