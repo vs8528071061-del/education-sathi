@@ -517,16 +517,176 @@
       </div>
 
       <div class="container section">
-        <!-- State Colleges List & Filters -->
-        <div class="state-dashboard-header mb-4">
-          <div>
-            <h3>Top Government & Private Medical Colleges in <span id="stateNameSpan">Madhya Pradesh</span></h3>
-            <p class="text-muted">Filtered by state quota guidelines, previous cutoffs, and verified fee structures.</p>
+        <!-- MP TOP 500 COLLEGES MASTER DIRECTORY (Active when viewing Madhya Pradesh) -->
+        <div id="mp500ExplorerBlock" class="d-none">
+          <!-- Top 500 Header Banner -->
+          <div class="glass-card mb-4" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%), var(--bg-card); border: 2px solid var(--primary);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div>
+                <span class="badge-tag gold font-bold mb-2"><i class="fa-solid fa-trophy"></i> OFFICIAL STATE DIRECTORY</span>
+                <h2 class="mb-1">🏆 Madhya Pradesh Top 500 Colleges Master List</h2>
+                <p class="text-muted font-sm mb-0">Complete reference ranking across All 55 MP Districts • Engineering, Medical, AYUSH, Nursing, Pharmacy, Agriculture & Degree Colleges.</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <button class="btn btn-secondary btn-sm" onclick="exportMp500CSV()">
+                  <i class="fa-solid fa-file-csv"></i> Download MP 500 List (.csv)
+                </button>
+                <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20want%20counselling%20guidance%20for%20MP%20Colleges" target="_blank" class="btn btn-whatsapp btn-sm">
+                  <i class="fa-brands fa-whatsapp"></i> MP Helpline: 9752754404
+                </a>
+              </div>
+            </div>
+
+            <!-- MP 500 Quick KPI Summary -->
+            <div class="dashboard-stats-row mt-3 mb-1">
+              <div class="dash-stat-box blue">
+                <span class="dash-stat-num">500</span>
+                <span class="dash-stat-lbl">Ranked Institutions</span>
+              </div>
+              <div class="dash-stat-box gold">
+                <span class="dash-stat-num">120+</span>
+                <span class="dash-stat-lbl">Govt & Autonomous</span>
+              </div>
+              <div class="dash-stat-box green">
+                <span class="dash-stat-num">150+</span>
+                <span class="dash-stat-lbl">Medical & AYUSH</span>
+              </div>
+              <div class="dash-stat-box purple">
+                <span class="dash-stat-num">55</span>
+                <span class="dash-stat-lbl">Districts Covered</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5 Part Selector Pills -->
+          <div class="dash-tab-nav mb-3">
+            <button class="dash-tab-btn active" id="partTabAll" onclick="filterMpPart('all')">
+              🌟 All Colleges (1–500)
+            </button>
+            <button class="dash-tab-btn" id="partTab1" onclick="filterMpPart(1)">
+              Part 1 (Rank 1–100)
+            </button>
+            <button class="dash-tab-btn" id="partTab2" onclick="filterMpPart(2)">
+              Part 2 (Rank 101–200)
+            </button>
+            <button class="dash-tab-btn" id="partTab3" onclick="filterMpPart(3)">
+              Part 3 (Rank 201–300)
+            </button>
+            <button class="dash-tab-btn" id="partTab4" onclick="filterMpPart(4)">
+              Part 4 (Rank 301–400)
+            </button>
+            <button class="dash-tab-btn" id="partTab5" onclick="filterMpPart(5)">
+              Part 5 (Rank 401–500)
+            </button>
+          </div>
+
+          <!-- Filter & Search Controls -->
+          <div class="search-filter-card mb-4">
+            <div class="filter-row">
+              <div class="search-box-wrap" style="flex: 2;">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="mp500SearchInput" class="search-input" placeholder="Search college name, district (Bhopal, Indore, Jabalpur...), or stream..." oninput="filterMpCollegesList()" />
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mp500StreamFilter" class="filter-select" onchange="filterMpCollegesList()">
+                  <option value="all">🎓 All Streams (Medical, Tech, AYUSH...)</option>
+                  <option value="Medical">🩺 Medical (MBBS)</option>
+                  <option value="Dental">🦷 Dental (BDS)</option>
+                  <option value="BAMS">🌿 BAMS (Ayurveda)</option>
+                  <option value="BHMS">🧪 BHMS (Homeopathy)</option>
+                  <option value="BUMS">🏺 BUMS (Unani)</option>
+                  <option value="Nursing">💉 Nursing (B.Sc Nursing)</option>
+                  <option value="Pharmacy">💊 Pharmacy (B.Pharm/D.Pharm)</option>
+                  <option value="Engineering">⚙️ Engineering & Tech</option>
+                  <option value="Paramedical">🔬 Allied Health & Paramedical</option>
+                  <option value="Agriculture">🌾 Agriculture & Horticulture</option>
+                  <option value="Veterinary">🐾 Veterinary Science</option>
+                  <option value="Commerce">💼 Commerce & Management</option>
+                  <option value="Law">⚖️ Law</option>
+                  <option value="UG/PG">🏛️ Govt Degree / PG Colleges</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mp500TypeFilter" class="filter-select" onchange="filterMpCollegesList()">
+                  <option value="all">🏛️ All Types (Govt & Pvt)</option>
+                  <option value="Govt">🏛️ Government / Central</option>
+                  <option value="Private">🏢 Private / Autonomous</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mp500CityFilter" class="filter-select" onchange="filterMpCollegesList()">
+                  <option value="all">📍 All Cities & Districts</option>
+                  <option value="Bhopal">Bhopal</option>
+                  <option value="Indore">Indore</option>
+                  <option value="Jabalpur">Jabalpur</option>
+                  <option value="Gwalior">Gwalior</option>
+                  <option value="Ujjain">Ujjain</option>
+                  <option value="Rewa">Rewa</option>
+                  <option value="Sagar">Sagar</option>
+                  <option value="Satna">Satna</option>
+                  <option value="Vidisha">Vidisha</option>
+                  <option value="Dewas">Dewas</option>
+                  <option value="Chhindwara">Chhindwara</option>
+                  <option value="Sehore">Sehore</option>
+                  <option value="Raisen">Raisen</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-2 font-sm text-muted">
+              <span>Showing <strong id="mp500DisplayCount" class="text-primary">500</strong> of <strong>500</strong> Institutions</span>
+              <span class="text-emerald font-bold"><i class="fa-solid fa-circle-check"></i> MP MMVY 100% Scholarship Applicable</span>
+            </div>
+          </div>
+
+          <!-- MP 500 Master Table -->
+          <div class="comparison-matrix-wrapper mb-4">
+            <table class="compare-table" id="mp500MasterTable">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Rank</th>
+                  <th>College / Institution Name</th>
+                  <th>District / City</th>
+                  <th>Type</th>
+                  <th>Major Stream</th>
+                  <th>Admission Mode & Eligibility</th>
+                  <th>Fee & MMVY Waiver</th>
+                  <th>Expert Action</th>
+                </tr>
+              </thead>
+              <tbody id="mp500MasterTbody">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination / Load More Controls -->
+          <div class="d-flex justify-content-center align-items-center gap-3 my-4" id="mp500PaginationWrap">
+            <button class="btn btn-secondary btn-sm" id="btnMpPrev" onclick="changeMpPage(-1)">
+              <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <span class="font-bold text-muted font-sm">Page <span id="mpCurrentPageNum" class="text-primary">1</span> of <span id="mpTotalPagesNum">10</span></span>
+            <button class="btn btn-secondary btn-sm" id="btnMpNext" onclick="changeMpPage(1)">
+              Next <i class="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
         </div>
 
-        <div class="medical-colleges-grid" id="stateCollegesGrid">
-          <!-- Populated dynamically -->
+        <!-- Default State Medical Colleges Grid (For other 35 states/UTs) -->
+        <div id="standardStateCollegesBlock">
+          <div class="state-dashboard-header mb-4">
+            <div>
+              <h3>Top Government & Private Medical Colleges in <span id="stateNameSpan">Selected State</span></h3>
+              <p class="text-muted">Filtered by state quota guidelines, previous cutoffs, and verified fee structures.</p>
+            </div>
+          </div>
+
+          <div class="medical-colleges-grid" id="stateCollegesGrid">
+            <!-- Populated dynamically -->
+          </div>
         </div>
       </div>
     </section>
@@ -2024,6 +2184,7 @@
 
   <!-- Scripts -->
   <script src="js/data.js"></script>
+  <script src="js/mp_colleges_data.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

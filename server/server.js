@@ -282,6 +282,45 @@ app.get('/api/colleges', (req, res) => {
   res.json({ success: true, count: DB.getColleges().length, colleges: DB.getColleges() });
 });
 
+// Top 500 MP Colleges Search & Directory API
+app.get('/api/colleges/mp-top-500', (req, res) => {
+  try {
+    const { search, stream, type, part, city } = req.query;
+    let list = DB.getMpTop500Colleges();
+
+    if (search) {
+      const q = search.toLowerCase().trim();
+      list = list.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.city.toLowerCase().includes(q) || 
+        c.stream.toLowerCase().includes(q) ||
+        String(c.rank) === q
+      );
+    }
+    if (stream && stream !== 'all') {
+      list = list.filter(c => c.stream.toLowerCase().includes(stream.toLowerCase()));
+    }
+    if (type && type !== 'all') {
+      list = list.filter(c => c.type.toLowerCase().includes(type.toLowerCase()));
+    }
+    if (part && part !== 'all') {
+      list = list.filter(c => c.part === parseInt(part, 10));
+    }
+    if (city && city !== 'all') {
+      list = list.filter(c => c.city.toLowerCase().includes(city.toLowerCase()));
+    }
+
+    res.json({
+      success: true,
+      total: 500,
+      count: list.length,
+      colleges: list
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get('/api/courses', (req, res) => {
   res.json({ success: true, categories: DB.getCourses() });
 });

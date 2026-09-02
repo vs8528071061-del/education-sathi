@@ -25,6 +25,7 @@ const ADMINS_FILE = path.join(DATA_DIR, 'admins.json');
 const EMPLOYEES_FILE = path.join(DATA_DIR, 'employees.json');
 const CALLING_SCHEDULE_FILE = path.join(DATA_DIR, 'calling_schedule.json');
 const ADMISSIONS_FILE = path.join(DATA_DIR, 'admissions.json');
+const MP_500_FILE = path.join(DATA_DIR, 'mp_colleges_500.json');
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -596,7 +597,10 @@ const DB = {
       totalCallsScheduled: schedule.length,
       staffPerformance: staffStats
     };
-  }
+  },
+
+  // Top 500 Madhya Pradesh Colleges Master Dataset
+  getMpTop500Colleges: () => readJson(MP_500_FILE, [])
 };
 
 initAndSeed();

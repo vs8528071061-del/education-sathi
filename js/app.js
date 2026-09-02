@@ -236,32 +236,260 @@ function openStateDetail(destId) {
   const subEl = document.getElementById('stateDetailSubtitle');
   const nameSpan = document.getElementById('stateNameSpan');
   const grid = document.getElementById('stateCollegesGrid');
+  const mp500Block = document.getElementById('mp500ExplorerBlock');
+  const standardBlock = document.getElementById('standardStateCollegesBlock');
 
   if (titleEl) titleEl.innerText = `🇮🇳 ${dest.name}`;
   if (subEl) subEl.innerText = `Key Education Cities: ${dest.cities.join(', ')} | Medical Hubs: ${dest.medicalColleges} | Universities: ${dest.universities}`;
   if (nameSpan) nameSpan.innerText = dest.name;
 
-  // Filter colleges for this state
-  const stateColleges = EDUCATION_DATA.colleges.filter(c => c.state.toLowerCase() === dest.name.toLowerCase());
-  
-  if (grid) {
-    if (stateColleges.length === 0) {
-      grid.innerHTML = `
-        <div class="text-center py-5" style="grid-column: 1 / -1;">
-          <i class="fa-solid fa-building-columns text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-          <h3>Connecting to ${dest.name} State Directory</h3>
-          <p class="text-muted">Education Sathi provides direct counselling for ${dest.name} Government & Private colleges.</p>
-          <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20want%20college%20details%20for%20${encodeURIComponent(dest.name)}" target="_blank" class="btn btn-whatsapp mt-3">
-            <i class="fa-brands fa-whatsapp"></i> Inquire ${dest.name} Colleges on WhatsApp
-          </a>
-        </div>
-      `;
-    } else {
-      grid.innerHTML = stateColleges.map(renderCollegeCardHTML).join('');
+  const isMP = dest.id === 'madhya-pradesh' || dest.code === 'MP';
+
+  if (isMP) {
+    if (mp500Block) mp500Block.classList.remove('d-none');
+    if (standardBlock) standardBlock.classList.add('d-none');
+    initMp500Explorer();
+  } else {
+    if (mp500Block) mp500Block.classList.add('d-none');
+    if (standardBlock) standardBlock.classList.remove('d-none');
+
+    // Filter colleges for other states
+    const stateColleges = EDUCATION_DATA.colleges.filter(c => c.state.toLowerCase() === dest.name.toLowerCase());
+    
+    if (grid) {
+      if (stateColleges.length === 0) {
+        grid.innerHTML = `
+          <div class="text-center py-5" style="grid-column: 1 / -1;">
+            <i class="fa-solid fa-building-columns text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <h3>Connecting to ${dest.name} State Directory</h3>
+            <p class="text-muted">Education Sathi provides direct counselling for ${dest.name} Government & Private colleges.</p>
+            <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20want%20college%20details%20for%20${encodeURIComponent(dest.name)}" target="_blank" class="btn btn-whatsapp mt-3">
+              <i class="fa-brands fa-whatsapp"></i> Inquire ${dest.name} Colleges on WhatsApp
+            </a>
+          </div>
+        `;
+      } else {
+        grid.innerHTML = stateColleges.map(renderCollegeCardHTML).join('');
+      }
     }
   }
 
   navigateTo('state-detail');
+}
+
+// ==========================================================================
+// 3B. TOP 500 MADHYA PRADESH COLLEGES DIRECTORY CONTROLLER
+// ==========================================================================
+
+let mpActivePart = 'all';
+let mpCurrentPage = 1;
+const MP_PAGE_SIZE = 50;
+let mpFilteredList = [];
+
+function initMp500Explorer() {
+  mpActivePart = 'all';
+  mpCurrentPage = 1;
+  const partBtns = ['All', '1', '2', '3', '4', '5'];
+  partBtns.forEach(p => {
+    const b = document.getElementById(`partTab${p}`);
+    if (b) {
+      if (p === 'All') b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  });
+
+  const searchInp = document.getElementById('mp500SearchInput');
+  const streamSel = document.getElementById('mp500StreamFilter');
+  const typeSel = document.getElementById('mp500TypeFilter');
+  const citySel = document.getElementById('mp500CityFilter');
+  if (searchInp) searchInp.value = '';
+  if (streamSel) streamSel.value = 'all';
+  if (typeSel) typeSel.value = 'all';
+  if (citySel) citySel.value = 'all';
+
+  filterMpCollegesList();
+}
+
+function filterMpPart(part) {
+  mpActivePart = part;
+  mpCurrentPage = 1;
+
+  const partBtns = ['All', '1', '2', '3', '4', '5'];
+  partBtns.forEach(p => {
+    const b = document.getElementById(`partTab${p}`);
+    const key = p === 'All' ? 'all' : parseInt(p, 10);
+    if (b) {
+      if (key === part) b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  });
+
+  filterMpCollegesList();
+}
+
+function filterMpCollegesList() {
+  if (typeof MP_TOP_500_COLLEGES === 'undefined' || !MP_TOP_500_COLLEGES.length) return;
+
+  const search = (document.getElementById('mp500SearchInput')?.value || '').toLowerCase().trim();
+  const stream = document.getElementById('mp500StreamFilter')?.value || 'all';
+  const type = document.getElementById('mp500TypeFilter')?.value || 'all';
+  const city = document.getElementById('mp500CityFilter')?.value || 'all';
+
+  mpFilteredList = MP_TOP_500_COLLEGES.filter(c => {
+    const matchSearch = !search || 
+      c.name.toLowerCase().includes(search) || 
+      c.city.toLowerCase().includes(search) || 
+      c.stream.toLowerCase().includes(search) ||
+      String(c.rank) === search;
+
+    const matchPart = mpActivePart === 'all' || c.part === mpActivePart;
+    const matchStream = stream === 'all' || c.stream.toLowerCase().includes(stream.toLowerCase());
+    const matchType = type === 'all' || c.type.toLowerCase().includes(type.toLowerCase());
+    const matchCity = city === 'all' || c.city.toLowerCase().includes(city.toLowerCase());
+
+    return matchSearch && matchPart && matchStream && matchType && matchCity;
+  });
+
+  renderMp500Table();
+}
+
+function changeMpPage(direction) {
+  const totalPages = Math.ceil(mpFilteredList.length / MP_PAGE_SIZE) || 1;
+  const newPage = mpCurrentPage + direction;
+  if (newPage >= 1 && newPage <= totalPages) {
+    mpCurrentPage = newPage;
+    renderMp500Table();
+    const tableEl = document.getElementById('mp500MasterTable');
+    if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderMp500Table() {
+  const tbody = document.getElementById('mp500MasterTbody');
+  const countEl = document.getElementById('mp500DisplayCount');
+  const pageNumEl = document.getElementById('mpCurrentPageNum');
+  const totalPagesEl = document.getElementById('mpTotalPagesNum');
+  const prevBtn = document.getElementById('btnMpPrev');
+  const nextBtn = document.getElementById('btnMpNext');
+  const paginationWrap = document.getElementById('mp500PaginationWrap');
+
+  if (countEl) countEl.innerText = mpFilteredList.length;
+
+  const totalPages = Math.ceil(mpFilteredList.length / MP_PAGE_SIZE) || 1;
+  if (mpCurrentPage > totalPages) mpCurrentPage = totalPages;
+
+  if (pageNumEl) pageNumEl.innerText = mpCurrentPage;
+  if (totalPagesEl) totalPagesEl.innerText = totalPages;
+
+  if (prevBtn) prevBtn.disabled = mpCurrentPage <= 1;
+  if (nextBtn) nextBtn.disabled = mpCurrentPage >= totalPages;
+
+  if (paginationWrap) {
+    if (totalPages <= 1) paginationWrap.classList.add('d-none');
+    else paginationWrap.classList.remove('d-none');
+  }
+
+  if (!tbody) return;
+
+  if (!mpFilteredList.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted p-5">
+          <i class="fa-solid fa-graduation-cap font-xl mb-2 d-block"></i>
+          <h4>No colleges found matching your criteria.</h4>
+          <p class="font-sm text-muted">Try clearing the search box or selecting a different stream/district filter.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const start = (mpCurrentPage - 1) * MP_PAGE_SIZE;
+  const pageItems = mpFilteredList.slice(start, start + MP_PAGE_SIZE);
+
+  tbody.innerHTML = pageItems.map(c => {
+    let typeClass = 'blue';
+    if (c.type === 'Central') typeClass = 'purple';
+    else if (c.type === 'Private') typeClass = 'gold';
+
+    let streamClass = 'blue';
+    const sLower = c.stream.toLowerCase();
+    if (sLower.includes('medical') || sLower.includes('bams') || sLower.includes('dental')) streamClass = 'green';
+    else if (sLower.includes('engineering')) streamClass = 'blue';
+    else if (sLower.includes('nursing') || sLower.includes('pharmacy')) streamClass = 'purple';
+
+    const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I am interested in admission & counselling guidance for Rank #${c.rank}: ${c.name} (${c.city}, MP). Target Course: ${c.stream}. Please guide me.`);
+
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column align-items-center">
+            <span class="badge-tag gold font-bold" style="font-size: 0.85rem; padding: 0.35rem 0.6rem;">#${c.rank}</span>
+            <span class="text-xs text-muted mt-1">Part ${c.part}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md text-main">${c.name}</strong>
+            <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-emerald"></i> Verified MP Institution</span>
+          </div>
+        </td>
+        <td>
+          <span class="font-bold"><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}</span>
+        </td>
+        <td>
+          <span class="badge-tag ${typeClass}">${c.type}</span>
+        </td>
+        <td>
+          <span class="stream-pill">${c.stream}</span>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="font-xs font-bold text-primary">${c.admissionThrough}</span>
+            <span class="text-xs text-muted">${c.eligibility}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-xs text-emerald">${c.estFee}</strong>
+            <span class="badge-tag green text-xs mt-1" style="font-size: 0.7rem;"><i class="fa-solid fa-award"></i> MMVY 100% Eligible</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="WhatsApp Rahul Bhartiya for Cutoffs">
+              <i class="fa-brands fa-whatsapp"></i> Inquire
+            </a>
+            <a href="tel:9752754404" class="btn btn-outline-primary btn-sm" title="Helpline Call">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportMp500CSV() {
+  if (typeof MP_TOP_500_COLLEGES === 'undefined' || !MP_TOP_500_COLLEGES.length) {
+    showToast('MP Colleges data is loading...');
+    return;
+  }
+
+  let csv = "Rank,College Name,District/City,State,Type,Major Stream,Admission Mode,Eligibility,Estimated Fee,MMVY Waiver\n";
+  MP_TOP_500_COLLEGES.forEach(c => {
+    csv += `"${c.rank}","${c.name.replace(/"/g, '""')}","${c.city}","Madhya Pradesh","${c.type}","${c.stream}","${c.admissionThrough}","${c.eligibility}","${c.estFee}","100% MMVY Applicable"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `MP_Top_500_Colleges_Education_Sathi.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  showToast('Downloaded complete MP Top 500 Colleges spreadsheet!');
 }
 
 // ==========================================================================
@@ -1375,19 +1603,19 @@ async function handleRegisterAdmissionSubmit(e) {
 // --------------------------------------------------------------------------
 async function fetchStaffColleges() {
   try {
-    const res = await fetch(`${API_BASE_URL}/destinations/madhya-pradesh`);
+    const res = await fetch(`${API_BASE_URL}/colleges/mp-top-500`);
     const data = await res.json();
     if (data.success && data.colleges) {
       allStaffColleges = data.colleges;
     }
   } catch (e) {
-    if (window.EDUCATION_DATA && window.EDUCATION_DATA.colleges) {
-      allStaffColleges = window.EDUCATION_DATA.colleges;
+    if (typeof MP_TOP_500_COLLEGES !== 'undefined') {
+      allStaffColleges = MP_TOP_500_COLLEGES;
     }
   }
-  renderStaffColleges(allStaffColleges);
+  renderStaffColleges(allStaffColleges.slice(0, 100));
   const badge = document.getElementById('crmCollegesCount');
-  if (badge) badge.innerText = allStaffColleges.length;
+  if (badge) badge.innerText = allStaffColleges.length || 500;
 }
 
 function renderStaffColleges(colleges) {
@@ -1398,24 +1626,26 @@ function renderStaffColleges(colleges) {
     return;
   }
   tbody.innerHTML = colleges.map(c => {
-    const feeFormatted = c.tuitionFee < 10000 ? `₹${c.tuitionFee.toLocaleString()}/yr` : `₹${(c.tuitionFee / 100000).toFixed(2)} Lakh/yr`;
+    const feeFormatted = c.estFee || (c.tuitionFee < 10000 ? `₹${c.tuitionFee?.toLocaleString()}/yr` : `₹${(c.tuitionFee / 100000).toFixed(2)} Lakh/yr`);
+    const rankLabel = c.rank ? `#${c.rank}` : (c.nirfRank ? `NIRF #${c.nirfRank}` : 'Top');
     return `
       <tr>
         <td>
           <div class="d-flex flex-column">
             <strong class="font-md">${c.name}</strong>
+            <span class="text-xs text-muted">${c.stream || 'Medical / Tech'}</span>
           </div>
         </td>
         <td>
-          <span class="badge-tag ${c.type === 'Government' ? 'blue' : 'purple'}">${c.type}</span>
-          <span class="text-xs text-gold font-bold d-block mt-1">NIRF #${c.nirfRank}</span>
+          <span class="badge-tag ${c.type === 'Govt' || c.type === 'Government' ? 'blue' : 'purple'}">${c.type}</span>
+          <span class="text-xs text-gold font-bold d-block mt-1">Rank ${rankLabel}</span>
         </td>
-        <td><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}, ${c.state}</td>
-        <td><strong>${c.seats > 0 ? c.seats + ' Seats' : 'PG Only'}</strong></td>
-        <td><strong class="text-emerald">${feeFormatted}</strong></td>
-        <td><span><i class="fa-solid fa-bed-pulse text-primary"></i> ${c.hospitalBeds ? c.hospitalBeds + ' Beds' : 'Multi-Specialty'}</span></td>
+        <td><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}, MP</td>
+        <td><strong>${c.seats ? c.seats + ' Seats' : (c.stream || 'State Quota')}</strong></td>
+        <td><strong class="text-emerald font-xs">${feeFormatted}</strong></td>
+        <td><span><i class="fa-solid fa-graduation-cap text-primary"></i> ${c.admissionThrough || 'MP Online / DME'}</span></td>
         <td>
-          <a href="https://wa.me/?text=Hello,%20here%20are%20the%20details%20for%20*${encodeURIComponent(c.name)}*:%0AType:%20${c.type}%0AFee:%20${encodeURIComponent(feeFormatted)}%0ASeats:%20${c.seats}%0AGuidance%20by%20Education%20Sathi%20(9752754404)" target="_blank" class="btn btn-whatsapp btn-sm">
+          <a href="https://wa.me/?text=Hello,%20here%20are%20the%20details%20for%20*${encodeURIComponent(c.name)}*%20(${c.city},%20MP):%0AType:%20${c.type}%0ACourse:%20${encodeURIComponent(c.stream || 'Admissions')}%0AFee:%20${encodeURIComponent(feeFormatted)}%0AGuidance%20by%20Education%20Sathi%20(9752754404)" target="_blank" class="btn btn-whatsapp btn-sm">
             <i class="fa-brands fa-whatsapp"></i> Share
           </a>
         </td>
@@ -1425,17 +1655,18 @@ function renderStaffColleges(colleges) {
 }
 
 function filterStaffColleges() {
-  const query = document.getElementById('staffColSearch')?.value.toLowerCase() || '';
+  const query = document.getElementById('staffColSearch')?.value.toLowerCase().trim() || '';
   const type = document.getElementById('staffColTypeFilter')?.value || 'all';
 
   let filtered = allStaffColleges.filter(c => {
     const matchQ = c.name.toLowerCase().includes(query) ||
                    c.city.toLowerCase().includes(query) ||
-                   c.state.toLowerCase().includes(query);
-    const matchT = type === 'all' || c.type.toLowerCase() === type.toLowerCase();
+                   (c.stream && c.stream.toLowerCase().includes(query)) ||
+                   String(c.rank) === query;
+    const matchT = type === 'all' || c.type.toLowerCase().includes(type.toLowerCase());
     return matchQ && matchT;
   });
-  renderStaffColleges(filtered);
+  renderStaffColleges(filtered.slice(0, 100));
 }
 
 // Helper card rendering
