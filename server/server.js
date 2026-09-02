@@ -249,22 +249,131 @@ app.get('/api/counselling', (req, res) => {
   res.json({ success: true, authorities: DB.getCounselling() });
 });
 
-app.get('/api/stats', (req, res) => {
-  const leads = DB.getLeads();
-  const destinations = DB.getDestinations();
-  const colleges = DB.getColleges();
+// ==========================================================================
+// 8. EMPLOYEE & COUNSELOR PORTAL APIS
+// ==========================================================================
 
-  res.json({
-    success: true,
-    stats: {
-      totalLeads: leads.length,
-      newLeads: leads.filter(l => l.status === 'New').length,
-      inProgressLeads: leads.filter(l => l.status === 'In Progress').length,
-      admittedLeads: leads.filter(l => l.status === 'Admitted').length,
-      totalDestinations: destinations.length,
-      totalColleges: colleges.length
+// Employee Login
+app.post('/api/employee/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ success: false, error: 'Employee username and password are required.' });
     }
-  });
+
+    const employee = DB.validateEmployee(username.trim(), password.trim());
+    if (!employee) {
+      return res.status(401).json({ success: false, error: 'Invalid Employee ID or Password.' });
+    }
+
+    const token = 'emp-token-' + Date.now() + '-' + Math.random().toString(36).substr(2);
+    activeSessions.add(token);
+
+    console.log(`👨‍💼 Employee Logged In: ${employee.name} (${employee.role})`);
+    res.json({
+      success: true,
+      message: `Welcome back, ${employee.name}!`,
+      token,
+      employee: {
+        id: employee.id,
+        empCode: employee.empCode,
+        username: employee.username,
+        name: employee.name,
+        role: employee.role,
+        phone: employee.phone,
+        email: employee.email,
+        avatar: employee.avatar,
+        specialization: employee.specialization,
+        assignedTerritory: employee.assignedTerritory
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/employee/logout', (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (token) activeSessions.delete(token);
+  res.json({ success: true, message: 'Employee logged out successfully.' });
+});
+
+// Calling Schedule & Tasks
+app.get('/api/employee/schedule', (req, res) => {
+  try {
+    const { username } = req.query;
+    const schedule = DB.getCallingSchedule(username);
+    res.json({ success: true, count: schedule.length, schedule });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/employee/schedule', (req, res) => {
+  try {
+    const newTask = DB.addCallingTask(req.body);
+    res.status(201).json({ success: true, message: 'Calling task scheduled successfully.', task: newTask });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.patch('/api/employee/schedule/:id', (req, res) => {
+  try {
+    const updated = DB.updateCallingTask(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ success: false, error: 'Task not found' });
+    res.json({ success: true, message: 'Calling task updated.', task: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Confirmed Admissions & Student Enrollment Tracker
+app.get('/api/employee/admissions', (req, res) => {
+  try {
+    const list = DB.getAdmissions();
+    res.json({ success: true, count: list.length, admissions: list });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/employee/admissions', (req, res) => {
+  try {
+    const newAdm = DB.addAdmission(req.body);
+    res.status(201).json({ success: true, message: 'Student admission enrolled successfully.', admission: newAdm });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.patch('/api/employee/admissions/:id', (req, res) => {
+  try {
+    const updated = DB.updateAdmission(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ success: false, error: 'Admission record not found' });
+    res.json({ success: true, message: 'Admission record updated.', admission: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Employee Staff Directory
+app.get('/api/employee/staff', (req, res) => {
+  try {
+    const list = DB.getEmployees().map(e => ({
+      id: e.id,
+      empCode: e.empCode,
+      name: e.name,
+      role: e.role,
+      phone: e.phone,
+      email: e.email,
+      specialization: e.specialization,
+      assignedTerritory: e.assignedTerritory
+    }));
+    res.json({ success: true, staff: list });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 app.listen(PORT, () => {

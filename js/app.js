@@ -86,9 +86,10 @@ function navigateTo(viewId) {
   const validViews = [
     'home', 'destinations', 'state-detail', 'medical-courses', 
     'courses', 'scholarships', 'ai-assistant', 'predictor', 
-    'compare', 'student-profile', 'admin', 'counselling'
+    'compare', 'student-profile', 'admin', 'employee', 'counselling'
   ];
-  const targetId = validViews.includes(viewId) ? viewId : 'home';
+  let targetId = validViews.includes(viewId) ? viewId : 'home';
+  if (targetId === 'employee') targetId = 'admin'; // Unified Staff CRM
 
   // Toggle active view
   document.querySelectorAll('.app-view').forEach(view => {
@@ -102,8 +103,12 @@ function navigateTo(viewId) {
 
   // Update desktop nav
   document.querySelectorAll('.nav-item').forEach(link => {
-    if (link.getAttribute('data-target') === targetId) link.classList.add('active');
-    else link.classList.remove('active');
+    const dt = link.getAttribute('data-target');
+    if (dt === targetId || (dt === 'admin' && (targetId === 'admin' || targetId === 'employee'))) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
   });
 
   // Update mobile bottom nav
@@ -113,7 +118,7 @@ function navigateTo(viewId) {
   });
 
   if (targetId === 'admin') {
-    fetchCrmLeads();
+    checkEmployeeAuth();
   }
 
   window.location.hash = targetId;
@@ -542,64 +547,571 @@ function loadStudentProfile() {
 }
 
 // ==========================================================================
-// 7. SECURE ADMIN CRM & LOGIN / LOGOUT
 // ==========================================================================
-function checkAdminAuth() {
-  const token = localStorage.getItem('es_admin_token');
+// 7. EXECUTIVE EMPLOYEE & STAFF CRM SYSTEM
+// ==========================================================================
+
+let currentEmployee = null;
+let allCallingTasks = [];
+let allAdmissions = [];
+let allStaffColleges = [];
+let activeStaffTab = 'calls';
+
+function fillEmployeeLogin(username, password) {
+  const uInput = document.getElementById('adminUsername');
+  const pInput = document.getElementById('adminPassword');
+  if (uInput) uInput.value = username;
+  if (pInput) pInput.value = password;
+}
+
+function checkEmployeeAuth() {
+  const token = localStorage.getItem('es_employee_token') || localStorage.getItem('es_admin_token');
+  const savedEmp = localStorage.getItem('es_employee');
   const loginBox = document.getElementById('adminLoginBox');
   const dashContent = document.getElementById('adminDashboardContent');
   const authButtons = document.getElementById('adminAuthButtons');
 
-  if (token) {
-    isAdminAuthenticated = true;
+  if (token && savedEmp) {
+    try {
+      currentEmployee = JSON.parse(savedEmp);
+    } catch (e) {
+      currentEmployee = {
+        name: 'Pooja Verma',
+        role: 'Senior Medical Counselor',
+        empCode: 'ES-0101',
+        assignedTerritory: 'Madhya Pradesh & Karnataka',
+        specialization: 'MBBS & MD/MS Admissions',
+        avatar: '👩‍💼'
+      };
+    }
+
     if (loginBox) loginBox.classList.add('d-none');
     if (dashContent) dashContent.classList.remove('d-none');
     if (authButtons) authButtons.classList.remove('d-none');
+
+    // Update Employee Profile Display
+    const nameEl = document.getElementById('empName');
+    const roleEl = document.getElementById('empRoleBadge');
+    const codeEl = document.getElementById('empCodeBadge');
+    const territoryEl = document.getElementById('empTerritory');
+    const specEl = document.getElementById('empSpecialty');
+    const avatarEl = document.getElementById('empAvatarBox');
+    const staffBadge = document.getElementById('headerStaffBadge');
+
+    if (nameEl) nameEl.innerText = currentEmployee.name;
+    if (roleEl) roleEl.innerText = currentEmployee.role;
+    if (codeEl) codeEl.innerText = currentEmployee.empCode || 'ES-STAFF';
+    if (territoryEl) territoryEl.innerText = currentEmployee.assignedTerritory || 'Pan India';
+    if (specEl) specEl.innerText = currentEmployee.specialization || 'Medical Admissions';
+    if (staffBadge) staffBadge.innerHTML = `<i class="fa-solid fa-user-check"></i> ${currentEmployee.name}`;
+
+    if (avatarEl) {
+      if (currentEmployee.avatar && currentEmployee.avatar.includes('.jpg')) {
+        avatarEl.innerHTML = `<img src="${currentEmployee.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" />`;
+      } else {
+        avatarEl.innerText = currentEmployee.avatar || '👩‍💼';
+      }
+    }
+
+    // Load Live CRM Data
+    fetchEmployeeDashboard();
   } else {
-    isAdminAuthenticated = false;
+    currentEmployee = null;
     if (loginBox) loginBox.classList.remove('d-none');
     if (dashContent) dashContent.classList.add('d-none');
     if (authButtons) authButtons.classList.add('d-none');
   }
 }
 
-async function handleAdminLogin(e) {
+async function handleEmployeeLogin(e) {
   e.preventDefault();
   const u = document.getElementById('adminUsername')?.value;
   const p = document.getElementById('adminPassword')?.value;
 
   try {
-    const res = await fetch(`${API_BASE_URL}/admin/login`, {
+    const res = await fetch(`${API_BASE_URL}/employee/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: u, password: p })
     });
     const data = await res.json();
     if (data.success) {
-      localStorage.setItem('es_admin_token', data.token);
-      showToast(`Welcome Director Rahul Bhartiya!`);
-      checkAdminAuth();
-      fetchCrmLeads();
+      localStorage.setItem('es_employee_token', data.token);
+      localStorage.setItem('es_employee', JSON.stringify(data.employee));
+      showToast(`Welcome ${data.employee.name}! Logged into Staff CRM.`);
+      checkEmployeeAuth();
     } else {
       alert(data.error || 'Invalid credentials');
     }
   } catch (err) {
-    // Local admin fallback
-    if (u === 'admin' && p === 'educationsathi2026') {
-      localStorage.setItem('es_admin_token', 'local-admin-token');
-      showToast('Welcome Director Rahul Bhartiya (Offline Mode)!');
-      checkAdminAuth();
-      fetchCrmLeads();
+    // Local fallback for offline/demo use
+    let fallbackEmp = null;
+    if (u === 'emp01' && p === 'sathi2026') {
+      fallbackEmp = {
+        id: 'emp-01', empCode: 'ES-0101', username: 'emp01', name: 'Pooja Verma',
+        role: 'Senior Medical Counselor', avatar: '👩‍💼',
+        assignedTerritory: 'Madhya Pradesh & Karnataka', specialization: 'MBBS & MD/MS Admissions'
+      };
+    } else if (u === 'emp02' && p === 'sathi2026') {
+      fallbackEmp = {
+        id: 'emp-02', empCode: 'ES-0102', username: 'emp02', name: 'Amit Sharma',
+        role: 'Telecalling & AYUSH Specialist', avatar: '👨‍💼',
+        assignedTerritory: 'Uttar Pradesh & Rajasthan', specialization: 'BAMS, BHMS & BDS Quotas'
+      };
+    } else if (u === 'admin' && p === 'educationsathi2026') {
+      fallbackEmp = {
+        id: 'admin-1', empCode: 'ES-DIR', username: 'admin', name: 'Rahul Bhartiya',
+        role: 'Director & Apex Counselor', avatar: 'images/director_rahul_bhartiya.jpg',
+        assignedTerritory: 'All 36 States & UTs', specialization: 'Pan-India Medical & MMVY Scheme'
+      };
+    }
+
+    if (fallbackEmp) {
+      localStorage.setItem('es_employee_token', 'local-emp-token');
+      localStorage.setItem('es_employee', JSON.stringify(fallbackEmp));
+      showToast(`Welcome ${fallbackEmp.name}!`);
+      checkEmployeeAuth();
     } else {
-      alert('Invalid username or password');
+      alert('Invalid username or password. Please try emp01 / sathi2026 or admin / educationsathi2026.');
     }
   }
 }
 
-function handleAdminLogout() {
+function handleEmployeeLogout() {
+  localStorage.removeItem('es_employee_token');
+  localStorage.removeItem('es_employee');
   localStorage.removeItem('es_admin_token');
-  showToast('Logged out of Admin Portal');
-  checkAdminAuth();
+  showToast('Logged out of Staff CRM.');
+  checkEmployeeAuth();
+}
+
+function fetchEmployeeDashboard() {
+  fetchCallingSchedule();
+  fetchCrmLeads();
+  fetchAdmissions();
+  fetchStaffColleges();
+}
+
+// Staff Tabs Switcher
+function switchStaffTab(tabKey) {
+  activeStaffTab = tabKey;
+  const tabs = ['calls', 'leads', 'admissions', 'colleges'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const pane = document.getElementById(`pane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (t === tabKey) {
+      if (btn) btn.classList.add('active');
+      if (pane) pane.classList.remove('d-none');
+    } else {
+      if (btn) btn.classList.remove('active');
+      if (pane) pane.classList.add('d-none');
+    }
+  });
+}
+
+// --------------------------------------------------------------------------
+// Calling Schedule Handlers
+// --------------------------------------------------------------------------
+async function fetchCallingSchedule() {
+  const username = currentEmployee?.username || '';
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/schedule?username=${encodeURIComponent(username)}`);
+    const data = await res.json();
+    if (data.success) {
+      allCallingTasks = data.schedule;
+    }
+  } catch (e) {
+    if (!allCallingTasks.length) {
+      allCallingTasks = [
+        {
+          id: 'call-101', studentName: 'Ananya Sharma', phone: '9826012345', targetCourse: 'MBBS (MP State Quota)',
+          neetScore: 565, scheduledTime: '10:30 AM', priority: 'High',
+          lastOutcome: 'Parent interested in GMC Bhopal or MGM Indore. Need state merit list check.',
+          counselorName: currentEmployee?.name || 'Pooja Verma', status: 'Scheduled'
+        },
+        {
+          id: 'call-102', studentName: 'Rohan Gupta', phone: '9752109876', targetCourse: 'MP MMVY Scholarship (100% Waiver)',
+          neetScore: 512, scheduledTime: '12:00 PM', priority: 'Urgent',
+          lastOutcome: 'Annual income certificate under 6 Lakhs verified. Need Domicile certificate copy.',
+          counselorName: currentEmployee?.name || 'Pooja Verma', status: 'Scheduled'
+        },
+        {
+          id: 'call-103', studentName: 'Priya Patel', phone: '9827099881', targetCourse: 'Private MBBS (Karnataka / UP)',
+          neetScore: 438, scheduledTime: '02:30 PM', priority: 'Normal',
+          lastOutcome: 'Budget 12 Lakhs/yr. Recommended KMC Manipal & UP Private Medical Colleges.',
+          counselorName: 'Amit Sharma', status: 'Scheduled'
+        },
+        {
+          id: 'call-104', studentName: 'Siddharth Verma', phone: '9752334411', targetCourse: 'BAMS Ayurveda Govt College',
+          neetScore: 475, scheduledTime: '04:00 PM', priority: 'Normal',
+          lastOutcome: 'High probability for Pt. Khushilal Bhopal. Requested hostel fees detail.',
+          counselorName: 'Amit Sharma', status: 'Scheduled'
+        },
+        {
+          id: 'call-105', studentName: 'Dr. Vivek Rathore', phone: '9425011223', targetCourse: 'MD/MS Medical PG (Medicine)',
+          neetScore: 610, scheduledTime: '05:30 PM', priority: 'High',
+          lastOutcome: 'Targeting DNB Medicine / MD Pediatrics in Top Deemed or Govt Institutes.',
+          counselorName: 'Rahul Bhartiya', status: 'Scheduled'
+        }
+      ];
+    }
+  }
+  renderCallingSchedule(allCallingTasks);
+  const badge = document.getElementById('badgeCallCount');
+  const cardBadge = document.getElementById('crmCallsTodayCount');
+  if (badge) badge.innerText = allCallingTasks.length;
+  if (cardBadge) cardBadge.innerText = allCallingTasks.length;
+}
+
+function renderCallingSchedule(tasks) {
+  const tbody = document.getElementById('callingScheduleTbody');
+  if (!tbody) return;
+  if (!tasks.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-4">No scheduled calls found matching criteria.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = tasks.map(t => {
+    const priorityClass = t.priority === 'Urgent' ? 'red' : (t.priority === 'High' ? 'gold' : 'green');
+    return `
+      <tr class="call-row">
+        <td>
+          <div class="d-flex flex-column gap-1">
+            <strong><i class="fa-solid fa-clock text-primary"></i> ${t.scheduledTime}</strong>
+            <span class="badge-tag ${priorityClass}">${t.priority}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md">${t.studentName}</strong>
+            <a href="tel:${t.phone}" class="text-primary font-bold"><i class="fa-solid fa-phone-volume font-sm"></i> ${t.phone}</a>
+          </div>
+        </td>
+        <td><span class="stream-pill">${t.targetCourse}</span></td>
+        <td><strong>${t.neetScore > 0 ? t.neetScore : '—'}</strong></td>
+        <td><p class="mb-0 text-muted font-sm" style="max-width:280px;">${t.lastOutcome || 'Counselling follow-up'}</p></td>
+        <td><span class="text-xs font-bold text-muted">${t.counselorName || 'Assigned'}</span></td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="tel:${t.phone}" class="btn btn-outline-primary btn-sm" title="Direct Phone Call">
+              <i class="fa-solid fa-phone"></i> Call
+            </a>
+            <a href="https://wa.me/91${t.phone}?text=Hello%20${encodeURIComponent(t.studentName)},%20I%20am%20calling%20from%20Education%20Sathi%20regarding%20your%20${encodeURIComponent(t.targetCourse)}%20admission%20guidance." target="_blank" class="btn btn-whatsapp btn-sm" title="Chat on WhatsApp">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <button class="btn btn-gold btn-sm" onclick="openCallOutcomeModal('${t.id}')" title="Log Call Outcome">
+              <i class="fa-solid fa-pen-to-square"></i> Log
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterCallingSchedule() {
+  const query = document.getElementById('callSearchInput')?.value.toLowerCase() || '';
+  const priority = document.getElementById('callPriorityFilter')?.value || 'all';
+
+  let filtered = allCallingTasks.filter(t => {
+    const matchQuery = t.studentName.toLowerCase().includes(query) ||
+                       t.phone.includes(query) ||
+                       t.targetCourse.toLowerCase().includes(query);
+    const matchPriority = priority === 'all' || t.priority === priority;
+    return matchQuery && matchPriority;
+  });
+  renderCallingSchedule(filtered);
+}
+
+function openScheduleCallModal() {
+  const dateInput = document.getElementById('schedDate');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = new Date().toISOString().split('T')[0];
+  }
+  const modal = document.getElementById('scheduleCallModalOverlay');
+  if (modal) modal.classList.add('active');
+}
+function closeScheduleCallModal() {
+  const modal = document.getElementById('scheduleCallModalOverlay');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleScheduleCallSubmit(e) {
+  e.preventDefault();
+  const newTask = {
+    studentName: document.getElementById('schedStudentName').value.trim(),
+    phone: document.getElementById('schedStudentPhone').value.trim(),
+    targetCourse: document.getElementById('schedCourse').value.trim(),
+    neetScore: document.getElementById('schedNeetScore').value,
+    scheduledDate: document.getElementById('schedDate').value,
+    scheduledTime: document.getElementById('schedTime').value.trim(),
+    priority: document.getElementById('schedPriority').value,
+    callType: document.getElementById('schedAgenda').value.trim(),
+    lastOutcome: document.getElementById('schedAgenda').value.trim(),
+    counselorName: currentEmployee?.name || 'Rahul Bhartiya',
+    counselorUsername: currentEmployee?.username || 'emp01'
+  };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/schedule`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTask)
+    });
+    const d = await res.json();
+    if (d.success) {
+      allCallingTasks.unshift(d.task);
+    }
+  } catch (err) {
+    newTask.id = 'call-' + Date.now();
+    allCallingTasks.unshift(newTask);
+  }
+
+  showToast(`Call scheduled with ${newTask.studentName}!`);
+  closeScheduleCallModal();
+  renderCallingSchedule(allCallingTasks);
+}
+
+function openCallOutcomeModal(taskId) {
+  const task = allCallingTasks.find(t => t.id === taskId);
+  if (!task) return;
+  const idInput = document.getElementById('outcomeTaskId');
+  const label = document.getElementById('outcomeStudentLabel');
+  const notes = document.getElementById('outcomeNotes');
+  if (idInput) idInput.value = taskId;
+  if (label) label.innerText = `Student: ${task.studentName} (${task.phone})`;
+  if (notes) notes.value = task.lastOutcome || '';
+
+  const modal = document.getElementById('callOutcomeModalOverlay');
+  if (modal) modal.classList.add('active');
+}
+function closeCallOutcomeModal() {
+  const modal = document.getElementById('callOutcomeModalOverlay');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleCallOutcomeSubmit(e) {
+  e.preventDefault();
+  const taskId = document.getElementById('outcomeTaskId').value;
+  const status = document.getElementById('outcomeStatus').value;
+  const notes = document.getElementById('outcomeNotes').value.trim();
+
+  try {
+    await fetch(`${API_BASE_URL}/employee/schedule/${taskId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, lastOutcome: notes })
+    });
+  } catch (err) {
+    // Local update
+  }
+
+  const idx = allCallingTasks.findIndex(t => t.id === taskId);
+  if (idx !== -1) {
+    allCallingTasks[idx].status = status;
+    allCallingTasks[idx].lastOutcome = notes;
+  }
+
+  showToast('Call notes logged successfully!');
+  closeCallOutcomeModal();
+  renderCallingSchedule(allCallingTasks);
+}
+
+// --------------------------------------------------------------------------
+// Confirmed Admissions Handlers
+// --------------------------------------------------------------------------
+async function fetchAdmissions() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/admissions`);
+    const data = await res.json();
+    if (data.success) {
+      allAdmissions = data.admissions;
+    }
+  } catch (e) {
+    if (!allAdmissions.length) {
+      allAdmissions = [
+        {
+          id: 'adm-01', studentName: 'Aditi Rao', phone: '9826198765',
+          allottedCollege: 'Gandhi Medical College (GMC), Bhopal', course: 'MBBS (Bachelor of Medicine)',
+          admissionQuota: 'MP State 85% Quota', annualFee: '₹1,00,000 / yr', feeReceiptNo: 'REC-GMC-2026-881',
+          scholarshipClaimed: 'MP MMVY (100% Tuition Waiver Granted)', documentStatus: 'Verified & Submitted',
+          assignedCounselor: 'Rahul Bhartiya'
+        },
+        {
+          id: 'adm-02', studentName: 'Vikram Solanki', phone: '9826334455',
+          allottedCollege: 'Index Medical College, Indore', course: 'MBBS (Bachelor of Medicine)',
+          admissionQuota: 'Private State Merit', annualFee: '₹12,50,000 / yr', feeReceiptNo: 'REC-IMC-2026-402',
+          scholarshipClaimed: 'None (Self-Financed)', documentStatus: 'Originals Deposited',
+          assignedCounselor: 'Pooja Verma'
+        },
+        {
+          id: 'adm-03', studentName: 'Meera Nair', phone: '9752889900',
+          allottedCollege: 'Pt. Khushilal Sharma Govt Ayurveda College, Bhopal', course: 'BAMS (Ayurvedacharya)',
+          admissionQuota: 'MP State Quota', annualFee: '₹40,000 / yr', feeReceiptNo: 'REC-PKAC-2026-193',
+          scholarshipClaimed: 'State Post-Matric Merit', documentStatus: 'Verified & Submitted',
+          assignedCounselor: 'Amit Sharma'
+        }
+      ];
+    }
+  }
+  renderAdmissions(allAdmissions);
+  const badge = document.getElementById('badgeAdmCount');
+  const cardBadge = document.getElementById('crmAdmittedCount');
+  if (badge) badge.innerText = allAdmissions.length;
+  if (cardBadge) cardBadge.innerText = allAdmissions.length;
+}
+
+function renderAdmissions(list) {
+  const tbody = document.getElementById('admissionsTbody');
+  if (!tbody) return;
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-4">No confirmed student admissions recorded yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map(a => `
+    <tr>
+      <td>
+        <div class="d-flex flex-column">
+          <strong class="font-md">${a.studentName}</strong>
+          <a href="tel:${a.phone}" class="text-primary font-bold"><i class="fa-solid fa-phone font-sm"></i> ${a.phone}</a>
+        </div>
+      </td>
+      <td>
+        <div class="d-flex flex-column">
+          <strong>${a.allottedCollege}</strong>
+        </div>
+      </td>
+      <td>
+        <div class="d-flex flex-column gap-1">
+          <span class="stream-pill">${a.course}</span>
+          <span class="badge-tag blue">${a.admissionQuota}</span>
+        </div>
+      </td>
+      <td>
+        <div class="d-flex flex-column">
+          <strong class="text-emerald">${a.annualFee}</strong>
+          <span class="text-xs text-muted">Receipt: ${a.feeReceiptNo}</span>
+        </div>
+      </td>
+      <td>
+        <span class="badge-tag gold">${a.scholarshipClaimed}</span>
+      </td>
+      <td>
+        <span class="badge-tag green"><i class="fa-solid fa-circle-check"></i> ${a.documentStatus}</span>
+      </td>
+      <td><span class="text-xs font-bold text-muted">${a.assignedCounselor}</span></td>
+    </tr>
+  `).join('');
+}
+
+function openRegisterAdmissionModal() {
+  const modal = document.getElementById('registerAdmissionModalOverlay');
+  if (modal) modal.classList.add('active');
+}
+function closeRegisterAdmissionModal() {
+  const modal = document.getElementById('registerAdmissionModalOverlay');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleRegisterAdmissionSubmit(e) {
+  e.preventDefault();
+  const newAdmission = {
+    studentName: document.getElementById('admStudentName').value.trim(),
+    phone: document.getElementById('admStudentPhone').value.trim(),
+    allottedCollege: document.getElementById('admCollegeName').value.trim(),
+    course: document.getElementById('admCourse').value,
+    admissionQuota: document.getElementById('admQuota').value,
+    category: document.getElementById('admCategory').value,
+    annualFee: document.getElementById('admAnnualFee').value.trim(),
+    feeReceiptNo: document.getElementById('admReceiptNo').value.trim(),
+    scholarshipClaimed: document.getElementById('admScholarship').value.trim(),
+    documentStatus: document.getElementById('admDocStatus').value,
+    assignedCounselor: currentEmployee?.name || 'Rahul Bhartiya'
+  };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/admissions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newAdmission)
+    });
+    const d = await res.json();
+    if (d.success) allAdmissions.unshift(d.admission);
+  } catch (err) {
+    newAdmission.id = 'adm-' + Date.now();
+    allAdmissions.unshift(newAdmission);
+  }
+
+  showToast(`Admission enrolled for ${newAdmission.studentName}!`);
+  closeRegisterAdmissionModal();
+  renderAdmissions(allAdmissions);
+}
+
+// --------------------------------------------------------------------------
+// Staff College Matrix & Fee Lookup Handlers
+// --------------------------------------------------------------------------
+async function fetchStaffColleges() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/destinations/madhya-pradesh`);
+    const data = await res.json();
+    if (data.success && data.colleges) {
+      allStaffColleges = data.colleges;
+    }
+  } catch (e) {
+    if (window.EDUCATION_DATA && window.EDUCATION_DATA.colleges) {
+      allStaffColleges = window.EDUCATION_DATA.colleges;
+    }
+  }
+  renderStaffColleges(allStaffColleges);
+  const badge = document.getElementById('crmCollegesCount');
+  if (badge) badge.innerText = allStaffColleges.length;
+}
+
+function renderStaffColleges(colleges) {
+  const tbody = document.getElementById('staffCollegesTbody');
+  if (!tbody) return;
+  if (!colleges.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-4">No colleges found matching filter.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = colleges.map(c => {
+    const feeFormatted = c.tuitionFee < 10000 ? `₹${c.tuitionFee.toLocaleString()}/yr` : `₹${(c.tuitionFee / 100000).toFixed(2)} Lakh/yr`;
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md">${c.name}</strong>
+          </div>
+        </td>
+        <td>
+          <span class="badge-tag ${c.type === 'Government' ? 'blue' : 'purple'}">${c.type}</span>
+          <span class="text-xs text-gold font-bold d-block mt-1">NIRF #${c.nirfRank}</span>
+        </td>
+        <td><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}, ${c.state}</td>
+        <td><strong>${c.seats > 0 ? c.seats + ' Seats' : 'PG Only'}</strong></td>
+        <td><strong class="text-emerald">${feeFormatted}</strong></td>
+        <td><span><i class="fa-solid fa-bed-pulse text-primary"></i> ${c.hospitalBeds ? c.hospitalBeds + ' Beds' : 'Multi-Specialty'}</span></td>
+        <td>
+          <a href="https://wa.me/?text=Hello,%20here%20are%20the%20details%20for%20*${encodeURIComponent(c.name)}*:%0AType:%20${c.type}%0AFee:%20${encodeURIComponent(feeFormatted)}%0ASeats:%20${c.seats}%0AGuidance%20by%20Education%20Sathi%20(9752754404)" target="_blank" class="btn btn-whatsapp btn-sm">
+            <i class="fa-brands fa-whatsapp"></i> Share
+          </a>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterStaffColleges() {
+  const query = document.getElementById('staffColSearch')?.value.toLowerCase() || '';
+  const type = document.getElementById('staffColTypeFilter')?.value || 'all';
+
+  let filtered = allStaffColleges.filter(c => {
+    const matchQ = c.name.toLowerCase().includes(query) ||
+                   c.city.toLowerCase().includes(query) ||
+                   c.state.toLowerCase().includes(query);
+    const matchT = type === 'all' || c.type.toLowerCase() === type.toLowerCase();
+    return matchQ && matchT;
+  });
+  renderStaffColleges(filtered);
 }
 
 // Helper card rendering
@@ -844,32 +1356,68 @@ async function fetchCrmLeads() {
 }
 function updateCrmStats(leads) {
   const tot = document.getElementById('crmTotalLeads');
-  const nw = document.getElementById('crmNewLeads');
-  const inp = document.getElementById('crmInProgressLeads');
-  const adm = document.getElementById('crmAdmittedLeads');
+  const leadBadge = document.getElementById('badgeLeadCount');
   if (tot) tot.innerText = leads.length;
-  if (nw) nw.innerText = leads.filter(l => l.status === 'New').length;
-  if (inp) inp.innerText = leads.filter(l => l.status === 'In Progress' || l.status === 'Contacted').length;
-  if (adm) adm.innerText = leads.filter(l => l.status === 'Admitted').length;
+  if (leadBadge) leadBadge.innerText = leads.length;
 }
+
 function renderCrmLeads(leads) {
   const tbody = document.getElementById('crmLeadsTbody');
   if (!tbody) return;
-  tbody.innerHTML = leads.map(l => `
-    <tr>
-      <td><strong>${l.studentName}</strong></td>
-      <td><a href="tel:${l.phone}" class="font-bold text-primary">${l.phone}</a></td>
-      <td>${l.targetCourse}</td>
-      <td>${l.domicileState || 'MP'}</td>
-      <td>${l.neetScore > 0 ? l.neetScore : '—'}</td>
-      <td><span class="badge-tag ${l.status === 'New' ? 'blue' : (l.status === 'Admitted' ? 'green' : 'gold')}">${l.status}</span></td>
-      <td>
-        <a href="https://wa.me/91${l.phone}?text=Hello%20${encodeURIComponent(l.studentName)},%20I%20am%20Rahul%20Bhartiya%20(Education%20Sathi)." target="_blank" class="btn btn-whatsapp btn-sm">
-          <i class="fa-brands fa-whatsapp"></i>
-        </a>
-      </td>
-    </tr>
-  `).join('');
+  if (!leads.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted p-4">No student leads found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = leads.map(l => {
+    const counselor = l.assignedCounselor || currentEmployee?.name || 'Rahul Bhartiya';
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md">${l.studentName}</strong>
+            <span class="text-xs text-muted">Counselor: ${counselor}</span>
+          </div>
+        </td>
+        <td>
+          <a href="tel:${l.phone}" class="font-bold text-primary d-block"><i class="fa-solid fa-phone font-sm"></i> ${l.phone}</a>
+        </td>
+        <td><span class="stream-pill">${l.targetCourse}</span></td>
+        <td>${l.domicileState || 'MP'}</td>
+        <td><strong>${l.neetScore > 0 ? l.neetScore : '—'}</strong></td>
+        <td>
+          <select class="status-select-pill" onchange="updateLeadStatus('${l.id}', this.value)">
+            <option value="New" ${l.status === 'New' ? 'selected' : ''}>🔵 New Inquiry</option>
+            <option value="In Progress" ${l.status === 'In Progress' ? 'selected' : ''}>🟡 In Progress</option>
+            <option value="Contacted" ${l.status === 'Contacted' ? 'selected' : ''}>🟢 Contacted</option>
+            <option value="Admitted" ${l.status === 'Admitted' ? 'selected' : ''}>🏆 Admitted</option>
+          </select>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="tel:${l.phone}" class="btn btn-outline-primary btn-sm" title="Call Student">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+            <a href="https://wa.me/91${l.phone}?text=Hello%20${encodeURIComponent(l.studentName)},%20I%20am%20${encodeURIComponent(counselor)}%20from%20Education%20Sathi%20following%20up%20on%20your%20${encodeURIComponent(l.targetCourse)}%20admission." target="_blank" class="btn btn-whatsapp btn-sm" title="WhatsApp Message">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updateLeadStatus(leadId, newStatus) {
+  try {
+    await fetch(`${API_BASE_URL}/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+  } catch (e) {}
+  const l = allCrmLeads.find(item => item.id === leadId);
+  if (l) l.status = newStatus;
+  showToast(`Updated ${l?.studentName || 'Student'} status to ${newStatus}`);
 }
 
 function showToast(message) {

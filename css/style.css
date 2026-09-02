@@ -3657,6 +3657,165 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
+   EXECUTIVE EMPLOYEE & COUNSELOR CRM PORTAL STYLES
+   ========================================================================== */
+.demo-login-chips {
+  background: var(--bg-subtle);
+  border: 1px dashed var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+}
+
+.quick-chip-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.quick-chip-btn:hover {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.emp-profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%), var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  flex-wrap: wrap;
+}
+
+.emp-profile-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.emp-avatar-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+  border: 2px solid #ffffff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.emp-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.emp-territory {
+  font-size: 0.85rem;
+}
+
+.emp-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Executive CRM Tabs Navigation */
+.dash-tab-nav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dash-tab-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.dash-tab-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: var(--transition);
+}
+
+.dash-tab-btn:hover {
+  color: var(--primary);
+  background: rgba(2, 132, 199, 0.08);
+}
+
+.dash-tab-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+}
+
+/* Table Pill Styles */
+.stream-pill {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  display: inline-block;
+}
+
+.status-select-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.status-select-pill:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+.call-row:hover {
+  background: rgba(2, 132, 199, 0.04);
+}
+
+/* ==========================================================================
    ADVANCED RESPONSIVE DESIGN SYSTEM - ALL DEVICES (MOBILE TO 4K)
    ========================================================================== */
 

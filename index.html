@@ -83,7 +83,7 @@
         <li><a href="#courses" class="nav-item" data-target="courses"><i class="fa-solid fa-book-open"></i> Courses</a></li>
         <li><a href="#scholarships" class="nav-item" data-target="scholarships"><i class="fa-solid fa-award"></i> Scholarships</a></li>
         <li><a href="#ai-assistant" class="nav-item ai-pill-link" data-target="ai-assistant"><i class="fa-solid fa-robot"></i> Ask AI</a></li>
-        <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-gauge-high"></i> Admin</a></li>
+        <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-users-gear"></i> Staff CRM</a></li>
       </ul>
 
       <!-- Action Area -->
@@ -960,100 +960,282 @@
     <section id="view-admin" class="app-view">
       <div class="page-banner counselling-banner">
         <div class="container">
-          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-              <div class="banner-badge gold-badge"><i class="fa-solid fa-lock"></i> SECURE DIRECTOR PORTAL</div>
-              <h1 class="page-title text-white">📊 Student Admissions CRM & Leads Database</h1>
-              <p class="page-subtitle text-white-80">Director: <strong>Rahul Bhartiya</strong> (Helpline: 9752754404)</p>
+              <div class="banner-badge gold-badge"><i class="fa-solid fa-users-gear"></i> EXECUTIVE EMPLOYEE & COUNSELOR PORTAL</div>
+              <h1 class="page-title text-white">💼 Staff Admissions CRM & Calling Hub</h1>
+              <p class="page-subtitle text-white-80">Calling Schedule • Assigned Leads • College Fee Matrix • Admissions Verification</p>
             </div>
-            <div id="adminAuthButtons">
-              <button class="btn btn-gold btn-sm" id="adminLogoutBtn" onclick="handleAdminLogout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-              </button>
+            <div id="adminAuthButtons" class="d-none">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge-tag blue" id="headerStaffBadge"><i class="fa-solid fa-user-check"></i> Staff</span>
+                <button class="btn btn-gold btn-sm" onclick="handleEmployeeLogout()">
+                  <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="container section">
-        <!-- Admin Login Card if not logged in -->
-        <div id="adminLoginBox" class="glass-card mb-4 d-none" style="max-width: 480px; margin: 0 auto;">
+        <!-- Employee / Staff Login Card (Shown when not logged in) -->
+        <div id="adminLoginBox" class="glass-card mb-4" style="max-width: 520px; margin: 0 auto;">
           <div class="text-center mb-3">
-            <i class="fa-solid fa-shield-halved text-primary" style="font-size: 2.5rem;"></i>
-            <h3 class="mt-2">Director & Admin Sign In</h3>
-            <p class="text-muted">Enter Director credentials to manage inquiries.</p>
+            <div class="logo-image-box" style="width: 60px; height: 60px; margin: 0 auto 0.75rem;">
+              <img src="images/education_sathi_logo.jpg" alt="Education Sathi Logo" class="brand-logo-img" />
+            </div>
+            <h3 class="mb-1">Employee & Counselor Login</h3>
+            <p class="text-muted font-sm">Sign in to access your calling schedule, assigned student leads, and college matrix.</p>
           </div>
-          <form onsubmit="handleAdminLogin(event)">
+
+          <!-- Quick Autofill Demo Chips -->
+          <div class="demo-login-chips mb-3">
+            <span class="demo-chip-label font-bold text-xs d-block mb-1">Quick Select Login:</span>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="quick-chip-btn" onclick="fillEmployeeLogin('emp01', 'sathi2026')">
+                👩‍💼 Pooja Verma (Sr. Counselor)
+              </button>
+              <button type="button" class="quick-chip-btn" onclick="fillEmployeeLogin('emp02', 'sathi2026')">
+                👨‍💼 Amit Sharma (Telecalling)
+              </button>
+              <button type="button" class="quick-chip-btn" onclick="fillEmployeeLogin('admin', 'educationsathi2026')">
+                👑 Rahul Bhartiya (Director)
+              </button>
+            </div>
+          </div>
+
+          <form onsubmit="handleEmployeeLogin(event)">
             <div class="form-group">
-              <label>Username</label>
-              <input type="text" id="adminUsername" class="form-control" value="admin" required />
+              <label>Employee ID / Username</label>
+              <input type="text" id="adminUsername" class="form-control" placeholder="e.g. emp01, emp02 or admin" value="emp01" required />
             </div>
             <div class="form-group">
               <label>Password</label>
-              <input type="password" id="adminPassword" class="form-control" value="educationsathi2026" required />
+              <input type="password" id="adminPassword" class="form-control" value="sathi2026" required />
             </div>
             <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
-              <i class="fa-solid fa-key"></i> Access CRM Dashboard
+              <i class="fa-solid fa-right-to-bracket"></i> Sign In to Staff CRM
             </button>
           </form>
         </div>
 
-        <!-- CRM Dashboard Content -->
-        <div id="adminDashboardContent">
+        <!-- Employee Dashboard Content (Shown when logged in) -->
+        <div id="adminDashboardContent" class="d-none">
+          <!-- Active Employee Profile & Stat Strip -->
+          <div class="emp-profile-header glass-card mb-4">
+            <div class="emp-profile-left">
+              <div class="emp-avatar-box" id="empAvatarBox">👩‍💼</div>
+              <div class="emp-profile-info">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <h3 class="emp-name mb-0" id="empName">Pooja Verma</h3>
+                  <span class="badge-tag blue" id="empRoleBadge">Senior Medical Counselor</span>
+                  <span class="badge-tag gold" id="empCodeBadge">ES-0101</span>
+                </div>
+                <p class="emp-territory text-muted mb-0 mt-1">
+                  <i class="fa-solid fa-map-location-dot text-primary"></i> <span id="empTerritory">Madhya Pradesh & Karnataka</span> • 
+                  <i class="fa-solid fa-graduation-cap text-gold"></i> <span id="empSpecialty">MBBS & MD/MS Admissions</span>
+                </p>
+              </div>
+            </div>
+            <div class="emp-quick-actions">
+              <button class="btn btn-primary btn-sm shadow-glow" onclick="openScheduleCallModal()">
+                <i class="fa-solid fa-phone"></i> + Schedule Call
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="openRegisterAdmissionModal()">
+                <i class="fa-solid fa-user-graduate"></i> + Enroll Student
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="handleEmployeeLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Metric Cards -->
           <div class="dashboard-stats-row mb-4">
             <div class="dash-stat-box blue">
-              <span class="dash-stat-num" id="crmTotalLeads">0</span>
-              <span class="dash-stat-lbl">Total Inquiries</span>
+              <span class="dash-stat-num" id="crmCallsTodayCount">5</span>
+              <span class="dash-stat-lbl">Today's Calling Queue</span>
             </div>
             <div class="dash-stat-box gold">
-              <span class="dash-stat-num" id="crmNewLeads">0</span>
-              <span class="dash-stat-lbl">New Pending</span>
+              <span class="dash-stat-num" id="crmTotalLeads">0</span>
+              <span class="dash-stat-lbl">Assigned Student Leads</span>
             </div>
             <div class="dash-stat-box green">
-              <span class="dash-stat-num" id="crmInProgressLeads">0</span>
-              <span class="dash-stat-lbl">In Progress</span>
+              <span class="dash-stat-num" id="crmAdmittedCount">3</span>
+              <span class="dash-stat-lbl">Confirmed Admissions</span>
             </div>
             <div class="dash-stat-box purple">
-              <span class="dash-stat-num" id="crmAdmittedLeads">0</span>
-              <span class="dash-stat-lbl">Seats Allotted</span>
+              <span class="dash-stat-num" id="crmCollegesCount">9</span>
+              <span class="dash-stat-lbl">Colleges in Matrix</span>
             </div>
           </div>
 
-          <div class="search-filter-card mb-4">
-            <div class="filter-row">
-              <div class="search-box-wrap">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="crmSearchInput" class="search-input" placeholder="Search student name, phone, state..." oninput="filterCrmLeads()" />
+          <!-- Executive Tab Navigation -->
+          <div class="dash-tab-nav mb-4">
+            <button class="dash-tab-btn active" id="tabBtnCalls" onclick="switchStaffTab('calls')">
+              <i class="fa-solid fa-headset"></i> 📞 Calling Schedule (<span id="badgeCallCount">5</span>)
+            </button>
+            <button class="dash-tab-btn" id="tabBtnLeads" onclick="switchStaffTab('leads')">
+              <i class="fa-solid fa-users"></i> 👥 Student Leads (<span id="badgeLeadCount">0</span>)
+            </button>
+            <button class="dash-tab-btn" id="tabBtnAdmissions" onclick="switchStaffTab('admissions')">
+              <i class="fa-solid fa-award"></i> 🎓 Confirmed Admissions (<span id="badgeAdmCount">3</span>)
+            </button>
+            <button class="dash-tab-btn" id="tabBtnColleges" onclick="switchStaffTab('colleges')">
+              <i class="fa-solid fa-building-columns"></i> 🏛️ College & Fee Lookup
+            </button>
+          </div>
+
+          <!-- TAB PANE 1: Calling Schedule & Follow-up Queue -->
+          <div class="staff-tab-pane" id="paneCalls">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row">
+                <div class="search-box-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="callSearchInput" class="search-input" placeholder="Search student name, phone, course..." oninput="filterCallingSchedule()" />
+                </div>
+                <div class="filter-select-wrap">
+                  <select id="callPriorityFilter" class="filter-select" onchange="filterCallingSchedule()">
+                    <option value="all">All Priorities</option>
+                    <option value="Urgent">🔴 Urgent</option>
+                    <option value="High">🟠 High Priority</option>
+                    <option value="Normal">🟢 Normal</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openScheduleCallModal()">
+                  <i class="fa-solid fa-calendar-plus"></i> + New Call Task
+                </button>
+                <button class="btn btn-outline-primary btn-sm" onclick="fetchCallingSchedule()"><i class="fa-solid fa-rotate"></i> Refresh</button>
               </div>
-              <div class="filter-select-wrap">
-                <select id="crmStatusFilter" class="filter-select" onchange="filterCrmLeads()">
-                  <option value="all">All Statuses</option>
-                  <option value="New">🔵 New</option>
-                  <option value="In Progress">🟡 In Progress</option>
-                  <option value="Contacted">🟢 Contacted</option>
-                  <option value="Admitted">🏆 Admitted</option>
-                </select>
-              </div>
-              <button class="btn btn-outline-primary btn-sm" onclick="fetchCrmLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="callingScheduleTable">
+                <thead>
+                  <tr>
+                    <th>Time & Priority</th>
+                    <th>Student Details</th>
+                    <th>Target Course</th>
+                    <th>NEET Score</th>
+                    <th>Call Reason & Notes</th>
+                    <th>Counselor</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="callingScheduleTbody"></tbody>
+              </table>
             </div>
           </div>
 
-          <div class="comparison-matrix-wrapper">
-            <table class="compare-table" id="crmLeadsTable">
-              <thead>
-                <tr>
-                  <th>Student Name</th>
-                  <th>Phone / WhatsApp</th>
-                  <th>Target Stream</th>
-                  <th>State</th>
-                  <th>Score / Marks</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="crmLeadsTbody"></tbody>
-            </table>
+          <!-- TAB PANE 2: Student Leads & CRM -->
+          <div class="staff-tab-pane d-none" id="paneLeads">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row">
+                <div class="search-box-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="crmSearchInput" class="search-input" placeholder="Search student name, phone, state..." oninput="filterCrmLeads()" />
+                </div>
+                <div class="filter-select-wrap">
+                  <select id="crmStatusFilter" class="filter-select" onchange="filterCrmLeads()">
+                    <option value="all">All Statuses</option>
+                    <option value="New">🔵 New Inquiry</option>
+                    <option value="In Progress">🟡 In Progress</option>
+                    <option value="Contacted">🟢 Contacted</option>
+                    <option value="Admitted">🏆 Admitted</option>
+                  </select>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" onclick="fetchCrmLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="crmLeadsTable">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Phone / WhatsApp</th>
+                    <th>Target Stream</th>
+                    <th>State</th>
+                    <th>NEET Score</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="crmLeadsTbody"></tbody>
+              </table>
+            </div>
           </div>
+
+          <!-- TAB PANE 3: Confirmed Admissions & Document Verification -->
+          <div class="staff-tab-pane d-none" id="paneAdmissions">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row justify-content-between align-items-center">
+                <div>
+                  <h4 class="mb-0">Confirmed Student Admissions (2026 Batch)</h4>
+                  <p class="text-muted font-sm mb-0">Track allotted seats, fee receipts, and document verification.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openRegisterAdmissionModal()">
+                  <i class="fa-solid fa-plus"></i> + Register New Admission
+                </button>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="admissionsTable">
+                <thead>
+                  <tr>
+                    <th>Student Details</th>
+                    <th>Allotted College</th>
+                    <th>Course & Quota</th>
+                    <th>Annual Fee & Receipt</th>
+                    <th>Scholarship Status</th>
+                    <th>Document Checklist</th>
+                    <th>Counselor</th>
+                  </tr>
+                </thead>
+                <tbody id="admissionsTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB PANE 4: College Matrix & Fee Lookup -->
+          <div class="staff-tab-pane d-none" id="paneColleges">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row">
+                <div class="search-box-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="staffColSearch" class="search-input" placeholder="Search college name, state, city..." oninput="filterStaffColleges()" />
+                </div>
+                <div class="filter-select-wrap">
+                  <select id="staffColTypeFilter" class="filter-select" onchange="filterStaffColleges()">
+                    <option value="all">All Types (Govt / Pvt / Deemed)</option>
+                    <option value="Government">Government</option>
+                    <option value="Private">Private</option>
+                    <option value="Deemed">Deemed University</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="staffCollegesTable">
+                <thead>
+                  <tr>
+                    <th>College Name</th>
+                    <th>Type & NIRF</th>
+                    <th>Location</th>
+                    <th>MBBS Seats</th>
+                    <th>Annual Tuition Fee</th>
+                    <th>Hospital Beds</th>
+                    <th>Counselor Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staffCollegesTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1286,6 +1468,198 @@
       </div>
     </div>
   </footer>
+
+  <!-- ========================================================================= -->
+  <!-- EMPLOYEE CRM MODALS -->
+  <!-- ========================================================================= -->
+
+  <!-- 1. Schedule Call Modal -->
+  <div class="modal-overlay" id="scheduleCallModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag blue">📞 TELECALLING QUEUE</span>
+          <h3>Schedule Student Callback</h3>
+          <p>Assign follow-up date and counselling agenda</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeScheduleCallModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleScheduleCallSubmit(event)">
+          <div class="form-group">
+            <label>Student Full Name</label>
+            <input type="text" class="form-control" id="schedStudentName" placeholder="e.g. Ananya Sharma" required />
+          </div>
+          <div class="form-group">
+            <label>Student Mobile / WhatsApp</label>
+            <input type="tel" class="form-control" id="schedStudentPhone" placeholder="10-digit phone" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Target Course</label>
+              <input type="text" class="form-control" id="schedCourse" placeholder="e.g. MBBS State Quota" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>NEET Score / Rank</label>
+              <input type="number" class="form-control" id="schedNeetScore" placeholder="e.g. 560" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Call Date</label>
+              <input type="date" class="form-control" id="schedDate" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Call Time</label>
+              <input type="text" class="form-control" id="schedTime" placeholder="e.g. 11:30 AM" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Priority Level</label>
+            <select class="form-control" id="schedPriority">
+              <option value="Normal">🟢 Normal Follow-up</option>
+              <option value="High" selected>🟠 High Priority (Choice Filling)</option>
+              <option value="Urgent">🔴 Urgent (Seat Lock Deadline)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Call Objective & Agenda</label>
+            <textarea class="form-control" id="schedAgenda" rows="2" placeholder="e.g. Discuss GMC Bhopal cutoff and MMVY scholarship documents." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+            <i class="fa-solid fa-calendar-check"></i> Add to Calling Schedule
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Register Confirmed Admission Modal -->
+  <div class="modal-overlay" id="registerAdmissionModalOverlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag green">🎓 CONFIRMED ADMISSION</span>
+          <h3>Register Student Admission</h3>
+          <p>Record allotted college, fee receipt, and document verification</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeRegisterAdmissionModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleRegisterAdmissionSubmit(event)">
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Student Full Name</label>
+              <input type="text" class="form-control" id="admStudentName" placeholder="Student name" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Contact Phone</label>
+              <input type="tel" class="form-control" id="admStudentPhone" placeholder="Mobile number" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+              <label>Allotted College Name</label>
+              <input type="text" class="form-control" id="admCollegeName" placeholder="e.g. Gandhi Medical College, Bhopal" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Course</label>
+              <select class="form-control" id="admCourse" required>
+                <option value="MBBS (Bachelor of Medicine)">MBBS</option>
+                <option value="BAMS (Ayurvedacharya)">BAMS</option>
+                <option value="BHMS (Homeopathy)">BHMS</option>
+                <option value="BUMS (Unani)">BUMS</option>
+                <option value="BDS (Dental)">BDS</option>
+                <option value="MD/MS Medical PG">MD/MS PG</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Admission Quota</label>
+              <select class="form-control" id="admQuota">
+                <option value="MP State 85% Quota">MP State 85% Quota</option>
+                <option value="AIQ 15% MCC Quota">AIQ 15% MCC Quota</option>
+                <option value="Private State Merit">Private State Merit</option>
+                <option value="Deemed University Quota">Deemed University Quota</option>
+                <option value="Management / NRI Quota">Management / NRI Quota</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Category</label>
+              <select class="form-control" id="admCategory">
+                <option value="General">General / UR</option>
+                <option value="OBC">OBC</option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+                <option value="EWS">EWS</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Annual Tuition Fee</label>
+              <input type="text" class="form-control" id="admAnnualFee" placeholder="e.g. ₹1,00,000 / yr" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>College Receipt #</label>
+              <input type="text" class="form-control" id="admReceiptNo" placeholder="e.g. REC-GMC-2026-901" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Scholarship Scheme Applied</label>
+            <input type="text" class="form-control" id="admScholarship" placeholder="e.g. MP MMVY 100% Tuition Waiver Granted" value="MP MMVY 100% Waiver" />
+          </div>
+          <div class="form-group">
+            <label>Document Verification Status</label>
+            <select class="form-control" id="admDocStatus">
+              <option value="Verified & Submitted">✅ Verified & Submitted</option>
+              <option value="Originals Deposited">📂 Originals Deposited at College</option>
+              <option value="Under Verification">⏳ Verification Under Process</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+            <i class="fa-solid fa-circle-check"></i> Complete Student Enrollment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Update Call Outcome Modal -->
+  <div class="modal-overlay" id="callOutcomeModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag purple">📝 CALL OUTCOME</span>
+          <h3>Log Call Outcome & Notes</h3>
+          <p id="outcomeStudentLabel">Student: Ananya Sharma</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeCallOutcomeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleCallOutcomeSubmit(event)">
+          <input type="hidden" id="outcomeTaskId" />
+          <div class="form-group">
+            <label>Call Status</label>
+            <select class="form-control" id="outcomeStatus" required>
+              <option value="Completed">✅ Call Completed (Counselling Given)</option>
+              <option value="Follow-up Required">⏳ Callback / Follow-up Required</option>
+              <option value="Admitted">🏆 Student Admitted to College</option>
+              <option value="Not Interested">❌ Not Interested</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Counsellor Discussion Notes</label>
+            <textarea class="form-control" id="outcomeNotes" rows="3" placeholder="Enter student's choices, queries answered, fee discussions..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+            <i class="fa-solid fa-floppy-disk"></i> Save Call Notes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <div class="toast-container" id="toastContainer"></div>
 
