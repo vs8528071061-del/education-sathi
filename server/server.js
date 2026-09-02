@@ -68,6 +68,51 @@ app.post('/api/admin/logout', (req, res) => {
   res.json({ success: true, message: 'Logged out successfully.' });
 });
 
+// Admin System Metrics & Performance
+app.get('/api/admin/metrics', (req, res) => {
+  try {
+    const metrics = DB.getAdminMetrics();
+    res.json({ success: true, metrics });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Admin Add New Staff Member
+app.post('/api/admin/staff', (req, res) => {
+  try {
+    const { name, username, password, role, phone, specialization, assignedTerritory } = req.body;
+    if (!name || !username) {
+      return res.status(400).json({ success: false, error: 'Staff name and username are required.' });
+    }
+    const newStaff = DB.addEmployee({
+      name,
+      username,
+      password: password || 'sathi2026',
+      role: role || 'Admission Counselor',
+      phone: phone || '9752754404',
+      specialization: specialization || 'General Medical Admissions',
+      assignedTerritory: assignedTerritory || 'Madhya Pradesh'
+    });
+    res.status(201).json({ success: true, message: `Staff member ${newStaff.name} created.`, staff: newStaff });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Admin Reassign Lead to Counselor
+app.patch('/api/admin/leads/:id/reassign', (req, res) => {
+  try {
+    const { counselorName } = req.body;
+    if (!counselorName) return res.status(400).json({ success: false, error: 'counselorName is required.' });
+    const updated = DB.reassignLead(req.params.id, counselorName);
+    if (!updated) return res.status(404).json({ success: false, error: 'Lead not found.' });
+    res.json({ success: true, message: `Lead reassigned to ${counselorName}.`, lead: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // ==========================================================================
 // 2. 36 INDIAN DESTINATIONS API
 // ==========================================================================

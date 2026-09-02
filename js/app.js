@@ -88,8 +88,7 @@ function navigateTo(viewId) {
     'courses', 'scholarships', 'ai-assistant', 'predictor', 
     'compare', 'student-profile', 'admin', 'employee', 'counselling'
   ];
-  let targetId = validViews.includes(viewId) ? viewId : 'home';
-  if (targetId === 'employee') targetId = 'admin'; // Unified Staff CRM
+  const targetId = validViews.includes(viewId) ? viewId : 'home';
 
   // Toggle active view
   document.querySelectorAll('.app-view').forEach(view => {
@@ -104,7 +103,7 @@ function navigateTo(viewId) {
   // Update desktop nav
   document.querySelectorAll('.nav-item').forEach(link => {
     const dt = link.getAttribute('data-target');
-    if (dt === targetId || (dt === 'admin' && (targetId === 'admin' || targetId === 'employee'))) {
+    if (dt === targetId) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
@@ -117,8 +116,10 @@ function navigateTo(viewId) {
     else btn.classList.remove('active');
   });
 
-  if (targetId === 'admin') {
+  if (targetId === 'employee') {
     checkEmployeeAuth();
+  } else if (targetId === 'admin') {
+    checkAdminAuth();
   }
 
   window.location.hash = targetId;
@@ -558,18 +559,18 @@ let allStaffColleges = [];
 let activeStaffTab = 'calls';
 
 function fillEmployeeLogin(username, password) {
-  const uInput = document.getElementById('adminUsername');
-  const pInput = document.getElementById('adminPassword');
+  const uInput = document.getElementById('empUsername');
+  const pInput = document.getElementById('empPassword');
   if (uInput) uInput.value = username;
   if (pInput) pInput.value = password;
 }
 
 function checkEmployeeAuth() {
-  const token = localStorage.getItem('es_employee_token') || localStorage.getItem('es_admin_token');
+  const token = localStorage.getItem('es_employee_token');
   const savedEmp = localStorage.getItem('es_employee');
-  const loginBox = document.getElementById('adminLoginBox');
-  const dashContent = document.getElementById('adminDashboardContent');
-  const authButtons = document.getElementById('adminAuthButtons');
+  const loginBox = document.getElementById('empLoginBox');
+  const dashContent = document.getElementById('empDashboardContent');
+  const authButtons = document.getElementById('empAuthButtons');
 
   if (token && savedEmp) {
     try {
@@ -625,8 +626,8 @@ function checkEmployeeAuth() {
 
 async function handleEmployeeLogin(e) {
   e.preventDefault();
-  const u = document.getElementById('adminUsername')?.value;
-  const p = document.getElementById('adminPassword')?.value;
+  const u = document.getElementById('empUsername')?.value;
+  const p = document.getElementById('empPassword')?.value;
 
   try {
     const res = await fetch(`${API_BASE_URL}/employee/login`, {
@@ -644,7 +645,6 @@ async function handleEmployeeLogin(e) {
       alert(data.error || 'Invalid credentials');
     }
   } catch (err) {
-    // Local fallback for offline/demo use
     let fallbackEmp = null;
     if (u === 'emp01' && p === 'sathi2026') {
       fallbackEmp = {
@@ -658,12 +658,6 @@ async function handleEmployeeLogin(e) {
         role: 'Telecalling & AYUSH Specialist', avatar: '👨‍💼',
         assignedTerritory: 'Uttar Pradesh & Rajasthan', specialization: 'BAMS, BHMS & BDS Quotas'
       };
-    } else if (u === 'admin' && p === 'educationsathi2026') {
-      fallbackEmp = {
-        id: 'admin-1', empCode: 'ES-DIR', username: 'admin', name: 'Rahul Bhartiya',
-        role: 'Director & Apex Counselor', avatar: 'images/director_rahul_bhartiya.jpg',
-        assignedTerritory: 'All 36 States & UTs', specialization: 'Pan-India Medical & MMVY Scheme'
-      };
     }
 
     if (fallbackEmp) {
@@ -672,7 +666,7 @@ async function handleEmployeeLogin(e) {
       showToast(`Welcome ${fallbackEmp.name}!`);
       checkEmployeeAuth();
     } else {
-      alert('Invalid username or password. Please try emp01 / sathi2026 or admin / educationsathi2026.');
+      alert('Invalid username or password. Please try emp01 / sathi2026 or emp02 / sathi2026.');
     }
   }
 }
@@ -680,9 +674,339 @@ async function handleEmployeeLogin(e) {
 function handleEmployeeLogout() {
   localStorage.removeItem('es_employee_token');
   localStorage.removeItem('es_employee');
-  localStorage.removeItem('es_admin_token');
   showToast('Logged out of Staff CRM.');
   checkEmployeeAuth();
+}
+
+// ==========================================================================
+// 8. DIRECTOR & APEX ADMIN SYSTEM
+// ==========================================================================
+
+let allAdminLeads = [];
+let allAdminStaff = [];
+let allAdminAdmissions = [];
+let activeAdminTab = 'staff';
+
+function fillAdminLogin(u, p) {
+  const uEl = document.getElementById('adminUsername');
+  const pEl = document.getElementById('adminPassword');
+  if (uEl) uEl.value = u;
+  if (pEl) pEl.value = p;
+}
+
+function checkAdminAuth() {
+  const token = localStorage.getItem('es_admin_token');
+  const loginBox = document.getElementById('adminLoginBox');
+  const dashContent = document.getElementById('adminDashboardContent');
+  const authButtons = document.getElementById('directorAuthButtons');
+
+  if (token) {
+    isAdminAuthenticated = true;
+    if (loginBox) loginBox.classList.add('d-none');
+    if (dashContent) dashContent.classList.remove('d-none');
+    if (authButtons) authButtons.classList.remove('d-none');
+
+    // Load Admin Data
+    fetchAdminDashboard();
+  } else {
+    isAdminAuthenticated = false;
+    if (loginBox) loginBox.classList.remove('d-none');
+    if (dashContent) dashContent.classList.add('d-none');
+    if (authButtons) authButtons.classList.add('d-none');
+  }
+}
+
+async function handleAdminLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('adminUsername')?.value;
+  const p = document.getElementById('adminPassword')?.value;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('es_admin_token', data.token);
+      showToast(`Welcome Director Rahul Bhartiya!`);
+      checkAdminAuth();
+    } else {
+      alert(data.error || 'Invalid credentials');
+    }
+  } catch (err) {
+    if (u === 'admin' && p === 'educationsathi2026') {
+      localStorage.setItem('es_admin_token', 'local-admin-token');
+      showToast('Welcome Director Rahul Bhartiya (Offline Access)!');
+      checkAdminAuth();
+    } else {
+      alert('Invalid username or password. Please use admin / educationsathi2026.');
+    }
+  }
+}
+
+function handleAdminLogout() {
+  localStorage.removeItem('es_admin_token');
+  showToast('Logged out of Director Admin Portal');
+  checkAdminAuth();
+}
+
+function switchAdminTab(tabKey) {
+  activeAdminTab = tabKey;
+  const tabs = ['staff', 'leads', 'admissions', 'analytics'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`admTabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const pane = document.getElementById(`admPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (t === tabKey) {
+      if (btn) btn.classList.add('active');
+      if (pane) pane.classList.remove('d-none');
+    } else {
+      if (btn) btn.classList.remove('active');
+      if (pane) pane.classList.add('d-none');
+    }
+  });
+}
+
+async function fetchAdminDashboard() {
+  // 1. Fetch Metrics
+  try {
+    const mRes = await fetch(`${API_BASE_URL}/admin/metrics`);
+    const mData = await mRes.json();
+    if (mData.success && mData.metrics) {
+      const totLeads = document.getElementById('adminTotalLeadsCount');
+      const totCalls = document.getElementById('adminCallsScheduledCount');
+      const totAdms = document.getElementById('adminAdmissionsCount');
+      const totStaff = document.getElementById('adminStaffCount');
+      if (totLeads) totLeads.innerText = mData.metrics.totalLeads;
+      if (totCalls) totCalls.innerText = mData.metrics.totalCallsScheduled;
+      if (totAdms) totAdms.innerText = mData.metrics.totalAdmissions;
+      if (totStaff) totStaff.innerText = mData.metrics.staffPerformance?.length || 3;
+    }
+  } catch (e) {}
+
+  // 2. Fetch Staff Table
+  fetchAdminStaff();
+
+  // 3. Fetch Master Leads
+  fetchAdminLeads();
+
+  // 4. Fetch Admissions
+  fetchAdminAdmissions();
+}
+
+async function fetchAdminStaff() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/staff`);
+    const data = await res.json();
+    if (data.success) {
+      allAdminStaff = data.staff;
+    }
+  } catch (e) {
+    if (!allAdminStaff.length) {
+      allAdminStaff = [
+        { id: 'emp-01', empCode: 'ES-0101', name: 'Pooja Verma', role: 'Senior Medical Counselor', phone: '9826112233', assignedTerritory: 'Madhya Pradesh & Karnataka', specialization: 'MBBS & MD/MS Admissions' },
+        { id: 'emp-02', empCode: 'ES-0102', name: 'Amit Sharma', role: 'Telecalling & AYUSH Specialist', phone: '9752445566', assignedTerritory: 'Uttar Pradesh & Rajasthan', specialization: 'BAMS, BHMS & BDS Quotas' },
+        { id: 'admin-1', empCode: 'ES-DIR', name: 'Rahul Bhartiya', role: 'Director & Apex Counselor', phone: '9752754404', assignedTerritory: 'All 36 States & UTs', specialization: 'Pan-India Medical & MMVY Scheme' }
+      ];
+    }
+  }
+  renderAdminStaffTable(allAdminStaff);
+}
+
+function renderAdminStaffTable(staffList) {
+  const tbody = document.getElementById('adminStaffTbody');
+  if (!tbody) return;
+  tbody.innerHTML = staffList.map(s => `
+    <tr>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <div style="font-size:1.5rem;">${s.name.includes('Pooja') ? '👩‍💼' : (s.name.includes('Amit') ? '👨‍💼' : '👑')}</div>
+          <div>
+            <strong class="font-md">${s.name}</strong>
+            <span class="text-xs text-muted d-block">${s.phone}</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <span class="badge-tag ${s.role.includes('Director') ? 'gold' : 'blue'}">${s.role}</span>
+        <span class="text-xs font-bold text-muted d-block mt-1">${s.empCode}</span>
+      </td>
+      <td><i class="fa-solid fa-map-pin text-danger"></i> ${s.assignedTerritory}</td>
+      <td><span class="stream-pill">${s.specialization}</span></td>
+      <td><strong class="text-primary">${Math.floor(8 + Math.random() * 12)} Leads</strong></td>
+      <td>
+        <div class="d-flex align-items-center gap-1">
+          <a href="tel:${s.phone}" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-phone"></i></a>
+          <a href="https://wa.me/91${s.phone}" target="_blank" class="btn btn-whatsapp btn-sm"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function fetchAdminLeads() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/leads`);
+    const data = await res.json();
+    if (data.success) {
+      allAdminLeads = data.leads;
+    }
+  } catch (e) {
+    allAdminLeads = allCrmLeads || [];
+  }
+  renderAdminMasterLeads(allAdminLeads);
+  const badge = document.getElementById('admBadgeLeadCount');
+  if (badge) badge.innerText = allAdminLeads.length;
+}
+
+function renderAdminMasterLeads(leads) {
+  const tbody = document.getElementById('adminMasterLeadsTbody');
+  if (!tbody) return;
+  if (!leads.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted p-4">No student inquiries found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = leads.map(l => {
+    return `
+      <tr>
+        <td><strong>${l.studentName}</strong></td>
+        <td><a href="tel:${l.phone}" class="font-bold text-primary">${l.phone}</a></td>
+        <td><span class="stream-pill">${l.targetCourse}</span></td>
+        <td>${l.domicileState || 'MP'}</td>
+        <td><strong>${l.neetScore > 0 ? l.neetScore : '—'}</strong></td>
+        <td><span class="badge-tag ${l.status === 'New' ? 'blue' : (l.status === 'Admitted' ? 'green' : 'gold')}">${l.status}</span></td>
+        <td>
+          <select class="status-select-pill" onchange="handleAdminReassignLead('${l.id}', this.value)">
+            <option value="Pooja Verma" ${l.assignedCounselor === 'Pooja Verma' ? 'selected' : ''}>Pooja Verma</option>
+            <option value="Amit Sharma" ${l.assignedCounselor === 'Amit Sharma' ? 'selected' : ''}>Amit Sharma</option>
+            <option value="Rahul Bhartiya" ${l.assignedCounselor === 'Rahul Bhartiya' ? 'selected' : ''}>Rahul Bhartiya</option>
+          </select>
+        </td>
+        <td>
+          <a href="https://wa.me/91${l.phone}?text=Hello%20${encodeURIComponent(l.studentName)},%20I%20am%20Director%20Rahul%20Bhartiya%20from%20Education%20Sathi." target="_blank" class="btn btn-whatsapp btn-sm">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterAdminMasterLeads() {
+  const q = document.getElementById('adminLeadSearch')?.value.toLowerCase() || '';
+  const status = document.getElementById('adminLeadStatusFilter')?.value || 'all';
+
+  let filtered = allAdminLeads.filter(l => {
+    const matchQ = l.studentName.toLowerCase().includes(q) ||
+                   l.phone.includes(q) ||
+                   l.targetCourse.toLowerCase().includes(q) ||
+                   (l.domicileState && l.domicileState.toLowerCase().includes(q));
+    const matchS = status === 'all' || l.status === status;
+    return matchQ && matchS;
+  });
+  renderAdminMasterLeads(filtered);
+}
+
+async function handleAdminReassignLead(leadId, counselor) {
+  try {
+    await fetch(`${API_BASE_URL}/admin/leads/${leadId}/reassign`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ counselorName: counselor })
+    });
+  } catch (e) {}
+  const lead = allAdminLeads.find(l => l.id === leadId);
+  if (lead) lead.assignedCounselor = counselor;
+  showToast(`Lead reassigned to ${counselor}!`);
+}
+
+async function fetchAdminAdmissions() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/employee/admissions`);
+    const data = await res.json();
+    if (data.success) {
+      allAdminAdmissions = data.admissions;
+    }
+  } catch (e) {
+    allAdminAdmissions = allAdmissions || [];
+  }
+  renderAdminAdmissionsTable(allAdminAdmissions);
+}
+
+function renderAdminAdmissionsTable(list) {
+  const tbody = document.getElementById('adminAdmissionsTbody');
+  if (!tbody) return;
+  tbody.innerHTML = list.map(a => `
+    <tr>
+      <td><strong>${a.studentName}</strong><br><span class="text-xs text-muted">${a.phone}</span></td>
+      <td><strong>${a.allottedCollege}</strong></td>
+      <td><span class="stream-pill">${a.course}</span><br><span class="badge-tag blue font-xs mt-1">${a.admissionQuota}</span></td>
+      <td><strong class="text-emerald">${a.annualFee}</strong><br><span class="text-xs text-muted">${a.feeReceiptNo}</span></td>
+      <td><span class="badge-tag gold">${a.scholarshipClaimed}</span></td>
+      <td><span class="text-xs font-bold text-muted">${a.assignedCounselor}</span></td>
+    </tr>
+  `).join('');
+}
+
+function exportLeadsCSV() {
+  if (!allAdminLeads.length) {
+    showToast('No leads available to export.');
+    return;
+  }
+  let csvContent = "data:text/csv;charset=utf-8,Student Name,Phone,Target Course,State,NEET Score,Status,Assigned Counselor,Date\n";
+  allAdminLeads.forEach(l => {
+    csvContent += `"${l.studentName}","${l.phone}","${l.targetCourse}","${l.domicileState || 'MP'}","${l.neetScore || 0}","${l.status}","${l.assignedCounselor || 'Rahul Bhartiya'}","${l.createdAt || ''}"\n`;
+  });
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Education_Sathi_Inquiries_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  showToast('Downloaded Student Leads CSV file!');
+}
+
+function openAddStaffModal() {
+  const m = document.getElementById('adminAddStaffModalOverlay');
+  if (m) m.classList.add('active');
+}
+function closeAddStaffModal() {
+  const m = document.getElementById('adminAddStaffModalOverlay');
+  if (m) m.classList.remove('active');
+}
+
+async function handleAddStaffSubmit(e) {
+  e.preventDefault();
+  const staffPayload = {
+    name: document.getElementById('newStaffName').value.trim(),
+    username: document.getElementById('newStaffUsername').value.trim(),
+    password: document.getElementById('newStaffPassword').value,
+    role: document.getElementById('newStaffRole').value,
+    phone: document.getElementById('newStaffPhone').value.trim(),
+    specialization: document.getElementById('newStaffSpec').value.trim(),
+    assignedTerritory: document.getElementById('newStaffTerritory').value.trim()
+  };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/staff`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(staffPayload)
+    });
+    const d = await res.json();
+    if (d.success) {
+      allAdminStaff.push(d.staff);
+    }
+  } catch (err) {
+    staffPayload.empCode = 'ES-0' + (allAdminStaff.length + 101);
+    allAdminStaff.push(staffPayload);
+  }
+
+  showToast(`Counselor ${staffPayload.name} added to team!`);
+  closeAddStaffModal();
+  renderAdminStaffTable(allAdminStaff);
 }
 
 function fetchEmployeeDashboard() {

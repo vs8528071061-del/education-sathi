@@ -542,14 +542,29 @@ button, input, select, textarea {
   background: rgba(56, 189, 248, 0.16);
 }
 
+.emp-pill {
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.22);
+  color: var(--primary) !important;
+}
+
+.emp-pill:hover, .emp-pill.active {
+  background: rgba(2, 132, 199, 0.18) !important;
+}
+
 .admin-crm-pill {
-  background: rgba(79, 70, 229, 0.06);
-  border: 1px solid rgba(79, 70, 229, 0.18);
-  color: var(--secondary) !important;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #b45309 !important;
+}
+
+[data-theme="dark"] .admin-crm-pill {
+  color: #fbbf24 !important;
+  background: rgba(245, 158, 11, 0.12);
 }
 
 .admin-crm-pill:hover, .admin-crm-pill.active {
-  background: rgba(79, 70, 229, 0.14) !important;
+  background: rgba(245, 158, 11, 0.22) !important;
 }
 
 .special-badge-link {

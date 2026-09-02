@@ -83,7 +83,8 @@
         <li><a href="#courses" class="nav-item" data-target="courses"><i class="fa-solid fa-book-open"></i> Courses</a></li>
         <li><a href="#scholarships" class="nav-item" data-target="scholarships"><i class="fa-solid fa-award"></i> Scholarships</a></li>
         <li><a href="#ai-assistant" class="nav-item ai-pill-link" data-target="ai-assistant"><i class="fa-solid fa-robot"></i> Ask AI</a></li>
-        <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-users-gear"></i> Staff CRM</a></li>
+        <li><a href="#employee" class="nav-item emp-pill" data-target="employee"><i class="fa-solid fa-headset"></i> Staff</a></li>
+        <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-shield-halved"></i> Admin</a></li>
       </ul>
 
       <!-- Action Area -->
@@ -159,8 +160,9 @@
         <li><a href="#predictor" class="drawer-link" onclick="navigateTo('predictor'); closeDrawer();"><i class="fa-solid fa-calculator"></i> NEET Rank & Score Predictor</a></li>
         <li><a href="#compare" class="drawer-link" onclick="navigateTo('compare'); closeDrawer();"><i class="fa-solid fa-code-compare"></i> College Comparison Matrix</a></li>
         <li><a href="#student-profile" class="drawer-link" onclick="navigateTo('student-profile'); closeDrawer();"><i class="fa-solid fa-user-graduate"></i> My Student Dashboard</a></li>
-        <li><a href="#admin" class="drawer-link" onclick="navigateTo('admin'); closeDrawer();"><i class="fa-solid fa-gauge-high"></i> Director Admin Portal</a></li>
-        <li><a href="#counselling" class="drawer-link" onclick="navigateTo('counselling'); closeDrawer();"><i class="fa-solid fa-headset"></i> Contact & Director Profile</a></li>
+        <li><a href="#employee" class="drawer-link" onclick="navigateTo('employee'); closeDrawer();"><i class="fa-solid fa-headset text-primary"></i> Staff & Counselor CRM</a></li>
+        <li><a href="#admin" class="drawer-link" onclick="navigateTo('admin'); closeDrawer();"><i class="fa-solid fa-shield-halved text-gold"></i> Director Admin Portal</a></li>
+        <li><a href="#counselling" class="drawer-link" onclick="navigateTo('counselling'); closeDrawer();"><i class="fa-solid fa-phone"></i> Contact & Director Profile</a></li>
       </ul>
       <div class="drawer-footer-contact">
         <div class="director-mini-badge">
@@ -957,7 +959,9 @@
     <!-- ========================================================================= -->
     <!-- VIEW 11: SECURE DIRECTOR & COUNSELOR ADMIN CRM (LOGIN / LOGOUT) -->
     <!-- ========================================================================= -->
-    <section id="view-admin" class="app-view">
+    <!-- VIEW 11: EMPLOYEE & STAFF CRM PORTAL -->
+    <!-- ========================================================================= -->
+    <section id="view-employee" class="app-view">
       <div class="page-banner counselling-banner">
         <div class="container">
           <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -966,7 +970,7 @@
               <h1 class="page-title text-white">💼 Staff Admissions CRM & Calling Hub</h1>
               <p class="page-subtitle text-white-80">Calling Schedule • Assigned Leads • College Fee Matrix • Admissions Verification</p>
             </div>
-            <div id="adminAuthButtons" class="d-none">
+            <div id="empAuthButtons" class="d-none">
               <div class="d-flex align-items-center gap-2">
                 <span class="badge-tag blue" id="headerStaffBadge"><i class="fa-solid fa-user-check"></i> Staff</span>
                 <button class="btn btn-gold btn-sm" onclick="handleEmployeeLogout()">
@@ -980,7 +984,7 @@
 
       <div class="container section">
         <!-- Employee / Staff Login Card (Shown when not logged in) -->
-        <div id="adminLoginBox" class="glass-card mb-4" style="max-width: 520px; margin: 0 auto;">
+        <div id="empLoginBox" class="glass-card mb-4" style="max-width: 520px; margin: 0 auto;">
           <div class="text-center mb-3">
             <div class="logo-image-box" style="width: 60px; height: 60px; margin: 0 auto 0.75rem;">
               <img src="images/education_sathi_logo.jpg" alt="Education Sathi Logo" class="brand-logo-img" />
@@ -999,20 +1003,17 @@
               <button type="button" class="quick-chip-btn" onclick="fillEmployeeLogin('emp02', 'sathi2026')">
                 👨‍💼 Amit Sharma (Telecalling)
               </button>
-              <button type="button" class="quick-chip-btn" onclick="fillEmployeeLogin('admin', 'educationsathi2026')">
-                👑 Rahul Bhartiya (Director)
-              </button>
             </div>
           </div>
 
           <form onsubmit="handleEmployeeLogin(event)">
             <div class="form-group">
               <label>Employee ID / Username</label>
-              <input type="text" id="adminUsername" class="form-control" placeholder="e.g. emp01, emp02 or admin" value="emp01" required />
+              <input type="text" id="empUsername" class="form-control" placeholder="e.g. emp01 or emp02" value="emp01" required />
             </div>
             <div class="form-group">
               <label>Password</label>
-              <input type="password" id="adminPassword" class="form-control" value="sathi2026" required />
+              <input type="password" id="empPassword" class="form-control" value="sathi2026" required />
             </div>
             <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
               <i class="fa-solid fa-right-to-bracket"></i> Sign In to Staff CRM
@@ -1021,7 +1022,7 @@
         </div>
 
         <!-- Employee Dashboard Content (Shown when logged in) -->
-        <div id="adminDashboardContent" class="d-none">
+        <div id="empDashboardContent" class="d-none">
           <!-- Active Employee Profile & Stat Strip -->
           <div class="emp-profile-header glass-card mb-4">
             <div class="emp-profile-left">
@@ -1241,7 +1242,309 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- VIEW 12: COUNSELLING & CONTACT -->
+    <!-- VIEW 12: DIRECTOR & EXECUTIVE ADMIN PORTAL -->
+    <!-- ========================================================================= -->
+    <section id="view-admin" class="app-view">
+      <div class="page-banner counselling-banner">
+        <div class="container">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <div class="banner-badge gold-badge"><i class="fa-solid fa-crown"></i> APEX DIRECTOR PORTAL • RAHUL BHARTIYA</div>
+              <h1 class="page-title text-white">📊 Executive Admin Management Dashboard</h1>
+              <p class="page-subtitle text-white-80">Team Performance • Lead Allocation • Admissions Audits • System Control</p>
+            </div>
+            <div id="directorAuthButtons" class="d-none">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge-tag gold" id="headerDirectorBadge"><i class="fa-solid fa-crown"></i> Director Rahul Bhartiya</span>
+                <button class="btn btn-gold btn-sm" onclick="handleAdminLogout()">
+                  <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container section">
+        <!-- Director Login Card (Shown when not logged in) -->
+        <div id="adminLoginBox" class="glass-card mb-4" style="max-width: 500px; margin: 0 auto;">
+          <div class="text-center mb-3">
+            <div class="director-photo-wrap" style="width: 80px; height: 80px; margin: 0 auto 0.75rem;">
+              <img src="images/director_rahul_bhartiya.jpg" alt="Director Rahul Bhartiya" class="director-photo" />
+            </div>
+            <h3 class="mb-1">Director & Admin Sign In</h3>
+            <p class="text-muted font-sm">Master administrative access for Director <strong>Rahul Bhartiya</strong>.</p>
+          </div>
+
+          <div class="demo-login-chips mb-3">
+            <button type="button" class="quick-chip-btn w-100 justify-content-center" onclick="fillAdminLogin('admin', 'educationsathi2026')">
+              👑 One-Click Fill Director Credentials (admin / educationsathi2026)
+            </button>
+          </div>
+
+          <form onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+              <label>Director Username</label>
+              <input type="text" id="adminUsername" class="form-control" value="admin" required />
+            </div>
+            <div class="form-group">
+              <label>Admin Master Password</label>
+              <input type="password" id="adminPassword" class="form-control" value="educationsathi2026" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+              <i class="fa-solid fa-key"></i> Access Director Dashboard
+            </button>
+          </form>
+        </div>
+
+        <!-- Director Dashboard Content (Shown when logged in) -->
+        <div id="adminDashboardContent" class="d-none">
+          <!-- Director Profile Header -->
+          <div class="emp-profile-header glass-card mb-4">
+            <div class="emp-profile-left">
+              <div class="director-photo-wrap" style="width: 70px; height: 70px; flex-shrink: 0;">
+                <img src="images/director_rahul_bhartiya.jpg" alt="Rahul Bhartiya" class="director-photo" />
+              </div>
+              <div class="emp-profile-info">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <h3 class="emp-name mb-0">Rahul Bhartiya</h3>
+                  <span class="badge-tag gold">Founder & Senior Director</span>
+                  <span class="badge-tag blue">5+ Yrs Experience</span>
+                </div>
+                <p class="emp-territory text-muted mb-0 mt-1">
+                  <i class="fa-solid fa-phone text-primary"></i> 9752754404 • 
+                  <i class="fa-solid fa-location-dot text-danger"></i> Bhopal, Madhya Pradesh (Pan India Headquarters)
+                </p>
+              </div>
+            </div>
+            <div class="emp-quick-actions">
+              <button class="btn btn-primary btn-sm shadow-glow" onclick="openAddStaffModal()">
+                <i class="fa-solid fa-user-plus"></i> + Add Counselor
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="exportLeadsCSV()">
+                <i class="fa-solid fa-file-csv"></i> Export Leads (CSV)
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="handleAdminLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+              </button>
+            </div>
+          </div>
+
+          <!-- Director Executive KPIs -->
+          <div class="dashboard-stats-row mb-4">
+            <div class="dash-stat-box blue">
+              <span class="dash-stat-num" id="adminTotalLeadsCount">19</span>
+              <span class="dash-stat-lbl">Total Student Inquiries</span>
+            </div>
+            <div class="dash-stat-box gold">
+              <span class="dash-stat-num" id="adminCallsScheduledCount">5</span>
+              <span class="dash-stat-lbl">Active Calling Queue</span>
+            </div>
+            <div class="dash-stat-box green">
+              <span class="dash-stat-num" id="adminAdmissionsCount">3</span>
+              <span class="dash-stat-lbl">Confirmed Enrollments</span>
+            </div>
+            <div class="dash-stat-box purple">
+              <span class="dash-stat-num" id="adminStaffCount">3</span>
+              <span class="dash-stat-lbl">Counselors in Team</span>
+            </div>
+          </div>
+
+          <!-- Director Tabs -->
+          <div class="dash-tab-nav mb-4">
+            <button class="dash-tab-btn active" id="admTabBtnStaff" onclick="switchAdminTab('staff')">
+              <i class="fa-solid fa-user-tie"></i> 👥 Counselors & Team Performance
+            </button>
+            <button class="dash-tab-btn" id="admTabBtnLeads" onclick="switchAdminTab('leads')">
+              <i class="fa-solid fa-database"></i> 📋 Master Inquiries CRM (<span id="admBadgeLeadCount">0</span>)
+            </button>
+            <button class="dash-tab-btn" id="admTabBtnAdmissions" onclick="switchAdminTab('admissions')">
+              <i class="fa-solid fa-graduation-cap"></i> 🎓 Admissions & Fee Records
+            </button>
+            <button class="dash-tab-btn" id="admTabBtnAnalytics" onclick="switchAdminTab('analytics')">
+              <i class="fa-solid fa-chart-pie"></i> 📈 Performance & Quota Analytics
+            </button>
+          </div>
+
+          <!-- PANE 1: Counselors & Team Performance -->
+          <div class="admin-tab-pane" id="admPaneStaff">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row justify-content-between align-items-center">
+                <div>
+                  <h4 class="mb-0">Counseling Team & Telecaller Performance</h4>
+                  <p class="text-muted font-sm mb-0">Monitor active student allocations, calling task velocity, and conversion.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openAddStaffModal()">
+                  <i class="fa-solid fa-user-plus"></i> + Add New Counselor
+                </button>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="adminStaffTable">
+                <thead>
+                  <tr>
+                    <th>Counselor Details</th>
+                    <th>Role & Code</th>
+                    <th>Assigned Territory</th>
+                    <th>Specialization</th>
+                    <th>Active Leads</th>
+                    <th>Direct Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="adminStaffTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE 2: Master Student Leads CRM -->
+          <div class="admin-tab-pane d-none" id="admPaneLeads">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row">
+                <div class="search-box-wrap">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" id="adminLeadSearch" class="search-input" placeholder="Search student name, phone, course..." oninput="filterAdminMasterLeads()" />
+                </div>
+                <div class="filter-select-wrap">
+                  <select id="adminLeadStatusFilter" class="filter-select" onchange="filterAdminMasterLeads()">
+                    <option value="all">All Statuses</option>
+                    <option value="New">🔵 New</option>
+                    <option value="In Progress">🟡 In Progress</option>
+                    <option value="Contacted">🟢 Contacted</option>
+                    <option value="Admitted">🏆 Admitted</option>
+                  </select>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="exportLeadsCSV()">
+                  <i class="fa-solid fa-file-arrow-down"></i> Export CSV
+                </button>
+                <button class="btn btn-outline-primary btn-sm" onclick="fetchAdminLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="adminMasterLeadsTable">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Phone / WhatsApp</th>
+                    <th>Target Course</th>
+                    <th>Domicile</th>
+                    <th>NEET Score</th>
+                    <th>Status</th>
+                    <th>Reassign Counselor</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminMasterLeadsTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE 3: Admissions & Fee Records -->
+          <div class="admin-tab-pane d-none" id="admPaneAdmissions">
+            <div class="search-filter-card mb-3">
+              <div class="filter-row justify-content-between">
+                <div>
+                  <h4 class="mb-0">Confirmed Student Admissions & Receipts Audit</h4>
+                  <p class="text-muted font-sm mb-0">Verified colleges, tuition fees, and scholarship schemes.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="openRegisterAdmissionModal()">
+                  <i class="fa-solid fa-plus"></i> + Enroll Student
+                </button>
+              </div>
+            </div>
+
+            <div class="comparison-matrix-wrapper">
+              <table class="compare-table" id="adminAdmissionsTable">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>College Allotted</th>
+                    <th>Course & Quota</th>
+                    <th>Tuition Fee & Receipt</th>
+                    <th>Scholarship Status</th>
+                    <th>Handled By</th>
+                  </tr>
+                </thead>
+                <tbody id="adminAdmissionsTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE 4: Counselling Analytics -->
+          <div class="admin-tab-pane d-none" id="admPaneAnalytics">
+            <div class="grid-2-cols mb-4">
+              <div class="glass-card">
+                <h4>Course Inquiries Distribution</h4>
+                <div class="d-flex flex-column gap-2 mt-3">
+                  <div>
+                    <div class="d-flex justify-content-between font-sm mb-1">
+                      <strong>MBBS (Allopathic)</strong>
+                      <span>58%</span>
+                    </div>
+                    <div style="background: var(--bg-subtle); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="background: var(--primary); width: 58%; height: 100%;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between font-sm mb-1">
+                      <strong>BAMS (Ayurveda)</strong>
+                      <span>22%</span>
+                    </div>
+                    <div style="background: var(--bg-subtle); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="background: var(--gold); width: 22%; height: 100%;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between font-sm mb-1">
+                      <strong>BHMS & BDS</strong>
+                      <span>12%</span>
+                    </div>
+                    <div style="background: var(--bg-subtle); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="background: var(--emerald); width: 12%; height: 100%;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between font-sm mb-1">
+                      <strong>MD / MS Medical PG</strong>
+                      <span>8%</span>
+                    </div>
+                    <div style="background: var(--bg-subtle); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="background: var(--purple); width: 8%; height: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card">
+                <h4>Scholarship & Financial Support</h4>
+                <div class="d-flex flex-column gap-3 mt-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div style="font-size: 2rem;">🏆</div>
+                    <div>
+                      <strong>MP MMVY Scheme</strong>
+                      <p class="text-muted font-sm mb-0">100% Tuition Fee Waiver for 12th MP Board $\ge 70\%$ or CBSE $\ge 85\%$.</p>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                    <div style="font-size: 2rem;">💰</div>
+                    <div>
+                      <strong>Estimated Savings Secured</strong>
+                      <h3 class="text-emerald mb-0">₹1.85+ Crore</h3>
+                      <p class="text-muted font-xs">Total student tuition fees waived across 1,000+ admissions.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 13: COUNSELLING & CONTACT -->
     <!-- ========================================================================= -->
     <section id="view-counselling" class="app-view">
       <div class="page-banner counselling-banner">
@@ -1655,6 +1958,62 @@
           </div>
           <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
             <i class="fa-solid fa-floppy-disk"></i> Save Call Notes
+          </button>
+        </form>
+      </div>
+    </div>
+  <!-- 4. Add Counselor Modal (Admin Only) -->
+  <div class="modal-overlay" id="adminAddStaffModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag gold">👑 DIRECTOR ACTIONS</span>
+          <h3>Add New Counselor to Team</h3>
+          <p>Create staff profile & assign counselling territory</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeAddStaffModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleAddStaffSubmit(event)">
+          <div class="form-group">
+            <label>Counselor Full Name</label>
+            <input type="text" class="form-control" id="newStaffName" placeholder="e.g. Neha Deshmukh" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Login Username</label>
+              <input type="text" class="form-control" id="newStaffUsername" placeholder="e.g. emp03" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Password</label>
+              <input type="password" class="form-control" id="newStaffPassword" value="sathi2026" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Role</label>
+              <select class="form-control" id="newStaffRole">
+                <option value="Senior Medical Counselor">Senior Medical Counselor</option>
+                <option value="Telecalling Specialist">Telecalling Specialist</option>
+                <option value="AYUSH & Nursing Counselor">AYUSH & Nursing Counselor</option>
+                <option value="Admission Coordinator">Admission Coordinator</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Phone Number</label>
+              <input type="tel" class="form-control" id="newStaffPhone" placeholder="10-digit mobile" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Specialization Stream</label>
+            <input type="text" class="form-control" id="newStaffSpec" placeholder="e.g. MBBS State Quota & MMVY Guidance" required />
+          </div>
+          <div class="form-group">
+            <label>Assigned Territory / States</label>
+            <input type="text" class="form-control" id="newStaffTerritory" placeholder="e.g. Madhya Pradesh, Maharashtra" value="Madhya Pradesh" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+            <i class="fa-solid fa-user-check"></i> Register Counselor to System
           </button>
         </form>
       </div>

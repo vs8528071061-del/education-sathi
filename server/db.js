@@ -533,6 +533,69 @@ const DB = {
     list[idx] = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
     writeJson(ADMISSIONS_FILE, list);
     return list[idx];
+  },
+
+  // Staff Management (Admin Only)
+  addEmployee: (empData) => {
+    const employees = readJson(EMPLOYEES_FILE);
+    const newEmp = {
+      id: 'emp-' + Date.now(),
+      empCode: 'ES-0' + (employees.length + 101),
+      username: empData.username.trim().toLowerCase(),
+      password: empData.password || 'sathi2026',
+      name: empData.name || 'New Counselor',
+      role: empData.role || 'Admission Counselor',
+      phone: empData.phone || '9752754404',
+      email: empData.email || '',
+      avatar: empData.avatar || '👩‍💼',
+      specialization: empData.specialization || 'General Medical Admissions',
+      assignedTerritory: empData.assignedTerritory || 'Madhya Pradesh',
+      activeLeadsCount: 0,
+      callsTodayCount: 0,
+      createdAt: new Date().toISOString()
+    };
+    employees.push(newEmp);
+    writeJson(EMPLOYEES_FILE, employees);
+    return newEmp;
+  },
+  reassignLead: (leadId, newCounselor) => {
+    const leads = readJson(LEADS_FILE);
+    const idx = leads.findIndex(l => l.id === leadId);
+    if (idx === -1) return null;
+    leads[idx].assignedCounselor = newCounselor;
+    leads[idx].updatedAt = new Date().toISOString();
+    writeJson(LEADS_FILE, leads);
+    return leads[idx];
+  },
+  getAdminMetrics: () => {
+    const leads = readJson(LEADS_FILE);
+    const admissions = readJson(ADMISSIONS_FILE);
+    const schedule = readJson(CALLING_SCHEDULE_FILE);
+    const employees = readJson(EMPLOYEES_FILE);
+
+    // Calculate staff stats
+    const staffStats = employees.map(e => {
+      const assignedLeads = leads.filter(l => l.assignedCounselor === e.name || l.assignedCounselor === e.username).length;
+      const completedCalls = schedule.filter(s => (s.counselorName === e.name || s.counselorUsername === e.username) && s.status === 'Completed').length;
+      const totalCalls = schedule.filter(s => s.counselorName === e.name || s.counselorUsername === e.username).length;
+      const enrolled = admissions.filter(a => a.assignedCounselor === e.name).length;
+      return {
+        ...e,
+        assignedLeads,
+        totalCalls,
+        completedCalls,
+        enrolled
+      };
+    });
+
+    return {
+      totalLeads: leads.length,
+      newLeads: leads.filter(l => l.status === 'New').length,
+      inProgressLeads: leads.filter(l => l.status === 'In Progress' || l.status === 'Contacted').length,
+      totalAdmissions: admissions.length,
+      totalCallsScheduled: schedule.length,
+      staffPerformance: staffStats
+    };
   }
 };
 
