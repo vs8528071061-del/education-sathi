@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>EDUCATION SATHI | Your Dream, Our Guidance, Your Success! - Premier Admissions & Counselling Hub</title>
+  <meta name="description" content="Education Sathi - India's Trusted Education Partner. 5+ Years Experience, 1000+ Success Stories. Medical Admissions (MBBS/BAMS/BHMS/BUMS/MD-MS), 28 States + 8 UTs, 500+ Courses, and Central/State Scholarships." />
+  <meta name="keywords" content="Education Sathi, Medical Admissions India, MBBS Cutoff 2026, BAMS BHMS Admission, 28 Indian States Colleges, NEET Predictor, Bhopal Education Counselor, Rahul Bhartiya, NSP Scholarships" />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Education Sathi - Your Dream, Our Guidance, Your Success!" />
+  <meta property="og:description" content="Explore Top Colleges across 28 States & 8 UTs, Dedicated Medical Admissions (MBBS, BAMS, BHMS, MD/MS), and 100% Scholarship Support." />
+  <meta property="og:type" content="website" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <header class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-info-left">
+        <span><i class="fa-solid fa-graduation-cap text-gold"></i> <strong>5+ Years Experience</strong></span>
+        <span class="divider-dot">•</span>
+        <span><i class="fa-solid fa-trophy text-gold"></i> <strong>1000+ Success Stories</strong></span>
+        <span class="divider-dot d-none-sm">•</span>
+        <span class="d-none-sm"><i class="fa-solid fa-location-dot text-danger"></i> Bhopal, MP | <i class="fa-solid fa-globe text-primary"></i> Pan India</span>
+      </div>
+      <div class="top-info-right">
+        <a href="mailto:hn247educationsthi@gmail.com" class="top-link"><i class="fa-solid fa-envelope"></i> hn247educationsthi@gmail.com</a>
+        <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20need%20expert%20career%20counselling%20guidance." target="_blank" class="top-btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> 9752754404
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Luxury Navigation Bar -->
+  <nav class="main-navbar" id="mainNavbar">
+    <div class="container nav-container">
+      <a href="#home" class="brand-logo" onclick="navigateTo('home')">
+        <div class="logo-icon-box">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="logo-text-group">
+          <span class="brand-title">EDUCATION <span class="highlight">SATHI</span></span>
+          <span class="brand-tagline">Your Dream, Our Guidance, Your Success!</span>
+        </div>
+      </a>
+
+      <!-- Quick Location Selector Dropdown -->
+      <div class="nav-location-picker d-none-sm">
+        <i class="fa-solid fa-location-dot text-danger"></i>
+        <select id="headerLocationSelect" onchange="handleLocationChange(this.value)">
+          <option value="all">📍 Pan India (All 36 States/UTs)</option>
+          <option value="madhya-pradesh" selected>🇮🇳 Madhya Pradesh (HQ)</option>
+          <option value="uttar-pradesh">🇮🇳 Uttar Pradesh</option>
+          <option value="maharashtra">🇮🇳 Maharashtra</option>
+          <option value="karnataka">🇮🇳 Karnataka</option>
+          <option value="rajasthan">🇮🇳 Rajasthan</option>
+          <option value="delhi">🇮🇳 Delhi NCR</option>
+          <option value="tamil-nadu">🇮🇳 Tamil Nadu</option>
+        </select>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-item active" data-target="home"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#destinations" class="nav-item" data-target="destinations"><i class="fa-solid fa-earth-asia"></i> 36 States</a></li>
+        <li><a href="#medical-courses" class="nav-item special-badge-link" data-target="medical-courses"><i class="fa-solid fa-stethoscope"></i> Medical <span class="nav-pill pulse">NEET</span></a></li>
+        <li><a href="#courses" class="nav-item" data-target="courses"><i class="fa-solid fa-book-open"></i> Courses</a></li>
+        <li><a href="#scholarships" class="nav-item special-badge-link" data-target="scholarships"><i class="fa-solid fa-award"></i> Scholarships <span class="nav-pill gold">Portal</span></a></li>
+        <li><a href="#ai-assistant" class="nav-item ai-pill-link" data-target="ai-assistant"><i class="fa-solid fa-robot"></i> Ask AI</a></li>
+        <li><a href="#admin" class="nav-item admin-crm-pill" data-target="admin"><i class="fa-solid fa-gauge-high"></i> Admin</a></li>
+      </ul>
+
+      <!-- Action Area -->
+      <div class="nav-actions">
+        <button class="nav-icon-btn" onclick="toggleNotificationDrawer()" title="Counselling Notifications" aria-label="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="icon-badge-dot"></span>
+        </button>
+        <button class="nav-icon-btn" onclick="openStudentProfileModal()" title="Student Profile / Login" aria-label="Profile">
+          <i class="fa-solid fa-user-graduate"></i>
+        </button>
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="btn btn-primary btn-sm btn-counsel shadow-glow" onclick="openCounselModal()">
+          <i class="fa-solid fa-phone-volume"></i> Free Consultation
+        </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open mobile menu">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Notification Drawer -->
+  <div class="notification-drawer" id="notificationDrawer">
+    <div class="notif-header">
+      <h4><i class="fa-solid fa-bell text-gold"></i> Admission Alerts & Deadlines</h4>
+      <button class="close-notif-btn" onclick="toggleNotificationDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="notif-list">
+      <div class="notif-item unread">
+        <span class="notif-tag blue">NEET 2026</span>
+        <p><strong>MCC Round 1 Choice Filling</strong> has opened for 15% AIQ and Deemed Medical Universities.</p>
+        <small class="text-muted">Today • Direct counselling support available</small>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-tag gold">MP Scholarship</span>
+        <p><strong>Mukhyamantri Medhavi Vidhyarthi Yojana (MMVY)</strong> portal is now accepting 100% tuition waiver registrations.</p>
+        <small class="text-muted">Yesterday • Deadline approaching</small>
+      </div>
+      <div class="notif-item">
+        <span class="notif-tag green">State DME</span>
+        <p><strong>UP DGME Open State Medical Merit List</strong> published for Private Medical Colleges.</p>
+        <small class="text-muted">2 days ago</small>
+      </div>
+    </div>
+    <div class="notif-footer">
+      <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20want%20latest%20counselling%20alerts" target="_blank" class="btn btn-whatsapp btn-sm w-100">
+        <i class="fa-brands fa-whatsapp"></i> Get Alerts on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div class="logo-text-group">
+        <span class="brand-title">EDUCATION <span class="highlight">SATHI</span></span>
+        <span class="brand-tagline">Your Dream, Our Guidance, Your Success!</span>
+      </div>
+      <button class="drawer-close-btn" id="drawerCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body">
+      <ul class="drawer-nav-list">
+        <li><a href="#home" class="drawer-link active" onclick="navigateTo('home'); closeDrawer();"><i class="fa-solid fa-house"></i> Home Overview</a></li>
+        <li><a href="#destinations" class="drawer-link" onclick="navigateTo('destinations'); closeDrawer();"><i class="fa-solid fa-earth-asia"></i> 36 States & UTs Directory</a></li>
+        <li><a href="#medical-courses" class="drawer-link" onclick="navigateTo('medical-courses'); closeDrawer();"><i class="fa-solid fa-stethoscope"></i> Dedicated Medical Boxes (MBBS/BAMS/BHMS)</a></li>
+        <li><a href="#courses" class="drawer-link" onclick="navigateTo('courses'); closeDrawer();"><i class="fa-solid fa-book-open"></i> 25+ Categories & 500+ Courses</a></li>
+        <li><a href="#scholarships" class="drawer-link" onclick="navigateTo('scholarships'); closeDrawer();"><i class="fa-solid fa-award"></i> Scholarships Portal (MMVY/NSP)</a></li>
+        <li><a href="#ai-assistant" class="drawer-link" onclick="navigateTo('ai-assistant'); closeDrawer();"><i class="fa-solid fa-robot text-primary"></i> Ask Education Sathi AI</a></li>
+        <li><a href="#predictor" class="drawer-link" onclick="navigateTo('predictor'); closeDrawer();"><i class="fa-solid fa-calculator"></i> NEET Rank & Score Predictor</a></li>
+        <li><a href="#compare" class="drawer-link" onclick="navigateTo('compare'); closeDrawer();"><i class="fa-solid fa-code-compare"></i> College Comparison Matrix</a></li>
+        <li><a href="#student-profile" class="drawer-link" onclick="navigateTo('student-profile'); closeDrawer();"><i class="fa-solid fa-user-graduate"></i> My Student Dashboard</a></li>
+        <li><a href="#admin" class="drawer-link" onclick="navigateTo('admin'); closeDrawer();"><i class="fa-solid fa-gauge-high"></i> Director Admin Portal</a></li>
+        <li><a href="#counselling" class="drawer-link" onclick="navigateTo('counselling'); closeDrawer();"><i class="fa-solid fa-headset"></i> Contact & Director Profile</a></li>
+      </ul>
+      <div class="drawer-footer-contact">
+        <div class="director-mini-badge">
+          <img src="images/director_rahul_bhartiya.jpg" alt="Rahul Bhartiya" class="director-mini-avatar" />
+          <div>
+            <strong>Rahul Bhartiya</strong>
+            <small>Director & Senior Counselor</small>
+          </div>
+        </div>
+        <a href="https://wa.me/919752754404?text=Hi%20Rahul%20Sir,%20I%20want%20career%20guidance" class="btn btn-whatsapp w-100 mt-3">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp: 9752754404
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN APP CONTAINER (SPA Views) -->
+  <main id="mainApp">
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: HOME (MOBILE-FIRST APP EXPERIENCE) -->
+    <!-- ========================================================================= -->
+    <section id="view-home" class="app-view active">
+      <!-- Hero Banner with Live College Campus Background -->
+      <section class="hero-section">
+        <!-- Live College Campus Background Layer -->
+        <div class="hero-live-bg" aria-hidden="true">
+          <div class="hero-live-bg-image"></div>
+          <div class="hero-live-scrim"></div>
+          <div class="hero-mesh-glow"></div>
+        </div>
+
+        <!-- Floating Live College Badges (Desktop/Tablet) -->
+        <div class="hero-live-floating-badges d-none-sm" aria-hidden="true">
+          <div class="live-floating-pill pill-top-left">
+            <span class="live-pulse-dot"></span>
+            <div class="live-pill-text">
+              <span class="live-pill-title"><i class="fa-solid fa-stethoscope text-primary"></i> 700+ Medical Hubs Active</span>
+              <span class="live-pill-sub">MBBS • BAMS • BHMS • MD/MS Choice Filling</span>
+            </div>
+          </div>
+          <div class="live-floating-pill pill-bottom-left">
+            <div class="live-pill-avatar-group">
+              <span class="avatar-pill"><i class="fa-solid fa-user-doctor"></i></span>
+              <span class="avatar-pill"><i class="fa-solid fa-user-graduate"></i></span>
+            </div>
+            <div class="live-pill-text">
+              <span class="live-pill-title"><i class="fa-solid fa-award text-gold"></i> 100% Scholarship Support</span>
+              <span class="live-pill-sub">MP MMVY & Central NSP Scheme</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="container hero-container">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="badge-dot"></span> 🌟 India's Trusted Education & Admission Partner
+              <span class="hero-live-counter"><span class="pulse-dot-green"></span> 128+ Online</span>
+            </div>
+            <h1 class="hero-title">
+              Choose The Right Course, <br />
+              <span class="gradient-text">Shape Your Bright Future!</span>
+            </h1>
+            <p class="hero-subtitle">
+              <strong>Your Dream, Our Guidance, Your Success!</strong> Career Guidance • College Selection • Admission Support • Scholarship Guidance across all 28 States & 8 Union Territories.
+            </p>
+
+            <!-- Quick Action CTA Group -->
+            <div class="hero-cta-group">
+              <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20want%20to%20book%20free%20counselling" target="_blank" class="btn btn-whatsapp btn-lg">
+                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+              </a>
+              <button class="btn btn-primary btn-lg shadow-glow" onclick="openCounselModal()">
+                <i class="fa-solid fa-calendar-check"></i> Book Free Counselling
+              </button>
+              <button class="btn btn-gold btn-lg" onclick="navigateTo('destinations')">
+                <i class="fa-solid fa-earth-asia"></i> Explore 36 States
+              </button>
+            </div>
+
+            <!-- Trust Metrics Bar -->
+            <div class="hero-stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="stat-info">
+                  <span class="stat-number">5+</span>
+                  <span class="stat-label">Years Experience</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon text-gold"><i class="fa-solid fa-trophy"></i></div>
+                <div class="stat-info">
+                  <span class="stat-number">1000+</span>
+                  <span class="stat-label">Success Stories</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon text-emerald"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="stat-info">
+                  <span class="stat-number">100%</span>
+                  <span class="stat-label">Transparency</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon text-cyan"><i class="fa-solid fa-earth-asia"></i></div>
+                <div class="stat-info">
+                  <span class="stat-number">Pan India</span>
+                  <span class="stat-label">Pan India Network</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Right Interactive Form -->
+          <div class="hero-interactive-card">
+            <div class="glass-card lead-quick-box">
+              <div class="lead-header">
+                <div class="pulse-indicator"></div>
+                <div>
+                  <h3>🎯 Instant Career & College Matcher</h3>
+                  <p>Get personalized guidance within 15 minutes</p>
+                </div>
+              </div>
+              <form id="heroLeadForm" onsubmit="handleLeadSubmit(event, 'Hero Quick Match')">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-user"></i> Student Name</label>
+                  <input type="text" class="form-control" placeholder="e.g. Aditi Sharma" required id="heroName" />
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-phone"></i> Mobile / WhatsApp</label>
+                  <input type="tel" class="form-control" placeholder="e.g. 9876543210" required id="heroPhone" />
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label><i class="fa-solid fa-graduation-cap"></i> Target Course</label>
+                    <select class="form-control" id="heroStream" required>
+                      <option value="MBBS Medical Admission">MBBS (Allopathy)</option>
+                      <option value="BAMS / BHMS / BUMS (AYUSH)">BAMS / BHMS / BUMS</option>
+                      <option value="MD / MS Postgraduate Medical">MD / MS Medical PG</option>
+                      <option value="B.Sc Nursing / Paramedical">B.Sc Nursing & Paramedical</option>
+                      <option value="Pharmacy (B.Pharm/D.Pharm)">Pharmacy</option>
+                      <option value="Engineering & Tech (B.Tech)">Engineering (B.Tech)</option>
+                      <option value="Management (BBA/MBA)">Management (BBA/MBA)</option>
+                      <option value="Law (BA LLB/LLB)">Law (BA LLB)</option>
+                      <option value="Scholarship Guidance">Scholarship Scheme</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label><i class="fa-solid fa-map-pin"></i> Domicile State</label>
+                    <select class="form-control" id="heroState" required>
+                      <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Delhi">Delhi NCR</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Other">Other State/UT</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-submit-lead">
+                  <i class="fa-solid fa-paper-plane"></i> Get Free Counselling Call
+                </button>
+                <div class="guarantee-text">
+                  <i class="fa-solid fa-lock"></i> 100% Confidential • Direct Guidance by Rahul Bhartiya
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 TEASER: CHOOSE YOUR FAVOURITE DESTINATION -->
+      <section class="section">
+        <div class="container">
+          <div class="section-title-wrap text-center">
+            <span class="sub-heading">EXPLORE ACROSS INDIA</span>
+            <h2 class="main-heading">🗺️ Choose Your Favourite Destination</h2>
+            <p class="section-desc">Explore Top Government & Private Colleges, Universities, and Medical Seats across all 28 States & 8 Union Territories.</p>
+          </div>
+
+          <!-- Featured Top State Cards -->
+          <div class="destination-cards-grid" id="homeDestinationsGrid">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="btn btn-primary btn-lg shadow-glow" onclick="navigateTo('destinations')">
+              <i class="fa-solid fa-earth-asia"></i> View All 36 States & Union Territories
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5 TEASER: DEDICATED MEDICAL ADMISSIONS BOXES -->
+      <section class="section bg-light-section">
+        <div class="container">
+          <div class="section-title-wrap text-center">
+            <span class="sub-heading">PREMIER MEDICAL SECTOR</span>
+            <h2 class="main-heading">🩺 Dedicated Medical Course Hub</h2>
+            <p class="section-desc">In-depth guides, cutoffs, seat matrices, and counselling paths for MBBS, BAMS, BHMS, BUMS, and MD/MS.</p>
+          </div>
+
+          <div class="medical-boxes-grid" id="homeMedicalBoxesGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: 5-STEP COUNSELLING JOURNEY -->
+      <section class="section" id="counselling-process">
+        <div class="container">
+          <div class="section-title-wrap text-center">
+            <span class="sub-heading">STRUCTURED ADMISSION JOURNEY</span>
+            <h2 class="main-heading">🧭 Our 5-Step Counselling Process</h2>
+            <p class="section-desc">From initial aptitude discovery to official round allotment and scholarship disbursement.</p>
+          </div>
+
+          <div class="counselling-flow-grid">
+            <div class="flow-card">
+              <div class="flow-step-num">01</div>
+              <div class="flow-icon bg-blue-subtle"><i class="fa-solid fa-magnifying-glass-chart text-primary"></i></div>
+              <h3>Career Assessment</h3>
+              <p>Scientific aptitude, score analysis, budget assessment, and state quota eligibility check.</p>
+            </div>
+            <div class="flow-card">
+              <div class="flow-step-num">02</div>
+              <div class="flow-icon bg-gold-subtle"><i class="fa-solid fa-building-columns text-gold"></i></div>
+              <h3>College Shortlisting</h3>
+              <p>Curating a dream, realistic, and safe list of top NIRF accredited medical/degree institutions.</p>
+            </div>
+            <div class="flow-card">
+              <div class="flow-step-num">03</div>
+              <div class="flow-icon bg-purple-subtle"><i class="fa-solid fa-file-signature text-purple"></i></div>
+              <h3>Counselling & Choice Filling</h3>
+              <p>Expert preference sequencing for MCC, MP DME, UP DGME, KEA, and state portal rounds.</p>
+            </div>
+            <div class="flow-card">
+              <div class="flow-step-num">04</div>
+              <div class="flow-icon bg-emerald-subtle"><i class="fa-solid fa-school-flag text-emerald"></i></div>
+              <h3>Admission Support</h3>
+              <p>On-ground document verification, nodal center guidance, and seat confirmation.</p>
+            </div>
+            <div class="flow-card">
+              <div class="flow-step-num">05</div>
+              <div class="flow-icon bg-blue-subtle"><i class="fa-solid fa-award text-primary"></i></div>
+              <h3>Post-Admission Guidance</h3>
+              <p>Scholarship claims (MMVY / NSP fee waiver), hostel settlement, and mentorship.</p>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="btn btn-whatsapp btn-lg" onclick="openCounselModal()">
+              <i class="fa-brands fa-whatsapp"></i> Book Free Counselling with Director
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Director Profile Spotlight -->
+      <section class="section director-spotlight-section">
+        <div class="container">
+          <div class="director-card">
+            <div class="director-avatar-box">
+              <div class="director-photo-wrap">
+                <img src="images/director_rahul_bhartiya.jpg" alt="Rahul Bhartiya - Director & Senior Education Counselor, Education Sathi" class="director-photo" />
+              </div>
+              <div class="verified-pill"><i class="fa-solid fa-circle-check"></i> Verified Senior Counselor</div>
+            </div>
+            <div class="director-details">
+              <span class="sub-heading">LEADERSHIP & TRUST</span>
+              <h2 class="director-name">Rahul Bhartiya</h2>
+              <span class="director-role">Director & Senior Education Counselor, Education Sathi</span>
+              <p class="director-bio">
+                "Our mission is to empower every student with transparent, ethical, and authentic career guidance. We eliminate confusion in NEET counselling, simplify state quotas, and ensure you secure the best college and scholarship you deserve."
+              </p>
+              <div class="director-tags">
+                <span class="d-tag"><i class="fa-solid fa-check"></i> 5+ Years Experience</span>
+                <span class="d-tag"><i class="fa-solid fa-users"></i> 1000+ Students Guided</span>
+                <span class="d-tag"><i class="fa-solid fa-award"></i> 100% Transparency</span>
+                <span class="d-tag"><i class="fa-solid fa-location-dot"></i> Bhopal (MP) • Pan India</span>
+              </div>
+              <div class="director-cta mt-4">
+                <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20need%20direct%20guidance" class="btn btn-whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp (9752754404)
+                </a>
+                <a href="tel:9752754404" class="btn btn-outline-primary">
+                  <i class="fa-solid fa-phone"></i> Call: 9752754404
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: CHOOSE YOUR FAVOURITE DESTINATION (ALL 36 STATES & UTs) -->
+    <!-- ========================================================================= -->
+    <section id="view-destinations" class="app-view">
+      <div class="page-banner">
+        <div class="container">
+          <span class="sub-heading text-white">PAN INDIA ADMISSION DIRECTORY</span>
+          <h1 class="page-title text-white">🗺️ Choose Your Favourite Destination</h1>
+          <p class="page-subtitle text-white-80">
+            Explore Government & Private Colleges, Deemed Universities, and Medical Seats across all 28 States & 8 Union Territories in India.
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <!-- Destination Filters -->
+        <div class="search-filter-card mb-4">
+          <div class="filter-row">
+            <div class="search-box-wrap">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="destinationSearchInput" class="search-input" placeholder="Search State or City (e.g. Madhya Pradesh, Bhopal, Maharashtra, Pune, Karnataka, Delhi...)" oninput="filterDestinations()" />
+            </div>
+            <div class="filter-select-wrap">
+              <select id="destinationTypeFilter" class="filter-select" onchange="filterDestinations()">
+                <option value="all">All 36 Destinations</option>
+                <option value="State">28 Indian States</option>
+                <option value="Union Territory">8 Union Territories</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 36 Destinations Grid -->
+        <div class="destination-cards-grid" id="destinationsMasterGrid">
+          <!-- Populated by JS with all 36 States/UTs -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: DEDICATED STATE DETAIL DASHBOARD -->
+    <!-- ========================================================================= -->
+    <section id="view-state-detail" class="app-view">
+      <div class="page-banner state-hero-banner" id="stateBannerWrap">
+        <div class="container">
+          <button class="btn btn-sm btn-outline-secondary text-white mb-2" onclick="navigateTo('destinations')">
+            <i class="fa-solid fa-arrow-left"></i> Back to All States
+          </button>
+          <div class="banner-badge" id="stateBadgeType">INDIAN STATE</div>
+          <h1 class="page-title text-white" id="stateDetailTitle">🇮🇳 Madhya Pradesh</h1>
+          <p class="page-subtitle text-white-80" id="stateDetailSubtitle">
+            Key Cities: Bhopal, Indore, Jabalpur, Gwalior | Total Medical Colleges: 26
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <!-- State Colleges List & Filters -->
+        <div class="state-dashboard-header mb-4">
+          <div>
+            <h3>Top Government & Private Medical Colleges in <span id="stateNameSpan">Madhya Pradesh</span></h3>
+            <p class="text-muted">Filtered by state quota guidelines, previous cutoffs, and verified fee structures.</p>
+          </div>
+        </div>
+
+        <div class="medical-colleges-grid" id="stateCollegesGrid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 4: DEDICATED MEDICAL COURSE BOXES (MBBS, BAMS, BHMS, BUMS, MD/MS) -->
+    <!-- ========================================================================= -->
+    <section id="view-medical-courses" class="app-view">
+      <div class="page-banner medical-banner">
+        <div class="container">
+          <span class="banner-badge"><i class="fa-solid fa-stethoscope"></i> APEX MEDICAL DEGREE DIRECTORY</span>
+          <h1 class="page-title text-white">🩺 Medical Admissions Hub</h1>
+          <p class="page-subtitle text-white-80">
+            Official roadmaps for MBBS, BAMS, BHMS, BUMS, and MD/MS — Eligibility, NEET Cutoffs, Govt vs Pvt Fee Matrices, and Counselling Bodies.
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="medical-boxes-master-container" id="medicalBoxesMasterList">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 5: 25+ CAREER CATEGORIES (500+ COURSES) -->
+    <!-- ========================================================================= -->
+    <section id="view-courses" class="app-view">
+      <div class="page-banner">
+        <div class="container">
+          <span class="sub-heading text-white">DISCOVER YOUR PASSION</span>
+          <h1 class="page-title text-white">25+ Career Categories | 500+ Courses</h1>
+          <p class="page-subtitle text-white-80">
+            Explore detailed course curriculum, durations, entry criteria, career prospects, and admission roadmaps.
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="search-filter-card">
+          <div class="filter-row">
+            <div class="search-box-wrap">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="courseSearchInput" class="search-input" placeholder="Search by Course Name (e.g. MBBS, BCA, B.Tech AI, BAMS, CA, Fashion, Pilot...)" oninput="filterCourses()" />
+            </div>
+            <div class="filter-select-wrap">
+              <select id="courseCategoryFilter" class="filter-select" onchange="filterCourses()">
+                <option value="all">All 25 Categories</option>
+              </select>
+            </div>
+          </div>
+          <div class="quick-chips-wrapper" id="categoryChips"></div>
+        </div>
+
+        <div class="courses-count-bar">
+          <span id="coursesShowingCount">Showing 25 Categories (500+ Courses)</span>
+          <button class="btn btn-outline-primary btn-sm" onclick="expandAllCategories()"><i class="fa-solid fa-expand"></i> Expand All</button>
+        </div>
+
+        <div class="category-cards-grid" id="categoryCardsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 6: SCHOLARSHIP PORTAL -->
+    <!-- ========================================================================= -->
+    <section id="view-scholarships" class="app-view">
+      <div class="page-banner scholarship-banner">
+        <div class="container">
+          <div class="banner-badge gold-badge"><i class="fa-solid fa-award"></i> 100% VERIFIED SCHEMES</div>
+          <h1 class="page-title text-white">🎓 Comprehensive Scholarship Portal</h1>
+          <p class="page-subtitle text-white-80">
+            Find Central (NSP), State Schemes (MP MMVY 100% Fee Waiver), Category-wise, and Girls Scholarships.
+          </p>
+
+          <div class="sch-subnav">
+            <button class="sch-nav-btn active" onclick="switchScholarshipTab('finder')"><i class="fa-solid fa-wand-magic-sparkles"></i> "Find Scholarship for Me"</button>
+            <button class="sch-nav-btn" onclick="switchScholarshipTab('central')"><i class="fa-solid fa-flag"></i> Central Schemes</button>
+            <button class="sch-nav-btn" onclick="switchScholarshipTab('state')"><i class="fa-solid fa-landmark"></i> State Schemes</button>
+            <button class="sch-nav-btn" onclick="switchScholarshipTab('documents')"><i class="fa-solid fa-file-circle-check"></i> Document Checklist</button>
+            <button class="sch-nav-btn" onclick="switchScholarshipTab('dashboard')"><i class="fa-solid fa-chart-line"></i> My Tracker</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="sch-tab-content active" id="schTab-finder">
+          <div class="scholarship-finder-card glass-card">
+            <div class="finder-header">
+              <div class="finder-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <div>
+                <h2>Find Eligible Scholarships For Me</h2>
+                <p>Enter your profile details to instantly calculate all central, state, and merit scholarships you qualify for!</p>
+              </div>
+            </div>
+
+            <form id="scholarshipFinderForm" onsubmit="calculateScholarshipMatches(event)">
+              <div class="finder-grid">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-map-location-dot"></i> Domicile State</label>
+                  <select id="schState" class="form-control" required>
+                    <option value="All India">All India / Any State</option>
+                    <option value="Madhya Pradesh" selected>Madhya Pradesh (MP)</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh (UP)</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Karnataka">Karnataka</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-book-open"></i> Stream</label>
+                  <select id="schCourse" class="form-control" required>
+                    <option value="all">All Streams</option>
+                    <option value="Medical">Medical / MBBS / BAMS / Nursing</option>
+                    <option value="Engineering">Engineering / B.Tech / Diploma</option>
+                    <option value="Management">Management / BBA / MBA</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-id-card"></i> Category</label>
+                  <select id="schCategory" class="form-control" required>
+                    <option value="all">All Categories</option>
+                    <option value="General">General / Open Merit</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-wallet"></i> Family Annual Income</label>
+                  <select id="schIncome" class="form-control" required>
+                    <option value="under1lakh">Under ₹1.0 Lakh / yr</option>
+                    <option value="1to2.5lakh" selected>₹1.0 Lakh – ₹2.5 Lakh / yr</option>
+                    <option value="2.5to5lakh">₹2.5 Lakh – ₹5.0 Lakh / yr</option>
+                    <option value="5to8lakh">₹5.0 Lakh – ₹8.0 Lakh / yr</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-percent"></i> 12th Marks (%)</label>
+                  <input type="number" id="schMarks" class="form-control" min="35" max="100" value="80" required />
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                  <select id="schGender" class="form-control" required>
+                    <option value="Female">Female / Girl Student</option>
+                    <option value="Male">Male</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="finder-btn-wrap">
+                <button type="submit" class="btn btn-primary btn-lg shadow-glow">
+                  <i class="fa-solid fa-magnifying-glass-chart"></i> Find Matching Scholarships
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="scholarship-results-container mt-4">
+            <h3 id="schCountHeading" class="mb-3">Available Scholarships</h3>
+            <div class="scholarship-cards-grid" id="scholarshipsGrid"></div>
+          </div>
+        </div>
+
+        <div class="sch-tab-content" id="schTab-central">
+          <div class="scholarship-cards-grid" id="centralSchGrid"></div>
+        </div>
+
+        <div class="sch-tab-content" id="schTab-state">
+          <div class="state-filter-buttons mb-4" id="schStatePills">
+            <button class="state-pill-btn active" onclick="filterStateScholarships('Madhya Pradesh', this)">Madhya Pradesh (MP)</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('Uttar Pradesh', this)">Uttar Pradesh (UP)</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('all', this)">All States</button>
+          </div>
+          <div class="scholarship-cards-grid" id="stateSchGrid"></div>
+        </div>
+
+        <div class="sch-tab-content" id="schTab-documents">
+          <div class="docs-checklist-wrapper glass-card">
+            <h2><i class="fa-solid fa-file-circle-check text-emerald"></i> Mandatory Scholarship Document Checklist</h2>
+            <div class="docs-checklist-grid mt-3">
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>1. Aadhaar Card (DBT Seeded)</strong></label></div>
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>2. Income Certificate (&lt;6 Months)</strong></label></div>
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>3. Domicile Certificate (Mool Niwas)</strong></label></div>
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>4. Caste Certificate (SC/ST/OBC/EWS)</strong></label></div>
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>5. 10th & 12th Marksheets</strong></label></div>
+              <div class="doc-item"><input type="checkbox" checked /><label><strong>6. College Allotment Letter & Fee Receipt</strong></label></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sch-tab-content" id="schTab-dashboard">
+          <div class="dashboard-wrapper">
+            <h2>📊 My Scholarship Applications Tracker</h2>
+            <div class="tracked-list-container mt-4" id="trackedScholarshipsList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 7: ASK EDUCATION SATHI AI (AI CAREER ASSISTANT) -->
+    <!-- ========================================================================= -->
+    <section id="view-ai-assistant" class="app-view">
+      <div class="page-banner ai-banner">
+        <div class="container">
+          <div class="banner-badge emerald-badge"><i class="fa-solid fa-robot"></i> AI ADMISSION ADVISOR</div>
+          <h1 class="page-title text-white">🤖 Ask Education Sathi AI</h1>
+          <p class="page-subtitle text-white-80">
+            Get instant AI analysis for your NEET score, state quota advantages, budget eligibility, and personalized choice-filling strategy.
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="grid-2-cols">
+          <div class="glass-card">
+            <h3><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Tell AI Your Profile</h3>
+            <form id="aiAssistantForm" onsubmit="runAiAssistantQuery(event)">
+              <div class="form-group">
+                <label>Target Field</label>
+                <select id="aiCourse" class="form-control">
+                  <option value="MBBS">MBBS (Allopathy)</option>
+                  <option value="BAMS">BAMS (Ayurveda)</option>
+                  <option value="BHMS">BHMS (Homoeopathy)</option>
+                  <option value="BUMS">BUMS (Unani)</option>
+                  <option value="MD/MS">MD / MS Medical PG</option>
+                  <option value="B.Tech">Engineering (B.Tech)</option>
+                </select>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>NEET Score / Marks</label>
+                  <input type="number" id="aiScore" class="form-control" value="540" min="100" max="720" required />
+                </div>
+                <div class="form-group">
+                  <label>Home State</label>
+                  <select id="aiState" class="form-control">
+                    <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Other">Other States</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Annual Budget Preference</label>
+                <select id="aiBudget" class="form-control">
+                  <option value="govtOnly">Government Fee Only (&lt; ₹1.5 Lakh/yr)</option>
+                  <option value="under10">Under ₹10 Lakh/yr</option>
+                  <option value="under15" selected>Under ₹15 Lakh/yr</option>
+                  <option value="under25">₹15 – 25 Lakh/yr</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-3">
+                <i class="fa-solid fa-microchip"></i> Generate AI Recommendation
+              </button>
+            </form>
+          </div>
+
+          <!-- AI Output Card -->
+          <div class="glass-card" id="aiOutputCard">
+            <div id="aiOutputPlaceholder" class="text-center py-5">
+              <i class="fa-solid fa-robot text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+              <h4>AI Advisor is Ready</h4>
+              <p class="text-muted">Enter your score and preferences to see instant admission insights.</p>
+            </div>
+            <div id="aiOutputResult" class="d-none">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 8: NEET PREDICTOR -->
+    <!-- ========================================================================= -->
+    <section id="view-predictor" class="app-view">
+      <div class="page-banner predictor-banner">
+        <div class="container">
+          <div class="banner-badge emerald-badge"><i class="fa-solid fa-chart-line"></i> ADMISSION PROBABILITY ALGORITHM</div>
+          <h1 class="page-title text-white">🎯 NEET Rank & College Predictor</h1>
+          <p class="page-subtitle text-white-80">
+            Enter your NEET Score (0-720) or All India Rank (AIR) to predict Government, Private, and Deemed colleges.
+          </p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="grid-predictor">
+          <div class="predictor-card glass-card">
+            <h3>Enter Your NEET Details</h3>
+            <form id="neetPredictorForm" onsubmit="runNeetPrediction(event)">
+              <div class="form-group mt-3">
+                <label>NEET Score (Marks out of 720)</label>
+                <input type="number" id="predScore" class="form-control" min="100" max="720" value="540" required />
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="predCategory" class="form-control">
+                    <option value="UR">General / UR</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Domicile</label>
+                  <select id="predState" class="form-control">
+                    <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-3">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Predict Probable Colleges
+              </button>
+            </form>
+          </div>
+
+          <div class="predictor-results-card">
+            <div id="predictorPlaceholder" class="predictor-placeholder">
+              <div class="placeholder-icon"><i class="fa-solid fa-stethoscope"></i></div>
+              <h3>Ready to Calculate</h3>
+              <p class="text-muted">Click Predict to calculate admission chances.</p>
+            </div>
+            <div id="predictorOutput" class="predictor-output d-none">
+              <div class="score-summary-circle mb-3"><span id="resScoreDisplay">540</span></div>
+              <div class="predicted-colleges-list" id="predictedCollegesList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 9: COLLEGE COMPARISON -->
+    <!-- ========================================================================= -->
+    <section id="view-compare" class="app-view">
+      <div class="page-banner compare-banner">
+        <div class="container">
+          <h1 class="page-title text-white">📋 Side-by-Side Medical College Comparison</h1>
+        </div>
+      </div>
+      <div class="container section">
+        <div class="comparison-matrix-wrapper" id="comparisonMatrixWrap"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 10: STUDENT PROFILE & DASHBOARD -->
+    <!-- ========================================================================= -->
+    <section id="view-student-profile" class="app-view">
+      <div class="page-banner">
+        <div class="container">
+          <h1 class="page-title text-white">👤 Student Profile & Application Tracker</h1>
+          <p class="page-subtitle text-white-80">Manage your saved colleges, counselling status, and uploaded document records.</p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="grid-2-cols">
+          <div class="glass-card">
+            <h3>Student Information</h3>
+            <form id="studentProfileForm" onsubmit="saveStudentProfile(event)">
+              <div class="form-group mt-3">
+                <label>Full Name</label>
+                <input type="text" id="profName" class="form-control" value="Aditi Sharma" required />
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Mobile</label>
+                  <input type="tel" id="profPhone" class="form-control" value="9826012345" required />
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" id="profEmail" class="form-control" value="aditi@example.com" />
+                </div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>NEET Score</label>
+                  <input type="number" id="profScore" class="form-control" value="565" />
+                </div>
+                <div class="form-group">
+                  <label>Target Stream</label>
+                  <input type="text" id="profCourse" class="form-control" value="MBBS Medical" />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm mt-3">
+                <i class="fa-solid fa-floppy-disk"></i> Save Profile
+              </button>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <h3>Saved Colleges & Applications</h3>
+            <div class="clean-list mt-3">
+              <div class="pred-college-row mb-2">
+                <div><strong>Gandhi Medical College (GMC) Bhopal</strong><br><small>Status: Choice List Prepared</small></div>
+                <span class="badge-tag green">High Chance</span>
+              </div>
+              <div class="pred-college-row">
+                <div><strong>MGM Medical College Indore</strong><br><small>Status: Round 1 Verification</small></div>
+                <span class="badge-tag gold">Moderate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 11: SECURE DIRECTOR & COUNSELOR ADMIN CRM (LOGIN / LOGOUT) -->
+    <!-- ========================================================================= -->
+    <section id="view-admin" class="app-view">
+      <div class="page-banner counselling-banner">
+        <div class="container">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+              <div class="banner-badge gold-badge"><i class="fa-solid fa-lock"></i> SECURE DIRECTOR PORTAL</div>
+              <h1 class="page-title text-white">📊 Student Admissions CRM & Leads Database</h1>
+              <p class="page-subtitle text-white-80">Director: <strong>Rahul Bhartiya</strong> (Helpline: 9752754404)</p>
+            </div>
+            <div id="adminAuthButtons">
+              <button class="btn btn-gold btn-sm" id="adminLogoutBtn" onclick="handleAdminLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container section">
+        <!-- Admin Login Card if not logged in -->
+        <div id="adminLoginBox" class="glass-card mb-4 d-none" style="max-width: 480px; margin: 0 auto;">
+          <div class="text-center mb-3">
+            <i class="fa-solid fa-shield-halved text-primary" style="font-size: 2.5rem;"></i>
+            <h3 class="mt-2">Director & Admin Sign In</h3>
+            <p class="text-muted">Enter Director credentials to manage inquiries.</p>
+          </div>
+          <form onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" id="adminUsername" class="form-control" value="admin" required />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="adminPassword" class="form-control" value="educationsathi2026" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
+              <i class="fa-solid fa-key"></i> Access CRM Dashboard
+            </button>
+          </form>
+        </div>
+
+        <!-- CRM Dashboard Content -->
+        <div id="adminDashboardContent">
+          <div class="dashboard-stats-row mb-4">
+            <div class="dash-stat-box blue">
+              <span class="dash-stat-num" id="crmTotalLeads">0</span>
+              <span class="dash-stat-lbl">Total Inquiries</span>
+            </div>
+            <div class="dash-stat-box gold">
+              <span class="dash-stat-num" id="crmNewLeads">0</span>
+              <span class="dash-stat-lbl">New Pending</span>
+            </div>
+            <div class="dash-stat-box green">
+              <span class="dash-stat-num" id="crmInProgressLeads">0</span>
+              <span class="dash-stat-lbl">In Progress</span>
+            </div>
+            <div class="dash-stat-box purple">
+              <span class="dash-stat-num" id="crmAdmittedLeads">0</span>
+              <span class="dash-stat-lbl">Seats Allotted</span>
+            </div>
+          </div>
+
+          <div class="search-filter-card mb-4">
+            <div class="filter-row">
+              <div class="search-box-wrap">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="crmSearchInput" class="search-input" placeholder="Search student name, phone, state..." oninput="filterCrmLeads()" />
+              </div>
+              <div class="filter-select-wrap">
+                <select id="crmStatusFilter" class="filter-select" onchange="filterCrmLeads()">
+                  <option value="all">All Statuses</option>
+                  <option value="New">🔵 New</option>
+                  <option value="In Progress">🟡 In Progress</option>
+                  <option value="Contacted">🟢 Contacted</option>
+                  <option value="Admitted">🏆 Admitted</option>
+                </select>
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="fetchCrmLeads()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+          </div>
+
+          <div class="comparison-matrix-wrapper">
+            <table class="compare-table" id="crmLeadsTable">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Phone / WhatsApp</th>
+                  <th>Target Stream</th>
+                  <th>State</th>
+                  <th>Score / Marks</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="crmLeadsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 12: COUNSELLING & CONTACT -->
+    <!-- ========================================================================= -->
+    <section id="view-counselling" class="app-view">
+      <div class="page-banner counselling-banner">
+        <div class="container">
+          <h1 class="page-title text-white">📞 Contact Education Sathi</h1>
+          <p class="page-subtitle text-white-80">Director Rahul Bhartiya • Bhopal, MP • Pan India Network</p>
+        </div>
+      </div>
+
+      <div class="container section">
+        <div class="grid-2-cols">
+          <div class="glass-card">
+            <h3>Head Office Details</h3>
+            <div class="contact-points-list mt-3">
+              <div class="c-point">
+                <div class="c-icon bg-emerald-subtle"><i class="fa-brands fa-whatsapp text-emerald"></i></div>
+                <div>
+                  <strong>WhatsApp Helpline</strong>
+                  <a href="https://wa.me/919752754404" target="_blank" class="d-block text-emerald font-bold">9752754404</a>
+                </div>
+              </div>
+              <div class="c-point">
+                <div class="c-icon bg-blue-subtle"><i class="fa-solid fa-envelope text-primary"></i></div>
+                <div>
+                  <strong>Email</strong>
+                  <a href="mailto:hn247educationsthi@gmail.com" class="d-block font-bold">hn247educationsthi@gmail.com</a>
+                </div>
+              </div>
+              <div class="c-point">
+                <div class="c-icon bg-purple-subtle"><i class="fa-solid fa-location-dot text-purple"></i></div>
+                <div>
+                  <strong>Location</strong>
+                  <p class="mb-0 font-bold">Bhopal, Madhya Pradesh (Pan India)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3>Book 1-on-1 Consultation</h3>
+            <form onsubmit="handleLeadSubmit(event, 'Contact Page')">
+              <div class="form-group mt-3">
+                <label>Student Name</label>
+                <input type="text" id="cName" class="form-control" placeholder="Enter name" required />
+              </div>
+              <div class="form-group">
+                <label>Phone / WhatsApp</label>
+                <input type="tel" id="cPhone" class="form-control" placeholder="Mobile number" required />
+              </div>
+              <div class="form-group">
+                <label>Target Course</label>
+                <input type="text" id="cCourse" class="form-control" placeholder="e.g. MBBS, BAMS, B.Tech" required />
+              </div>
+              <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-3">
+                <i class="fa-solid fa-paper-plane"></i> Submit & Chat on WhatsApp
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MOBILE BOTTOM NAVIGATION BAR (FIXED ON SMARTPHONES) -->
+  <!-- ========================================================================= -->
+  <nav class="mobile-bottom-nav">
+    <a href="#home" class="bottom-nav-item active" onclick="navigateTo('home')">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="#destinations" class="bottom-nav-item" onclick="navigateTo('destinations')">
+      <i class="fa-solid fa-earth-asia"></i>
+      <span>36 States</span>
+    </a>
+    <a href="#medical-courses" class="bottom-nav-item" onclick="navigateTo('medical-courses')">
+      <i class="fa-solid fa-stethoscope"></i>
+      <span>Medical</span>
+    </a>
+    <a href="#courses" class="bottom-nav-item" onclick="navigateTo('courses')">
+      <i class="fa-solid fa-book-open"></i>
+      <span>Courses</span>
+    </a>
+    <a href="#student-profile" class="bottom-nav-item" onclick="navigateTo('student-profile')">
+      <i class="fa-solid fa-user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Floating Quick Actions Bar -->
+  <aside class="floating-quick-bar">
+    <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20need%20quick%20counselling%20support" target="_blank" class="floating-btn whatsapp-float" title="Chat on WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+      <span class="float-tooltip">Chat with Rahul Sir (9752754404)</span>
+    </a>
+    <a href="tel:9752754404" class="floating-btn call-float" title="Call Us Now">
+      <i class="fa-solid fa-phone"></i>
+      <span class="float-tooltip">Call: 9752754404</span>
+    </a>
+  </aside>
+
+  <!-- Consultation Modal -->
+  <div class="modal-overlay" id="counselModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag gold">🎓 DIRECT COUNSELLING</span>
+          <h3>Book Free Consultation</h3>
+          <p>Direct Guidance by Director Rahul Bhartiya</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeCounselModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleLeadSubmit(event, 'Modal Popup')">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" class="form-control" id="mName" placeholder="Enter full name" required />
+          </div>
+          <div class="form-group">
+            <label>Mobile / WhatsApp</label>
+            <input type="tel" class="form-control" id="mPhone" placeholder="10-digit mobile" required />
+          </div>
+          <div class="form-group">
+            <label>Interested Course</label>
+            <select class="form-control" id="mCourse" required>
+              <option value="MBBS Medical Admission">MBBS Medical Admission</option>
+              <option value="BAMS / BHMS / BUMS">BAMS / BHMS / BUMS</option>
+              <option value="MD / MS Medical PG">MD / MS Medical PG</option>
+              <option value="Scholarship Guidance">Scholarship Scheme (MMVY)</option>
+              <option value="B.Tech Engineering">Engineering (B.Tech)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-3">
+            <i class="fa-solid fa-paper-plane"></i> Connect on WhatsApp Now
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- College Detail Modal -->
+  <div class="modal-overlay" id="collegeModalOverlay">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag blue" id="modalColType">Government</span>
+          <h3 id="modalColName">College Name</h3>
+          <p id="modalColLocation"><i class="fa-solid fa-location-dot"></i> City, State</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeCollegeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modalColBody"></div>
+      <div class="modal-footer" id="modalColFooter"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-grid">
+        <div class="footer-col brand-col">
+          <div class="brand-logo footer-brand">
+            <div class="logo-icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="logo-text-group">
+              <span class="brand-title text-white">EDUCATION <span class="highlight">SATHI</span></span>
+              <span class="brand-tagline text-white-80">Your Dream, Our Guidance, Your Success!</span>
+            </div>
+          </div>
+          <p class="footer-desc mt-3">
+            Committed to guiding students toward the right career with top colleges, transparent admission support, and 100% scholarship assistance.
+          </p>
+          <div class="director-contact-chip d-flex align-items-center gap-3">
+            <img src="images/director_rahul_bhartiya.jpg" alt="Rahul Bhartiya" class="director-mini-avatar" />
+            <div>
+              <strong>Director: Rahul Bhartiya</strong>
+              <span>Senior Counselor • 5+ Years Experience • 1000+ Success Stories</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#home" onclick="navigateTo('home')"><i class="fa-solid fa-angle-right"></i> Home</a></li>
+            <li><a href="#destinations" onclick="navigateTo('destinations')"><i class="fa-solid fa-angle-right"></i> 36 States & UTs</a></li>
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-angle-right"></i> Medical Admissions</a></li>
+            <li><a href="#courses" onclick="navigateTo('courses')"><i class="fa-solid fa-angle-right"></i> 25+ Categories</a></li>
+            <li><a href="#scholarships" onclick="navigateTo('scholarships')"><i class="fa-solid fa-angle-right"></i> Scholarships Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Medical Programs</h4>
+          <ul class="footer-links">
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-check text-gold"></i> MBBS Admissions</a></li>
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-check text-gold"></i> BAMS (Ayurveda)</a></li>
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-check text-gold"></i> BHMS (Homoeopathy)</a></li>
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-check text-gold"></i> BUMS (Unani)</a></li>
+            <li><a href="#medical-courses" onclick="navigateTo('medical-courses')"><i class="fa-solid fa-check text-gold"></i> MD / MS Specialization</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-heading">Contact Us</h4>
+          <div class="footer-contact-items">
+            <div class="fc-item"><i class="fa-solid fa-phone text-primary"></i><div><span>Helpline</span><strong>9752754404</strong></div></div>
+            <div class="fc-item"><i class="fa-brands fa-whatsapp text-emerald"></i><div><span>WhatsApp</span><strong>9752754404</strong></div></div>
+            <div class="fc-item"><i class="fa-solid fa-envelope text-gold"></i><div><span>Email</span><strong>hn247educationsthi@gmail.com</strong></div></div>
+            <div class="fc-item"><i class="fa-solid fa-location-dot text-danger"></i><div><span>Location</span><strong>Bhopal, Madhya Pradesh (Pan India)</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <p>© 2026 <strong>Education Sathi</strong>. All Rights Reserved. Your Dream, Our Guidance, Your Success! ✨</p>
+        <div class="footer-bottom-links">
+          <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Counselling</a>
+          <a href="mailto:hn247educationsthi@gmail.com"><i class="fa-solid fa-envelope"></i> Email Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
