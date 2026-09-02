@@ -244,13 +244,22 @@ function openStateDetail(destId) {
   if (nameSpan) nameSpan.innerText = dest.name;
 
   const isMP = dest.id === 'madhya-pradesh' || dest.code === 'MP';
+  const isMH = dest.id === 'maharashtra' || dest.code === 'MH';
+  const mh200Block = document.getElementById('mh200ExplorerBlock');
 
   if (isMP) {
     if (mp500Block) mp500Block.classList.remove('d-none');
+    if (mh200Block) mh200Block.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initMp500Explorer();
+  } else if (isMH) {
+    if (mp500Block) mp500Block.classList.add('d-none');
+    if (mh200Block) mh200Block.classList.remove('d-none');
+    if (standardBlock) standardBlock.classList.add('d-none');
+    initMh200Explorer();
   } else {
     if (mp500Block) mp500Block.classList.add('d-none');
+    if (mh200Block) mh200Block.classList.add('d-none');
     if (standardBlock) standardBlock.classList.remove('d-none');
 
     // Filter colleges for other states
@@ -490,6 +499,239 @@ function exportMp500CSV() {
   link.click();
   link.remove();
   showToast('Downloaded complete MP Top 500 Colleges spreadsheet!');
+}
+
+// ==========================================================================
+// 3C. TOP 200 MAHARASHTRA MEDICAL & HEALTH SCIENCE COLLEGES CONTROLLER
+// ==========================================================================
+
+let mhActiveCategory = 'all';
+let mhCurrentPage = 1;
+const MH_PAGE_SIZE = 50;
+let mhFilteredList = [];
+
+function initMh200Explorer() {
+  mhActiveCategory = 'all';
+  mhCurrentPage = 1;
+
+  const cats = ['All', 'GovtMbbs', 'PvtMbbs', 'Bds', 'Bams', 'BhmsBums', 'NursingAllied'];
+  cats.forEach(c => {
+    const b = document.getElementById(`mhTab${c}`);
+    if (b) {
+      if (c === 'All') b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  });
+
+  const searchInp = document.getElementById('mh200SearchInput');
+  const courseSel = document.getElementById('mh200CourseFilter');
+  const typeSel = document.getElementById('mh200TypeFilter');
+  const citySel = document.getElementById('mh200CityFilter');
+  if (searchInp) searchInp.value = '';
+  if (courseSel) courseSel.value = 'all';
+  if (typeSel) typeSel.value = 'all';
+  if (citySel) citySel.value = 'all';
+
+  filterMhCollegesList();
+}
+
+function filterMhCategory(cat) {
+  mhActiveCategory = cat;
+  mhCurrentPage = 1;
+
+  const btnMap = {
+    'all': 'mhTabAll',
+    'Govt MBBS': 'mhTabGovtMbbs',
+    'Private/Deemed MBBS': 'mhTabPvtMbbs',
+    'BDS Dental': 'mhTabBds',
+    'BAMS Ayurveda': 'mhTabBams',
+    'BHMS/BUMS': 'mhTabBhmsBums',
+    'Nursing & Allied': 'mhTabNursingAllied'
+  };
+
+  Object.keys(btnMap).forEach(k => {
+    const btn = document.getElementById(btnMap[k]);
+    if (btn) {
+      if (k === cat) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  filterMhCollegesList();
+}
+
+function filterMhCollegesList() {
+  if (typeof MH_TOP_200_COLLEGES === 'undefined' || !MH_TOP_200_COLLEGES.length) return;
+
+  const search = (document.getElementById('mh200SearchInput')?.value || '').toLowerCase().trim();
+  const course = document.getElementById('mh200CourseFilter')?.value || 'all';
+  const type = document.getElementById('mh200TypeFilter')?.value || 'all';
+  const city = document.getElementById('mh200CityFilter')?.value || 'all';
+
+  mhFilteredList = MH_TOP_200_COLLEGES.filter(c => {
+    const matchSearch = !search || 
+      c.name.toLowerCase().includes(search) || 
+      c.city.toLowerCase().includes(search) || 
+      c.course.toLowerCase().includes(search) ||
+      (c.category && c.category.toLowerCase().includes(search)) ||
+      String(c.rank) === search;
+
+    let matchCategory = true;
+    if (mhActiveCategory === 'BHMS/BUMS') {
+      matchCategory = c.category === 'BHMS Homeopathy' || c.category === 'BUMS Unani';
+    } else if (mhActiveCategory !== 'all') {
+      matchCategory = c.category === mhActiveCategory;
+    }
+
+    const matchCourse = course === 'all' || c.course.toLowerCase().includes(course.toLowerCase());
+    const matchType = type === 'all' || c.type.toLowerCase().includes(type.toLowerCase());
+    const matchCity = city === 'all' || c.city.toLowerCase().includes(city.toLowerCase());
+
+    return matchSearch && matchCategory && matchCourse && matchType && matchCity;
+  });
+
+  renderMh200Table();
+}
+
+function changeMhPage(direction) {
+  const totalPages = Math.ceil(mhFilteredList.length / MH_PAGE_SIZE) || 1;
+  const newPage = mhCurrentPage + direction;
+  if (newPage >= 1 && newPage <= totalPages) {
+    mhCurrentPage = newPage;
+    renderMh200Table();
+    const tableEl = document.getElementById('mh200MasterTable');
+    if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderMh200Table() {
+  const tbody = document.getElementById('mh200MasterTbody');
+  const countEl = document.getElementById('mh200DisplayCount');
+  const pageNumEl = document.getElementById('mhCurrentPageNum');
+  const totalPagesEl = document.getElementById('mhTotalPagesNum');
+  const prevBtn = document.getElementById('btnMhPrev');
+  const nextBtn = document.getElementById('btnMhNext');
+  const paginationWrap = document.getElementById('mh200PaginationWrap');
+
+  if (countEl) countEl.innerText = mhFilteredList.length;
+
+  const totalPages = Math.ceil(mhFilteredList.length / MH_PAGE_SIZE) || 1;
+  if (mhCurrentPage > totalPages) mhCurrentPage = totalPages;
+
+  if (pageNumEl) pageNumEl.innerText = mhCurrentPage;
+  if (totalPagesEl) totalPagesEl.innerText = totalPages;
+
+  if (prevBtn) prevBtn.disabled = mhCurrentPage <= 1;
+  if (nextBtn) nextBtn.disabled = mhCurrentPage >= totalPages;
+
+  if (paginationWrap) {
+    if (totalPages <= 1) paginationWrap.classList.add('d-none');
+    else paginationWrap.classList.remove('d-none');
+  }
+
+  if (!tbody) return;
+
+  if (!mhFilteredList.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted p-5">
+          <i class="fa-solid fa-stethoscope font-xl mb-2 d-block"></i>
+          <h4>No institutions found matching your filter.</h4>
+          <p class="font-sm text-muted">Try clearing the search box or selecting another category.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const start = (mhCurrentPage - 1) * MH_PAGE_SIZE;
+  const pageItems = mhFilteredList.slice(start, start + MH_PAGE_SIZE);
+
+  tbody.innerHTML = pageItems.map(c => {
+    let typeClass = 'blue';
+    if (c.type === 'Deemed') typeClass = 'purple';
+    else if (c.type === 'Private' || c.type === 'Private/Deemed') typeClass = 'gold';
+
+    let courseBadgeClass = 'green';
+    if (c.course === 'MBBS') courseBadgeClass = 'blue';
+    else if (c.course === 'BDS') courseBadgeClass = 'gold';
+    else if (c.course === 'B.Sc Nursing' || c.course === 'BPT') courseBadgeClass = 'purple';
+
+    const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I want counselling guidance for Maharashtra College Rank #${c.rank}: ${c.name} (${c.city}, MH). Course: ${c.course} (${c.duration}). Please share cutoff, fees, and quota details.`);
+
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column align-items-center">
+            <span class="badge-tag green font-bold" style="font-size: 0.85rem; padding: 0.35rem 0.6rem;">#${c.rank}</span>
+            <span class="text-xs text-muted mt-1">${c.category || 'Medical'}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md text-main">${c.name}</strong>
+            <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-emerald"></i> Verified MH Health Science Institution</span>
+          </div>
+        </td>
+        <td>
+          <span class="font-bold"><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}</span>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="badge-tag ${courseBadgeClass}">${c.course}</span>
+            <span class="text-xs text-muted mt-1">${c.duration}</span>
+          </div>
+        </td>
+        <td>
+          <span class="badge-tag ${typeClass}">${c.type}</span>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="font-xs font-bold text-primary">${c.entrance}</span>
+            <span class="text-xs text-muted">${c.eligibility}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-xs text-emerald">${c.estFee}</strong>
+            <span class="text-xs text-muted mt-1 font-bold">${c.counsellingBody}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="WhatsApp Rahul Bhartiya">
+              <i class="fa-brands fa-whatsapp"></i> Inquire
+            </a>
+            <a href="tel:9752754404" class="btn btn-outline-primary btn-sm" title="Helpline Call">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportMh200CSV() {
+  if (typeof MH_TOP_200_COLLEGES === 'undefined' || !MH_TOP_200_COLLEGES.length) {
+    showToast('Maharashtra Colleges data is loading...');
+    return;
+  }
+
+  let csv = "Rank,College Name,Location,State,Course,Duration,Management Type,Eligibility,Entrance Exam,Estimated Fee,Counselling Authority\n";
+  MH_TOP_200_COLLEGES.forEach(c => {
+    csv += `"${c.rank}","${c.name.replace(/"/g, '""')}","${c.city}","Maharashtra","${c.course}","${c.duration}","${c.type}","${c.eligibility}","${c.entrance}","${c.estFee}","${c.counsellingBody}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Maharashtra_Top_200_Medical_Colleges_Education_Sathi.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  showToast('Downloaded complete Maharashtra 200 Colleges spreadsheet!');
 }
 
 // ==========================================================================

@@ -675,7 +675,170 @@
           </div>
         </div>
 
-        <!-- Default State Medical Colleges Grid (For other 35 states/UTs) -->
+        <!-- MAHARASHTRA TOP 200 MEDICAL & HEALTH SCIENCES MASTER DIRECTORY (Active when viewing Maharashtra) -->
+        <div id="mh200ExplorerBlock" class="d-none">
+          <!-- Top 200 Header Banner -->
+          <div class="glass-card mb-4" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(2, 132, 199, 0.08) 100%), var(--bg-card); border: 2px solid var(--primary);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div>
+                <span class="badge-tag green font-bold mb-2"><i class="fa-solid fa-stethoscope"></i> OFFICIAL DMER & CET CELL MATRIX</span>
+                <h2 class="mb-1">🇮🇳 Maharashtra Top 200 Medical & Health Science Colleges</h2>
+                <p class="text-muted font-sm mb-0">Official 2026 Directory: 34 Govt MBBS, 86 Private & Deemed MBBS, 30 Dental (BDS), 40 AYUSH (BAMS/BHMS/BUMS), Nursing & Allied Health.</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <button class="btn btn-secondary btn-sm" onclick="exportMh200CSV()">
+                  <i class="fa-solid fa-file-csv"></i> Download Maharashtra 200 List (.csv)
+                </button>
+                <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20want%20counselling%20guidance%20for%20Maharashtra%20Medical%20Colleges" target="_blank" class="btn btn-whatsapp btn-sm">
+                  <i class="fa-brands fa-whatsapp"></i> MH Helpline: 9752754404
+                </a>
+              </div>
+            </div>
+
+            <!-- MH 200 Quick KPI Summary -->
+            <div class="dashboard-stats-row mt-3 mb-1">
+              <div class="dash-stat-box green">
+                <span class="dash-stat-num">200</span>
+                <span class="dash-stat-lbl">Institutions</span>
+              </div>
+              <div class="dash-stat-box blue">
+                <span class="dash-stat-num">34</span>
+                <span class="dash-stat-lbl">Govt MBBS</span>
+              </div>
+              <div class="dash-stat-box purple">
+                <span class="dash-stat-num">86</span>
+                <span class="dash-stat-lbl">Pvt & Deemed MBBS</span>
+              </div>
+              <div class="dash-stat-box gold">
+                <span class="dash-stat-num">30</span>
+                <span class="dash-stat-lbl">BDS Dental</span>
+              </div>
+              <div class="dash-stat-box red">
+                <span class="dash-stat-num">50</span>
+                <span class="dash-stat-lbl">AYUSH & Allied</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="dash-tab-nav mb-3">
+            <button class="dash-tab-btn active" id="mhTabAll" onclick="filterMhCategory('all')">
+              🌟 All 200 Colleges
+            </button>
+            <button class="dash-tab-btn" id="mhTabGovtMbbs" onclick="filterMhCategory('Govt MBBS')">
+              🏛️ Govt MBBS (1–34)
+            </button>
+            <button class="dash-tab-btn" id="mhTabPvtMbbs" onclick="filterMhCategory('Private/Deemed MBBS')">
+              🏢 Pvt/Deemed MBBS (35–120)
+            </button>
+            <button class="dash-tab-btn" id="mhTabBds" onclick="filterMhCategory('BDS Dental')">
+              🦷 BDS Dental (121–150)
+            </button>
+            <button class="dash-tab-btn" id="mhTabBams" onclick="filterMhCategory('BAMS Ayurveda')">
+              🌿 BAMS Ayurveda (151–175)
+            </button>
+            <button class="dash-tab-btn" id="mhTabBhmsBums" onclick="filterMhCategory('BHMS/BUMS')">
+              🧪 BHMS & BUMS (176–190)
+            </button>
+            <button class="dash-tab-btn" id="mhTabNursingAllied" onclick="filterMhCategory('Nursing & Allied')">
+              💉 Nursing & Allied (191–200)
+            </button>
+          </div>
+
+          <!-- Filter & Search Controls -->
+          <div class="search-filter-card mb-4">
+            <div class="filter-row">
+              <div class="search-box-wrap" style="flex: 2;">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="mh200SearchInput" class="search-input" placeholder="Search college name, district (Mumbai, Pune, Nagpur, Nashik, Kolhapur...), or course..." oninput="filterMhCollegesList()" />
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mh200CourseFilter" class="filter-select" onchange="filterMhCollegesList()">
+                  <option value="all">🎓 All Courses (MBBS, BDS, BAMS...)</option>
+                  <option value="MBBS">🩺 MBBS (Medicine & Surgery)</option>
+                  <option value="BDS">🦷 BDS (Dental Surgery)</option>
+                  <option value="BAMS">🌿 BAMS (Ayurvedacharya)</option>
+                  <option value="BHMS">🧪 BHMS (Homeopathy)</option>
+                  <option value="BUMS">🏺 BUMS (Unani)</option>
+                  <option value="B.Sc Nursing">💉 B.Sc Nursing</option>
+                  <option value="BPT">🤸 BPT (Physiotherapy)</option>
+                  <option value="BASLP">🔊 BASLP / Allied Health</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mh200TypeFilter" class="filter-select" onchange="filterMhCollegesList()">
+                  <option value="all">🏛️ All Management Types</option>
+                  <option value="Govt">🏛️ Government / Municipal</option>
+                  <option value="Private">🏢 Private Unaided (State Quota)</option>
+                  <option value="Deemed">💎 Deemed University (MCC Quota)</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="mh200CityFilter" class="filter-select" onchange="filterMhCollegesList()">
+                  <option value="all">📍 All Cities & Districts</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Nagpur">Nagpur</option>
+                  <option value="Nashik">Nashik</option>
+                  <option value="Navi Mumbai">Navi Mumbai</option>
+                  <option value="Chhatrapati Sambhajinagar">Chhatrapati Sambhajinagar</option>
+                  <option value="Kolhapur">Kolhapur</option>
+                  <option value="Solapur">Solapur</option>
+                  <option value="Wardha">Wardha</option>
+                  <option value="Karad">Karad</option>
+                  <option value="Latur">Latur</option>
+                  <option value="Amravati">Amravati</option>
+                  <option value="Jalgaon">Jalgaon</option>
+                  <option value="Dhule">Dhule</option>
+                  <option value="Nanded">Nanded</option>
+                  <option value="Ahmednagar">Ahmednagar</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-2 font-sm text-muted">
+              <span>Showing <strong id="mh200DisplayCount" class="text-primary">200</strong> of <strong>200</strong> Institutions</span>
+              <span class="text-emerald font-bold"><i class="fa-solid fa-circle-check"></i> Maharashtra State CET Cell / DMER Approved</span>
+            </div>
+          </div>
+
+          <!-- MH 200 Master Table -->
+          <div class="comparison-matrix-wrapper mb-4">
+            <table class="compare-table" id="mh200MasterTable">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Rank</th>
+                  <th>College Name</th>
+                  <th>Location</th>
+                  <th>Course & Duration</th>
+                  <th>Management</th>
+                  <th>Eligibility & Entrance</th>
+                  <th>Estimated Fee & Authority</th>
+                  <th>Expert Action</th>
+                </tr>
+              </thead>
+              <tbody id="mh200MasterTbody">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="d-flex justify-content-center align-items-center gap-3 my-4" id="mh200PaginationWrap">
+            <button class="btn btn-secondary btn-sm" id="btnMhPrev" onclick="changeMhPage(-1)">
+              <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <span class="font-bold text-muted font-sm">Page <span id="mhCurrentPageNum" class="text-primary">1</span> of <span id="mhTotalPagesNum">4</span></span>
+            <button class="btn btn-secondary btn-sm" id="btnMhNext" onclick="changeMhPage(1)">
+              Next <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Default State Medical Colleges Grid (For other states/UTs) -->
         <div id="standardStateCollegesBlock">
           <div class="state-dashboard-header mb-4">
             <div>
@@ -2185,6 +2348,7 @@
   <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/mp_colleges_data.js"></script>
+  <script src="js/mh_colleges_data.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

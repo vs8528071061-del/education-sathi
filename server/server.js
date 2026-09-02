@@ -321,6 +321,46 @@ app.get('/api/colleges/mp-top-500', (req, res) => {
   }
 });
 
+// Top 200 Maharashtra Medical & Health Science Colleges API
+app.get('/api/colleges/maharashtra-top-200', (req, res) => {
+  try {
+    const { search, course, category, type, city } = req.query;
+    let list = DB.getMhTop200Colleges();
+
+    if (search) {
+      const q = search.toLowerCase().trim();
+      list = list.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.city.toLowerCase().includes(q) || 
+        c.course.toLowerCase().includes(q) ||
+        (c.category && c.category.toLowerCase().includes(q)) ||
+        String(c.rank) === q
+      );
+    }
+    if (course && course !== 'all') {
+      list = list.filter(c => c.course.toLowerCase().includes(course.toLowerCase()));
+    }
+    if (category && category !== 'all') {
+      list = list.filter(c => c.category.toLowerCase().includes(category.toLowerCase()));
+    }
+    if (type && type !== 'all') {
+      list = list.filter(c => c.type.toLowerCase().includes(type.toLowerCase()));
+    }
+    if (city && city !== 'all') {
+      list = list.filter(c => c.city.toLowerCase().includes(city.toLowerCase()));
+    }
+
+    res.json({
+      success: true,
+      total: 200,
+      count: list.length,
+      colleges: list
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get('/api/courses', (req, res) => {
   res.json({ success: true, categories: DB.getCourses() });
 });
