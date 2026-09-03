@@ -245,21 +245,32 @@ function openStateDetail(destId) {
 
   const isMP = dest.id === 'madhya-pradesh' || dest.code === 'MP';
   const isMH = dest.id === 'maharashtra' || dest.code === 'MH';
+  const isUP = dest.id === 'uttar-pradesh' || dest.code === 'UP';
   const mh200Block = document.getElementById('mh200ExplorerBlock');
+  const up500Block = document.getElementById('up500ExplorerBlock');
 
   if (isMP) {
     if (mp500Block) mp500Block.classList.remove('d-none');
     if (mh200Block) mh200Block.classList.add('d-none');
+    if (up500Block) up500Block.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initMp500Explorer();
   } else if (isMH) {
     if (mp500Block) mp500Block.classList.add('d-none');
     if (mh200Block) mh200Block.classList.remove('d-none');
+    if (up500Block) up500Block.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initMh200Explorer();
+  } else if (isUP) {
+    if (mp500Block) mp500Block.classList.add('d-none');
+    if (mh200Block) mh200Block.classList.add('d-none');
+    if (up500Block) up500Block.classList.remove('d-none');
+    if (standardBlock) standardBlock.classList.add('d-none');
+    initUp500Explorer();
   } else {
     if (mp500Block) mp500Block.classList.add('d-none');
     if (mh200Block) mh200Block.classList.add('d-none');
+    if (up500Block) up500Block.classList.add('d-none');
     if (standardBlock) standardBlock.classList.remove('d-none');
 
     // Filter colleges for other states
@@ -732,6 +743,236 @@ function exportMh200CSV() {
   link.click();
   link.remove();
   showToast('Downloaded complete Maharashtra 200 Colleges spreadsheet!');
+}
+
+// ==========================================================================
+// 3D. TOP UTTAR PRADESH MEDICAL & HEALTHCARE COLLEGES CONTROLLER
+// ==========================================================================
+
+let upActiveCategory = 'all';
+let upCurrentPage = 1;
+const UP_PAGE_SIZE = 50;
+let upFilteredList = [];
+
+function initUp500Explorer() {
+  upActiveCategory = 'all';
+  upCurrentPage = 1;
+
+  const cats = ['All', 'GovtMedical', 'PvtMedical', 'Bds', 'Ayush', 'NursingAllied'];
+  cats.forEach(c => {
+    const b = document.getElementById(`upTab${c}`);
+    if (b) {
+      if (c === 'All') b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  });
+
+  const searchInp = document.getElementById('up500SearchInput');
+  const courseSel = document.getElementById('up500CourseFilter');
+  const typeSel = document.getElementById('up500TypeFilter');
+  const citySel = document.getElementById('up500CityFilter');
+  if (searchInp) searchInp.value = '';
+  if (courseSel) courseSel.value = 'all';
+  if (typeSel) typeSel.value = 'all';
+  if (citySel) citySel.value = 'all';
+
+  filterUpCollegesList();
+}
+
+function filterUpCategory(cat) {
+  upActiveCategory = cat;
+  upCurrentPage = 1;
+
+  const btnMap = {
+    'all': 'upTabAll',
+    'Govt Medical': 'upTabGovtMedical',
+    'Private Medical': 'upTabPvtMedical',
+    'BDS Dental': 'upTabBds',
+    'AYUSH (BAMS/BHMS/BUMS)': 'upTabAyush',
+    'Nursing & Allied Health': 'upTabNursingAllied'
+  };
+
+  Object.keys(btnMap).forEach(k => {
+    const btn = document.getElementById(btnMap[k]);
+    if (btn) {
+      if (k === cat) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  filterUpCollegesList();
+}
+
+function filterUpCollegesList() {
+  if (typeof UP_TOP_500_COLLEGES === 'undefined' || !UP_TOP_500_COLLEGES.length) return;
+
+  const search = (document.getElementById('up500SearchInput')?.value || '').toLowerCase().trim();
+  const course = document.getElementById('up500CourseFilter')?.value || 'all';
+  const type = document.getElementById('up500TypeFilter')?.value || 'all';
+  const city = document.getElementById('up500CityFilter')?.value || 'all';
+
+  upFilteredList = UP_TOP_500_COLLEGES.filter(c => {
+    const matchSearch = !search || 
+      c.name.toLowerCase().includes(search) || 
+      c.city.toLowerCase().includes(search) || 
+      c.course.toLowerCase().includes(search) ||
+      (c.category && c.category.toLowerCase().includes(search)) ||
+      (c.university && c.university.toLowerCase().includes(search)) ||
+      String(c.rank) === search;
+
+    const matchCategory = upActiveCategory === 'all' || c.category === upActiveCategory;
+    const matchCourse = course === 'all' || c.course.toLowerCase().includes(course.toLowerCase());
+    const matchType = type === 'all' || c.type.toLowerCase().includes(type.toLowerCase());
+    const matchCity = city === 'all' || c.city.toLowerCase().includes(city.toLowerCase());
+
+    return matchSearch && matchCategory && matchCourse && matchType && matchCity;
+  });
+
+  renderUp500Table();
+}
+
+function changeUpPage(direction) {
+  const totalPages = Math.ceil(upFilteredList.length / UP_PAGE_SIZE) || 1;
+  const newPage = upCurrentPage + direction;
+  if (newPage >= 1 && newPage <= totalPages) {
+    upCurrentPage = newPage;
+    renderUp500Table();
+    const tableEl = document.getElementById('up500MasterTable');
+    if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderUp500Table() {
+  const tbody = document.getElementById('up500MasterTbody');
+  const countEl = document.getElementById('up500DisplayCount');
+  const pageNumEl = document.getElementById('upCurrentPageNum');
+  const totalPagesEl = document.getElementById('upTotalPagesNum');
+  const prevBtn = document.getElementById('btnUpPrev');
+  const nextBtn = document.getElementById('btnUpNext');
+  const paginationWrap = document.getElementById('up500PaginationWrap');
+
+  if (countEl) countEl.innerText = upFilteredList.length;
+
+  const totalPages = Math.ceil(upFilteredList.length / UP_PAGE_SIZE) || 1;
+  if (upCurrentPage > totalPages) upCurrentPage = totalPages;
+
+  if (pageNumEl) pageNumEl.innerText = upCurrentPage;
+  if (totalPagesEl) totalPagesEl.innerText = totalPages;
+
+  if (prevBtn) prevBtn.disabled = upCurrentPage <= 1;
+  if (nextBtn) nextBtn.disabled = upCurrentPage >= totalPages;
+
+  if (paginationWrap) {
+    if (totalPages <= 1) paginationWrap.classList.add('d-none');
+    else paginationWrap.classList.remove('d-none');
+  }
+
+  if (!tbody) return;
+
+  if (!upFilteredList.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted p-5">
+          <i class="fa-solid fa-hospital font-xl mb-2 d-block"></i>
+          <h4>No UP institutions found matching your filter criteria.</h4>
+          <p class="font-sm text-muted">Try changing the course filter or search keywords.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const start = (upCurrentPage - 1) * UP_PAGE_SIZE;
+  const pageItems = upFilteredList.slice(start, start + UP_PAGE_SIZE);
+
+  tbody.innerHTML = pageItems.map(c => {
+    let typeClass = 'blue';
+    if (c.type.includes('Central')) typeClass = 'purple';
+    else if (c.type.includes('Private') || c.type.includes('Deemed')) typeClass = 'gold';
+
+    let courseBadgeClass = 'green';
+    if (c.course.includes('MBBS')) courseBadgeClass = 'blue';
+    else if (c.course.includes('BDS')) courseBadgeClass = 'gold';
+    else if (c.course.includes('Nursing') || c.course.includes('BPT')) courseBadgeClass = 'purple';
+
+    const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I want admission & counselling guidance for UP Medical Rank #${c.rank}: ${c.name} (${c.city}, UP). Target: ${c.course}. Please guide me on UPNEET cutoffs & seats.`);
+
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column align-items-center">
+            <span class="badge-tag gold font-bold" style="font-size: 0.85rem; padding: 0.35rem 0.6rem;">#${c.rank}</span>
+            <span class="text-xs text-muted mt-1">${c.category || 'Medical'}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md text-main">${c.name}</strong>
+            <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-emerald"></i> Verified UP Healthcare Institution</span>
+          </div>
+        </td>
+        <td>
+          <span class="font-bold"><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}</span>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="badge-tag ${courseBadgeClass}">${c.course}</span>
+            <span class="text-xs text-muted mt-1">${c.duration || '5.5 Yr'}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="badge-tag ${typeClass}">${c.type}</span>
+            <span class="text-xs text-muted mt-1">${c.university || 'State Affiliated'}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="font-xs font-bold text-primary">${c.entrance || 'NEET-UG'}</span>
+            <span class="text-xs text-muted">${c.eligibility}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-xs text-emerald">${c.estFee}</strong>
+            <span class="text-xs text-muted mt-1 font-bold">${c.counsellingBody || 'UPNEET'}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="WhatsApp Rahul Bhartiya">
+              <i class="fa-brands fa-whatsapp"></i> Inquire
+            </a>
+            <a href="tel:9752754404" class="btn btn-outline-primary btn-sm" title="Helpline Call">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportUp500CSV() {
+  if (typeof UP_TOP_500_COLLEGES === 'undefined' || !UP_TOP_500_COLLEGES.length) {
+    showToast('Uttar Pradesh Colleges data is loading...');
+    return;
+  }
+
+  let csv = "Rank,College Name,District/City,State,Course,Duration,Management Type,University/Affiliation,Eligibility,Entrance Exam,Estimated Fee,Counselling Authority\n";
+  UP_TOP_500_COLLEGES.forEach(c => {
+    csv += `"${c.rank}","${c.name.replace(/"/g, '""')}","${c.city}","Uttar Pradesh","${c.course}","${c.duration}","${c.type}","${(c.university || '').replace(/"/g, '""')}","${c.eligibility}","${c.entrance}","${c.estFee}","${c.counsellingBody}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Uttar_Pradesh_Top_500_Medical_Colleges_Education_Sathi.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  showToast('Downloaded complete Uttar Pradesh Medical Colleges spreadsheet!');
 }
 
 // ==========================================================================

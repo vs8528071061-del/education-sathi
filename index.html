@@ -838,6 +838,176 @@
           </div>
         </div>
 
+        <!-- UTTAR PRADESH TOP 500 MEDICAL & HEALTHCARE MASTER DIRECTORY (Active when viewing Uttar Pradesh) -->
+        <div id="up500ExplorerBlock" class="d-none">
+          <!-- Top 500 Header Banner -->
+          <div class="glass-card mb-4" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%), var(--bg-card); border: 2px solid var(--primary);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <div>
+                <span class="badge-tag gold font-bold mb-2"><i class="fa-solid fa-trophy"></i> OFFICIAL UPNEET & DGME DIRECTORY</span>
+                <h2 class="mb-1">🇮🇳 Uttar Pradesh Top Medical & Healthcare Colleges Master List</h2>
+                <p class="text-muted font-sm mb-0">Official 2026 Directory: KGMU, IMS BHU, RMLIMS, SGPGIMS, 35+ Autonomous Medical Colleges, 32+ Private MBBS, 30+ BDS Dental, BAMS, BHMS, BUMS, B.Sc Nursing & Allied Health.</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <button class="btn btn-secondary btn-sm" onclick="exportUp500CSV()">
+                  <i class="fa-solid fa-file-csv"></i> Download UP 500 List (.csv)
+                </button>
+                <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20want%20counselling%20guidance%20for%20Uttar%20Pradesh%20Medical%20Colleges" target="_blank" class="btn btn-whatsapp btn-sm">
+                  <i class="fa-brands fa-whatsapp"></i> UP Helpline: 9752754404
+                </a>
+              </div>
+            </div>
+
+            <!-- UP 500 Quick KPI Summary -->
+            <div class="dashboard-stats-row mt-3 mb-1">
+              <div class="dash-stat-box gold">
+                <span class="dash-stat-num">500</span>
+                <span class="dash-stat-lbl">Total Institutions</span>
+              </div>
+              <div class="dash-stat-box blue">
+                <span class="dash-stat-num">65+</span>
+                <span class="dash-stat-lbl">Govt & Autonomous</span>
+              </div>
+              <div class="dash-stat-box purple">
+                <span class="dash-stat-num">35+</span>
+                <span class="dash-stat-lbl">Private MBBS</span>
+              </div>
+              <div class="dash-stat-box green">
+                <span class="dash-stat-num">30+</span>
+                <span class="dash-stat-lbl">BDS Dental</span>
+              </div>
+              <div class="dash-stat-box red">
+                <span class="dash-stat-num">80+</span>
+                <span class="dash-stat-lbl">AYUSH (BAMS/BHMS)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="dash-tab-nav mb-3">
+            <button class="dash-tab-btn active" id="upTabAll" onclick="filterUpCategory('all')">
+              🌟 All 500 Colleges
+            </button>
+            <button class="dash-tab-btn" id="upTabGovtMedical" onclick="filterUpCategory('Govt Medical')">
+              🏛️ Govt Medical & Autonomous (1–37)
+            </button>
+            <button class="dash-tab-btn" id="upTabPvtMedical" onclick="filterUpCategory('Private Medical')">
+              🏢 Private MBBS (38–70)
+            </button>
+            <button class="dash-tab-btn" id="upTabBds" onclick="filterUpCategory('BDS Dental')">
+              🦷 BDS Dental (71–85, 104–110)
+            </button>
+            <button class="dash-tab-btn" id="upTabAyush" onclick="filterUpCategory('AYUSH (BAMS/BHMS/BUMS)')">
+              🌿 AYUSH (BAMS/BHMS/BUMS)
+            </button>
+            <button class="dash-tab-btn" id="upTabNursingAllied" onclick="filterUpCategory('Nursing & Allied Health')">
+              💉 Nursing & Allied Health
+            </button>
+          </div>
+
+          <!-- Filter & Search Controls -->
+          <div class="search-filter-card mb-4">
+            <div class="filter-row">
+              <div class="search-box-wrap" style="flex: 2;">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="up500SearchInput" class="search-input" placeholder="Search college name, district (Lucknow, Varanasi, Kanpur, Agra, Meerut, Bareilly...), or course..." oninput="filterUpCollegesList()" />
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="up500CourseFilter" class="filter-select" onchange="filterUpCollegesList()">
+                  <option value="all">🎓 All Courses (MBBS, BDS, BAMS...)</option>
+                  <option value="MBBS">🩺 MBBS (Medicine & Surgery)</option>
+                  <option value="BDS">🦷 BDS (Dental Surgery)</option>
+                  <option value="BAMS">🌿 BAMS (Ayurvedacharya)</option>
+                  <option value="BHMS">🧪 BHMS (Homeopathy)</option>
+                  <option value="BUMS">🏺 BUMS (Unani)</option>
+                  <option value="B.Sc Nursing">💉 B.Sc Nursing</option>
+                  <option value="BPT">🤸 BPT (Physiotherapy)</option>
+                  <option value="BMLT">🔬 BMLT (Medical Lab)</option>
+                  <option value="Radiology">📷 Radiology & Imaging</option>
+                  <option value="Optometry">👁️ Optometry</option>
+                  <option value="BASLP">🔊 BASLP / Allied Health</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="up500TypeFilter" class="filter-select" onchange="filterUpCollegesList()">
+                  <option value="all">🏛️ All Management Types</option>
+                  <option value="Govt">🏛️ Government / Autonomous</option>
+                  <option value="Private">🏢 Private / Minority</option>
+                  <option value="Central">🌟 Central Government (BHU/AMU)</option>
+                  <option value="Deemed">💎 Deemed University</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrap">
+                <select id="up500CityFilter" class="filter-select" onchange="filterUpCollegesList()">
+                  <option value="all">📍 All Cities & Districts</option>
+                  <option value="Lucknow">Lucknow</option>
+                  <option value="Kanpur">Kanpur</option>
+                  <option value="Varanasi">Varanasi</option>
+                  <option value="Prayagraj">Prayagraj</option>
+                  <option value="Agra">Agra</option>
+                  <option value="Meerut">Meerut</option>
+                  <option value="Greater Noida">Greater Noida</option>
+                  <option value="Noida">Noida</option>
+                  <option value="Ghaziabad">Ghaziabad</option>
+                  <option value="Bareilly">Bareilly</option>
+                  <option value="Gorakhpur">Gorakhpur</option>
+                  <option value="Mathura">Mathura</option>
+                  <option value="Ayodhya">Ayodhya</option>
+                  <option value="Jhansi">Jhansi</option>
+                  <option value="Aligarh">Aligarh</option>
+                  <option value="Saharanpur">Saharanpur</option>
+                  <option value="Muzaffarnagar">Muzaffarnagar</option>
+                  <option value="Moradabad">Moradabad</option>
+                  <option value="Hapur">Hapur</option>
+                  <option value="Barabanki">Barabanki</option>
+                  <option value="Sitapur">Sitapur</option>
+                  <option value="Shahjahanpur">Shahjahanpur</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-2 font-sm text-muted">
+              <span>Showing <strong id="up500DisplayCount" class="text-primary">500</strong> of <strong>500</strong> Institutions</span>
+              <span class="text-emerald font-bold"><i class="fa-solid fa-circle-check"></i> UP DGME & UPNEET Portal Approved</span>
+            </div>
+          </div>
+
+          <!-- UP 500 Master Table -->
+          <div class="comparison-matrix-wrapper mb-4">
+            <table class="compare-table" id="up500MasterTable">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Rank</th>
+                  <th>College Name</th>
+                  <th>District / City</th>
+                  <th>Course & Duration</th>
+                  <th>Type & University</th>
+                  <th>Eligibility & Entrance</th>
+                  <th>Fee & UPNEET Guidelines</th>
+                  <th>Expert Action</th>
+                </tr>
+              </thead>
+              <tbody id="up500MasterTbody">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="d-flex justify-content-center align-items-center gap-3 my-4" id="up500PaginationWrap">
+            <button class="btn btn-secondary btn-sm" id="btnUpPrev" onclick="changeUpPage(-1)">
+              <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <span class="font-bold text-muted font-sm">Page <span id="upCurrentPageNum" class="text-primary">1</span> of <span id="upTotalPagesNum">10</span></span>
+            <button class="btn btn-secondary btn-sm" id="btnUpNext" onclick="changeUpPage(1)">
+              Next <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
         <!-- Default State Medical Colleges Grid (For other states/UTs) -->
         <div id="standardStateCollegesBlock">
           <div class="state-dashboard-header mb-4">
@@ -2349,6 +2519,7 @@
   <script src="js/data.js"></script>
   <script src="js/mp_colleges_data.js"></script>
   <script src="js/mh_colleges_data.js"></script>
+  <script src="js/up_colleges_data.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
