@@ -1417,20 +1417,33 @@ button, input, select, textarea {
 /* ==========================================================================
    MOBILE STICKY BOTTOM NAVIGATION BAR
    ========================================================================== */
+/* ==========================================================================
+   MOBILE BOTTOM NAVIGATION & DRAWER (NATIVE iOS & ANDROID LUXURY UX)
+   ========================================================================== */
 .mobile-bottom-nav {
   display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 65px;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border-color);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 -8px 25px rgba(15, 23, 42, 0.08);
   z-index: 995;
   justify-content: space-around;
-  align-items: center;
-  padding: 0 0.5rem;
+  align-items: flex-start;
+  padding: 0.45rem 0.5rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  transition: background 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .mobile-bottom-nav {
+  background: rgba(11, 17, 32, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6);
 }
 
 .bottom-nav-item {
@@ -1441,43 +1454,58 @@ button, input, select, textarea {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.72rem;
-  font-weight: 600;
-  gap: 0.2rem;
-  padding: 0.35rem;
-  transition: var(--transition);
+  font-weight: 700;
+  gap: 0.22rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 58px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bottom-nav-item i {
   font-size: 1.25rem;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.bottom-nav-item.active, .bottom-nav-item:hover {
+.bottom-nav-item:active {
+  transform: scale(0.92);
+}
+
+.bottom-nav-item.active {
   color: var(--primary);
+  background: rgba(2, 132, 199, 0.1);
+  font-weight: 800;
+}
+
+.bottom-nav-item.active i {
+  transform: scale(1.15) translateY(-1px);
+}
+
+[data-theme="dark"] .bottom-nav-item.active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
 }
 
 @media (max-width: 768px) {
   .mobile-bottom-nav {
     display: flex;
   }
-  .floating-quick-bar {
-    bottom: 80px;
-  }
-  .destination-cards-grid,
-  .medical-boxes-grid,
-  .counselling-flow-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
+/* Mobile Slide-Out Drawer */
 .mobile-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 998;
+  background: rgba(10, 15, 29, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 2200;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-drawer-overlay.active {
@@ -1488,16 +1516,19 @@ button, input, select, textarea {
 .mobile-drawer {
   position: fixed;
   top: 0;
-  right: -320px;
-  width: 300px;
+  right: -340px;
+  width: 320px;
+  max-width: 86vw;
   height: 100%;
+  height: 100dvh;
   background: var(--bg-card);
-  z-index: 999;
-  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+  z-index: 2201;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 1.5rem;
+  padding: max(1.25rem, env(safe-area-inset-top, 0px)) 1.25rem max(1.25rem, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
 }
 
 .mobile-drawer.active {
@@ -1508,20 +1539,34 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 1.25rem;
+  padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .drawer-close-btn {
-  background: none;
-  border: none;
-  font-size: 1.4rem;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 1.25rem;
   color: var(--text-main);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.drawer-close-btn:active {
+  transform: scale(0.92);
 }
 
 .drawer-body {
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   flex: 1;
   padding-top: 1rem;
 }
@@ -1529,38 +1574,58 @@ button, input, select, textarea {
 .drawer-nav-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .drawer-link {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  font-weight: 750;
   font-size: 0.95rem;
   color: var(--text-main);
-  transition: var(--transition);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.drawer-link:hover, .drawer-link.active {
-  background: var(--primary-light);
+.drawer-link i {
+  font-size: 1.15rem;
+  width: 24px;
+  text-align: center;
   color: var(--primary);
+}
+
+.drawer-link:active, .drawer-link:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--primary);
+  transform: translateX(4px);
+}
+
+.drawer-link.active {
+  background: rgba(2, 132, 199, 0.12);
+  color: var(--primary);
+  border: 1px solid rgba(2, 132, 199, 0.22);
 }
 
 .director-mini-badge {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: var(--bg-subtle);
-  border-radius: var(--radius-md);
-  margin-top: 1.5rem;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-top: 1.25rem;
 }
 
 .director-mini-badge i {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--primary);
 }
 
@@ -5542,4 +5607,264 @@ button, input, select, textarea {
   .toast {
     width: 100%;
   }
+}
+
+/* ==========================================================================
+   ADVANCED iOS & ANDROID RESPONSIVENESS & ULTRA-PREMIUM UI/UX ENHANCEMENTS
+   ========================================================================== */
+
+/* 1. Universal Touch & Mobile Engine Reset */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 2. iOS Safari Auto-Zoom Prevention on Form Fields */
+@media (max-width: 768px) {
+  input, select, textarea,
+  .form-control, .form-control-premium, .form-select-premium,
+  .form-group-premium input, .form-group-premium select,
+  .form-group input, .form-group select {
+    font-size: 16px !important; /* Disables iOS Safari viewport auto-zooming */
+  }
+
+  /* Safe Area Bottom Padding for Smartphones */
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Mobile Bottom Navigation Bar Safe Insets */
+  .mobile-bottom-nav {
+    display: flex !important;
+    padding-bottom: calc(0.35rem + env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    backdrop-filter: blur(25px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+  }
+
+  /* Safe Position for Floating CTA Widgets */
+  .floating-quick-bar,
+  .matcher-float {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Prevent Content Clipping in Overlays & Modals */
+  .modal-overlay {
+    padding: max(0.75rem, env(safe-area-inset-top, 0px)) 0.75rem max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .modal-card,
+  .entry-matcher-card,
+  .review-modal-card {
+    max-height: calc(92dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1.5rem 1.15rem 1.25rem !important;
+    border-radius: 20px !important;
+  }
+
+  .form-row-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .entry-metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  .modal-close-btn {
+    top: 14px !important;
+    right: 14px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.1rem !important;
+  }
+
+  /* Home Courses Explorer Responsiveness */
+  .home-courses-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .premium-course-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px !important;
+  }
+
+  .home-course-filters-wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    padding: 0.25rem 0.5rem 0.75rem !important;
+    gap: 0.5rem !important;
+    scrollbar-width: none !important;
+  }
+
+  .home-course-filters-wrap::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .home-course-filter-btn {
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+    white-space: nowrap !important;
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.82rem !important;
+  }
+
+  /* Home Reviews Slider Mobile Touch Calibration */
+  .home-reviews-proof-strip {
+    gap: 0.5rem !important;
+    justify-content: center !important;
+  }
+
+  .proof-pill {
+    font-size: 0.74rem !important;
+    padding: 0.35rem 0.65rem !important;
+  }
+
+  .review-slider-card {
+    width: calc(100% - 1.5rem) !important;
+    flex: 0 0 calc(100% - 1.5rem) !important;
+    margin: 0 0.75rem !important;
+    padding: 1.5rem 1.15rem !important;
+    border-radius: 20px !important;
+  }
+
+  .slider-control-btn {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .slider-nav-group {
+    gap: 0.6rem !important;
+  }
+
+  /* Footer Bottom Alignment on Mobile */
+  .footer-bottom-flex {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.75rem !important;
+  }
+
+  .footer-copyright-text {
+    justify-content: center !important;
+  }
+
+  .footer-bottom-links {
+    justify-content: center !important;
+  }
+}
+
+/* 3. Small Screen Phones (iPhone SE, Galaxy A, Foldables ≤ 390px) */
+@media (max-width: 390px) {
+  .hero-title {
+    font-size: 1.65rem !important;
+  }
+
+  .section-title {
+    font-size: 1.5rem !important;
+  }
+
+  .entry-title {
+    font-size: 1.25rem !important;
+  }
+
+  .entry-metric-tile {
+    padding: 0.5rem !important;
+  }
+
+  .entry-metric-tile strong {
+    font-size: 0.95rem !important;
+  }
+
+  .stat-num {
+    font-size: 1.35rem !important;
+  }
+
+  .bottom-nav-item {
+    font-size: 0.68rem !important;
+    min-width: 50px !important;
+    padding: 0.25rem 0.35rem !important;
+  }
+
+  .bottom-nav-item i {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* 4. Native App Haptic Micro-Interactions (Spring-back on Touch) */
+@media (hover: none) and (pointer: coarse) {
+  button:active,
+  .btn:active,
+  .nav-item:active,
+  .bottom-nav-item:active,
+  .home-course-filter-btn:active,
+  .slider-control-btn:active,
+  .theme-toggle-btn:active,
+  .nav-icon-btn:active,
+  .matcher-float:active {
+    transform: scale(0.95) !important;
+    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+}
+
+/* 5. Ultra-Premium Visual Excellence Enhancements */
+.card-ambient-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-ambient-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px -5px rgba(2, 132, 199, 0.15), 0 0 0 1px rgba(2, 132, 199, 0.2);
+}
+
+/* Smooth Touch-Friendly Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.6);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.5);
 }
