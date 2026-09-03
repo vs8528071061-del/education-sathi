@@ -1291,9 +1291,11 @@
                     <option value="All India">All India / Any State</option>
                     <option value="Madhya Pradesh" selected>Madhya Pradesh (MP)</option>
                     <option value="Uttar Pradesh">Uttar Pradesh (UP)</option>
+                    <option value="Bihar">Bihar</option>
                     <option value="Maharashtra">Maharashtra</option>
                     <option value="Rajasthan">Rajasthan</option>
                     <option value="Karnataka">Karnataka</option>
+                    <option value="West Bengal">West Bengal</option>
                   </select>
                 </div>
 
@@ -1301,9 +1303,11 @@
                   <label><i class="fa-solid fa-book-open"></i> Stream</label>
                   <select id="schCourse" class="form-control" required>
                     <option value="all">All Streams</option>
-                    <option value="Medical">Medical / MBBS / BAMS / Nursing</option>
-                    <option value="Engineering">Engineering / B.Tech / Diploma</option>
-                    <option value="Management">Management / BBA / MBA</option>
+                    <option value="Medical">Medical (MBBS / BDS / BAMS / BHMS / Nursing)</option>
+                    <option value="Engineering">Engineering (B.Tech / Polytechnic Diploma)</option>
+                    <option value="Management">Management (BBA / MBA / PGDM)</option>
+                    <option value="Law">Law (B.A. LL.B / LL.B)</option>
+                    <option value="Science">Pure Science & Research (B.Sc / M.Sc)</option>
                   </select>
                 </div>
 
@@ -1326,6 +1330,7 @@
                     <option value="1to2.5lakh" selected>₹1.0 Lakh – ₹2.5 Lakh / yr</option>
                     <option value="2.5to5lakh">₹2.5 Lakh – ₹5.0 Lakh / yr</option>
                     <option value="5to8lakh">₹5.0 Lakh – ₹8.0 Lakh / yr</option>
+                    <option value="above8lakh">Above ₹8.0 Lakh / yr</option>
                   </select>
                 </div>
 
@@ -1337,6 +1342,7 @@
                 <div class="form-group">
                   <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
                   <select id="schGender" class="form-control" required>
+                    <option value="All" selected>All Genders</option>
                     <option value="Female">Female / Girl Student</option>
                     <option value="Male">Male</option>
                   </select>
@@ -1365,6 +1371,11 @@
           <div class="state-filter-buttons mb-4" id="schStatePills">
             <button class="state-pill-btn active" onclick="filterStateScholarships('Madhya Pradesh', this)">Madhya Pradesh (MP)</button>
             <button class="state-pill-btn" onclick="filterStateScholarships('Uttar Pradesh', this)">Uttar Pradesh (UP)</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('Bihar', this)">Bihar</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('Maharashtra', this)">Maharashtra</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('Rajasthan', this)">Rajasthan</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('Karnataka', this)">Karnataka</button>
+            <button class="state-pill-btn" onclick="filterStateScholarships('West Bengal', this)">West Bengal</button>
             <button class="state-pill-btn" onclick="filterStateScholarships('all', this)">All States</button>
           </div>
           <div class="scholarship-cards-grid" id="stateSchGrid"></div>

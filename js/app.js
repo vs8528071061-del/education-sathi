@@ -1404,6 +1404,241 @@ function renderMedicalBoxCardHTML(box) {
 }
 
 // ==========================================================================
+// 4B. COMPREHENSIVE SCHOLARSHIP PORTAL CONTROLLER
+// ==========================================================================
+
+let trackedScholarships = JSON.parse(localStorage.getItem('es_tracked_scholarships') || '[]');
+
+function switchScholarshipTab(tabId) {
+  const tabs = ['finder', 'central', 'state', 'documents', 'dashboard'];
+  tabs.forEach(t => {
+    const content = document.getElementById(`schTab-${t}`);
+    if (content) {
+      if (t === tabId) content.classList.add('active');
+      else content.classList.remove('active');
+    }
+  });
+
+  const buttons = document.querySelectorAll('.sch-nav-btn');
+  buttons.forEach(btn => {
+    if (btn.getAttribute('onclick')?.includes(`'${tabId}'`)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  if (tabId === 'central') renderCentralScholarships();
+  if (tabId === 'state') filterStateScholarships('Madhya Pradesh');
+  if (tabId === 'dashboard') renderTrackedScholarships();
+}
+
+function renderScholarships() {
+  if (typeof EDUCATION_DATA === 'undefined' || !EDUCATION_DATA.scholarships) return;
+  // Default finder results
+  renderFinderScholarships(EDUCATION_DATA.scholarships);
+  renderCentralScholarships();
+  filterStateScholarships('Madhya Pradesh');
+  renderTrackedScholarships();
+}
+
+function renderFinderScholarships(list) {
+  const grid = document.getElementById('scholarshipsGrid');
+  const countHeading = document.getElementById('schCountHeading');
+  if (countHeading) {
+    countHeading.innerHTML = `Available Scholarships <span class="text-primary font-bold">(${list.length})</span>`;
+  }
+  if (!grid) return;
+
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="text-center py-5" style="grid-column: 1 / -1;">
+        <i class="fa-solid fa-award text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+        <h3>No Direct Scholarship Matches Found</h3>
+        <p class="text-muted">Try adjusting your marks or annual income filter to view broader central or state schemes.</p>
+        <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20please%20help%20me%20find%20scholarship%20schemes%20for%20my%20course" target="_blank" class="btn btn-whatsapp mt-2">
+          <i class="fa-brands fa-whatsapp"></i> Ask Rahul Sir on WhatsApp
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = list.map(renderScholarshipCardHTML).join('');
+}
+
+function renderCentralScholarships() {
+  const grid = document.getElementById('centralSchGrid');
+  if (!grid || !EDUCATION_DATA.scholarships) return;
+  const centralList = EDUCATION_DATA.scholarships.filter(s => s.type === 'Central');
+  grid.innerHTML = centralList.map(renderScholarshipCardHTML).join('');
+}
+
+function filterStateScholarships(stateName, btnEl) {
+  if (btnEl) {
+    const pills = document.querySelectorAll('#schStatePills .state-pill-btn');
+    pills.forEach(p => p.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+
+  const grid = document.getElementById('stateSchGrid');
+  if (!grid || !EDUCATION_DATA.scholarships) return;
+
+  const stateList = EDUCATION_DATA.scholarships.filter(s => {
+    if (s.type !== 'State') return false;
+    if (!stateName || stateName === 'all') return true;
+    return s.state.toLowerCase() === stateName.toLowerCase();
+  });
+
+  if (!stateList.length) {
+    grid.innerHTML = `
+      <div class="text-center py-5" style="grid-column: 1 / -1;">
+        <i class="fa-solid fa-landmark text-muted font-xl mb-2 d-block"></i>
+        <h3>State Schemes for ${stateName}</h3>
+        <p class="text-muted">Education Sathi provides verified guidance for state fee reimbursement & scholarships.</p>
+        <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20want%20state%20scholarship%20details%20for%20${encodeURIComponent(stateName)}" target="_blank" class="btn btn-whatsapp mt-2">
+          <i class="fa-brands fa-whatsapp"></i> Inquire ${stateName} Scholarships
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = stateList.map(renderScholarshipCardHTML).join('');
+}
+
+function calculateScholarshipMatches(e) {
+  if (e) e.preventDefault();
+  if (!EDUCATION_DATA.scholarships) return;
+
+  const state = document.getElementById('schState')?.value || 'All India';
+  const course = document.getElementById('schCourse')?.value || 'all';
+  const category = document.getElementById('schCategory')?.value || 'all';
+  const incomeKey = document.getElementById('schIncome')?.value || '1to2.5lakh';
+  const marks = parseFloat(document.getElementById('schMarks')?.value || '75');
+  const gender = document.getElementById('schGender')?.value || 'All';
+
+  let incomeVal = 250000;
+  if (incomeKey === 'under1lakh') incomeVal = 100000;
+  else if (incomeKey === '1to2.5lakh') incomeVal = 250000;
+  else if (incomeKey === '2.5to5lakh') incomeVal = 500000;
+  else if (incomeKey === '5to8lakh') incomeVal = 800000;
+  else if (incomeKey === 'above8lakh') incomeVal = 1500000;
+
+  const matches = EDUCATION_DATA.scholarships.filter(s => {
+    // State matching: All India schemes or matching student domicile
+    const matchState = s.state === 'All India' || state === 'All India' || s.state.toLowerCase() === state.toLowerCase();
+    
+    // Course matching
+    const matchCourse = course === 'all' || s.courseLevel.includes(course) || s.courseLevel.includes('General');
+
+    // Category matching
+    const matchCategory = category === 'all' || s.targetCategory.includes(category);
+
+    // Income limit: student's income must be <= scheme's income limit
+    const matchIncome = incomeVal <= s.incomeLimit;
+
+    // Minimum marks: student's marks must be >= scheme's minimum marks
+    const matchMarks = marks >= s.minMarks;
+
+    // Gender matching
+    const matchGender = s.gender === 'All' || gender === 'All' || s.gender === gender;
+
+    return matchState && matchCourse && matchCategory && matchIncome && matchMarks && matchGender;
+  });
+
+  renderFinderScholarships(matches);
+  showToast(`Found ${matches.length} scholarships matching your profile!`);
+}
+
+function renderScholarshipCardHTML(s) {
+  let badgeColor = 'blue';
+  if (s.type === 'State') badgeColor = 'gold';
+  else if (s.type === 'Corporate') badgeColor = 'green';
+
+  const isTracked = trackedScholarships.includes(s.id);
+  const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I want application guidance for the scholarship: "${s.name}" (${s.authority}). Benefit: ${s.amount}. Please guide me on eligibility & documents.`);
+
+  return `
+    <div class="scholarship-card glass-card">
+      <div class="sch-card-head">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+          <span class="badge-tag ${badgeColor} font-bold"><i class="fa-solid fa-award"></i> ${s.type} Scheme</span>
+          <span class="badge-tag purple"><i class="fa-solid fa-location-dot"></i> ${s.state}</span>
+        </div>
+        <h3 class="sch-title mb-1">${s.name}</h3>
+        <p class="sch-authority text-muted font-xs mb-2"><i class="fa-solid fa-building-columns"></i> ${s.authority}</p>
+      </div>
+
+      <div class="sch-amount-banner my-2 p-2 rounded" style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--emerald);">
+        <span class="font-xs text-muted d-block">Scholarship / Fee Waiver Amount:</span>
+        <strong class="text-emerald font-sm">${s.amount}</strong>
+      </div>
+
+      <p class="sch-desc font-xs text-muted mb-3">${s.description}</p>
+
+      <div class="sch-criteria-grid mb-3">
+        <div class="criteria-pill"><i class="fa-solid fa-percent text-primary"></i> Min Marks: <strong>${s.minMarks}%</strong></div>
+        <div class="criteria-pill"><i class="fa-solid fa-wallet text-gold"></i> Max Income: <strong>₹${(s.incomeLimit / 100000).toFixed(1)} Lakh/yr</strong></div>
+        <div class="criteria-pill"><i class="fa-solid fa-venus-mars text-purple"></i> Gender: <strong>${s.gender}</strong></div>
+        <div class="criteria-pill"><i class="fa-solid fa-calendar-day text-danger"></i> Deadline: <strong>${s.deadline}</strong></div>
+      </div>
+
+      <div class="sch-card-actions d-flex align-items-center gap-2 mt-auto flex-wrap">
+        <a href="${s.officialPortal}" target="_blank" class="btn btn-primary btn-sm flex-grow-1 text-center" rel="noopener">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Apply on ${s.portalName.split(' ')[0]}
+        </a>
+        <button class="btn ${isTracked ? 'btn-success' : 'btn-secondary'} btn-sm" onclick="toggleTrackScholarship('${s.id}')" title="${isTracked ? 'Remove from Tracker' : 'Bookmark & Track'}">
+          <i class="fa-solid ${isTracked ? 'fa-bookmark' : 'fa-regular fa-bookmark'}"></i> ${isTracked ? 'Tracked' : 'Track'}
+        </button>
+        <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="Consult Rahul Bhartiya">
+          <i class="fa-brands fa-whatsapp"></i> Inquire
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function toggleTrackScholarship(schId) {
+  const index = trackedScholarships.indexOf(schId);
+  if (index > -1) {
+    trackedScholarships.splice(index, 1);
+    showToast('Scholarship removed from your tracker.');
+  } else {
+    trackedScholarships.push(schId);
+    showToast('Scholarship added to "My Tracker"!');
+  }
+  localStorage.setItem('es_tracked_scholarships', JSON.stringify(trackedScholarships));
+  renderScholarships();
+}
+
+function renderTrackedScholarships() {
+  const container = document.getElementById('trackedScholarshipsList');
+  if (!container || !EDUCATION_DATA.scholarships) return;
+
+  const trackedList = EDUCATION_DATA.scholarships.filter(s => trackedScholarships.includes(s.id));
+  if (!trackedList.length) {
+    container.innerHTML = `
+      <div class="glass-card text-center py-5">
+        <i class="fa-regular fa-bookmark text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+        <h3>No Scholarships Bookmarked Yet</h3>
+        <p class="text-muted">Click the "Track" button on any scholarship card to save it here for deadlines and updates.</p>
+        <button class="btn btn-primary mt-3" onclick="switchScholarshipTab('finder')">
+          <i class="fa-solid fa-magnifying-glass"></i> Browse Scholarships
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="scholarship-cards-grid">
+      ${trackedList.map(renderScholarshipCardHTML).join('')}
+    </div>
+  `;
+}
+
+// ==========================================================================
 // 5. AI CAREER ASSISTANT LOGIC ("Ask Education Sathi AI")
 // ==========================================================================
 async function runAiAssistantQuery(event) {
