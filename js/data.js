@@ -706,6 +706,42 @@ const EDUCATION_DATA = {
       documentsRequired: ["NEET Scorecard", "10th Urdu Certificate", "12th Marksheet", "Domicile Certificate"]
     },
     {
+      id: "bnys",
+      name: "BNYS",
+      fullName: "Bachelor of Naturopathy & Yogic Sciences",
+      badge: "Drugless Healthcare & Lifestyle Medicine",
+      icon: "fa-solid fa-spa",
+      color: "#0891b2",
+      bgColor: "#cffafe",
+      duration: "5.5 Years (4.5 Yrs Academic & Hospital Training + 1 Yr Rotatory Internship)",
+      eligibility: "10+2 with Physics, Chemistry & Biology (PCB) with minimum 50% marks (40% for SC/ST/OBC).",
+      neetRequirement: "NEET-UG qualification or State AYUSH Entrance / Merit based admission (State dependent).",
+      feesGovt: "₹15,000 – ₹50,000 / year (Govt Naturopathy & Yoga Colleges)",
+      feesPvt: "₹1.2 Lakh – ₹2.5 Lakh / year (State Merit / Regulated)",
+      feesDeemed: "₹2.5 Lakh – ₹4.0 Lakh / year (Private / Deemed Universities)",
+      seatsIndia: "5,500+ BNYS Seats across 80+ Naturopathy Medical Colleges in India",
+      counsellingBodies: [
+        "Ministry of AYUSH (Central Guidelines)",
+        "State AYUSH Counselling Authorities (MP AYUSH, UP AYUSH, Karnataka KEA, TN Medical, Gujarat AYUSH)"
+      ],
+      careerScope: [
+        "Registered Naturopathic Physician & Clinic Director (Eligible for 'Dr.' Title)",
+        "Chief Medical Officer in AYUSH, Naturopathy & Wellness Hospitals",
+        "Clinical Lifestyle Medicine & Therapeutic Yoga Consultant",
+        "Acupuncture, Hydrotherapy & Dietetics Specialist",
+        "Academic Professor & Researcher (CCRYN / National Institute of Naturopathy - NIN Pune)",
+        "International Holistic Health Specialist (Europe, Middle East, USA, Australia, SE Asia)"
+      ],
+      documentsRequired: [
+        "10th & 12th Marksheets & Passing Certificates",
+        "NEET Scorecard (if applicable) / State Entrance Rank Card",
+        "Domicile & Nationality Certificate",
+        "Caste / EWS & Income Certificate (if applicable)",
+        "Aadhaar Card & Identity Proof",
+        "Medical Fitness Certificate & Passport Photos"
+      ]
+    },
+    {
       id: "md-ms",
       name: "MD / MS",
       fullName: "Doctor of Medicine (MD) & Master of Surgery (MS)",
