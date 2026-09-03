@@ -614,6 +614,41 @@ const EDUCATION_DATA = {
       documentsRequired: ["NEET Admit Card & Scorecard", "10th & 12th Marksheets", "Domicile Certificate", "Caste & Income Certificate", "Aadhaar Card", "Provisional Allotment Letter"]
     },
     {
+      id: "bds",
+      name: "BDS",
+      fullName: "Bachelor of Dental Surgery",
+      badge: "Apex Dental Surgery & Oral Healthcare",
+      icon: "fa-solid fa-tooth",
+      color: "#0d9488",
+      bgColor: "#ccfbf1",
+      duration: "5 Years (4 Years Academic + 1 Year Compulsory Paid Rotatory Internship)",
+      eligibility: "10+2 with Physics, Chemistry, Biology/Biotechnology & English with min 50% marks (40% for SC/ST/OBC). Must qualify NEET-UG entrance exam.",
+      neetRequirement: "Mandatory NEET-UG Qualification. Cutoff range: 520-590+ for Govt Dental Colleges; 140-350 marks for Private & Deemed Dental Colleges.",
+      feesGovt: "₹25,000 – ₹70,000 / year (State & Central Govt Dental Colleges)",
+      feesPvt: "₹2.5 Lakh – ₹5.0 Lakh / year (State Merit / FRA Regulated)",
+      feesDeemed: "₹4.5 Lakh – ₹7.5 Lakh / year (MCC Deemed University AIQ)",
+      seatsIndia: "27,800+ BDS Seats across 320+ Dental Colleges in India",
+      counsellingBodies: [
+        "MCC (15% All India Quota in Govt Dental + 100% Deemed Universities / Central Universities like BHU, Jamia)",
+        "State Counselling Authorities (85% State Quota - MP DME, Maharashtra CET Cell, UP DGME)"
+      ],
+      careerScope: [
+        "Dental Surgeon & Private Clinical Practice",
+        "Government Dental Officer (Army Dental Corps / Railways / State PSC / ESI Hospitals)",
+        "Specialist Master in Dental Surgery (MDS via NEET-MDS in Orthodontics, Oral & Maxillofacial Surgery, Endodontics, Prosthodontics)",
+        "Aesthetic & Cosmetic Dentistry, Oral Implantology Specialist",
+        "International Licensure Practice (NBDE USA, ORE UK, ADC Australia, DHA Dubai)"
+      ],
+      documentsRequired: [
+        "NEET-UG Admit Card & Scorecard",
+        "10th & 12th Board Marksheets & Passing Certificates",
+        "State Domicile Certificate (for 85% State Quota seats)",
+        "Caste & EWS Certificate (if applicable)",
+        "Aadhaar Card / ID Proof",
+        "Provisional Allotment Letter & Verification Slip"
+      ]
+    },
+    {
       id: "bams",
       name: "BAMS",
       fullName: "Bachelor of Ayurvedic Medicine & Surgery",

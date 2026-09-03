@@ -162,6 +162,10 @@ app.get('/api/medical-boxes', (req, res) => {
   res.json({ success: true, count: DB.getMedicalBoxes().length, medicalBoxes: DB.getMedicalBoxes() });
 });
 
+app.get('/api/medical-courses', (req, res) => {
+  res.json({ success: true, count: DB.getMedicalBoxes().length, medicalBoxes: DB.getMedicalBoxes() });
+});
+
 app.get('/api/medical-boxes/:id', (req, res) => {
   const box = DB.getMedicalBoxById(req.params.id);
   if (!box) return res.status(404).json({ success: false, error: 'Medical course not found' });

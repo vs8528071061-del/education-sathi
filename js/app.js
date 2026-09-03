@@ -985,9 +985,9 @@ function renderMedicalBoxes() {
 
   const boxes = EDUCATION_DATA.medicalBoxes;
 
-  // Render home preview (top 3)
+  // Render home preview (all apex medical courses: MBBS, BDS, BAMS, BHMS, BUMS, MD/MS)
   if (homeGrid) {
-    homeGrid.innerHTML = boxes.slice(0, 3).map(renderMedicalBoxCardHTML).join('');
+    homeGrid.innerHTML = boxes.map(renderMedicalBoxCardHTML).join('');
   }
 
   // Render full dedicated view - Elegant, Sleek Luxury Design
