@@ -282,53 +282,133 @@
               <div class="lead-header">
                 <div class="pulse-indicator"></div>
                 <div>
-                  <h3>🎯 Instant Career & College Matcher</h3>
-                  <p>Get personalized guidance within 15 minutes</p>
+                  <h3>🎯 Instant Career &amp; College Matcher</h3>
+                  <p>Get personalized cutoff matching &amp; guidance within 15 minutes</p>
                 </div>
               </div>
               <form id="heroLeadForm" onsubmit="handleLeadSubmit(event, 'Hero Quick Match')">
-                <div class="form-group">
-                  <label><i class="fa-solid fa-user"></i> Student Name</label>
-                  <input type="text" class="form-control" placeholder="e.g. Aditi Sharma" required id="heroName" />
-                </div>
-                <div class="form-group">
-                  <label><i class="fa-solid fa-phone"></i> Mobile / WhatsApp</label>
-                  <input type="tel" class="form-control" placeholder="e.g. 9876543210" required id="heroPhone" />
-                </div>
                 <div class="form-row-2">
-                  <div class="form-group">
-                    <label><i class="fa-solid fa-graduation-cap"></i> Target Course</label>
-                    <select class="form-control" id="heroStream" required>
-                      <option value="MBBS Medical Admission">MBBS (Allopathy)</option>
-                      <option value="BAMS / BHMS / BUMS (AYUSH)">BAMS / BHMS / BUMS</option>
-                      <option value="MD / MS Postgraduate Medical">MD / MS Medical PG</option>
-                      <option value="B.Sc Nursing / Paramedical">B.Sc Nursing & Paramedical</option>
-                      <option value="Pharmacy (B.Pharm/D.Pharm)">Pharmacy</option>
-                      <option value="Engineering & Tech (B.Tech)">Engineering (B.Tech)</option>
-                      <option value="Management (BBA/MBA)">Management (BBA/MBA)</option>
-                      <option value="Law (BA LLB/LLB)">Law (BA LLB)</option>
-                      <option value="Scholarship Guidance">Scholarship Scheme</option>
-                    </select>
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon blue"><i class="fa-solid fa-user"></i></span>
+                      Student Name <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control-premium" name="studentName" placeholder="e.g. Aditi Sharma" required id="heroName" />
                   </div>
-                  <div class="form-group">
-                    <label><i class="fa-solid fa-map-pin"></i> Domicile State</label>
-                    <select class="form-control" id="heroState" required>
-                      <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
-                      <option value="Uttar Pradesh">Uttar Pradesh</option>
-                      <option value="Maharashtra">Maharashtra</option>
-                      <option value="Rajasthan">Rajasthan</option>
-                      <option value="Karnataka">Karnataka</option>
-                      <option value="Delhi">Delhi NCR</option>
-                      <option value="Bihar">Bihar</option>
-                      <option value="Other">Other State/UT</option>
-                    </select>
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon emerald"><i class="fa-solid fa-phone"></i></span>
+                      Mobile / WhatsApp <span class="text-danger">*</span>
+                    </label>
+                    <input type="tel" class="form-control-premium" name="phone" placeholder="e.g. 9876543210" required id="heroPhone" pattern="[0-9]{10}" title="10 digit mobile number" />
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 btn-submit-lead">
-                  <i class="fa-solid fa-paper-plane"></i> Get Free Counselling Call
+
+                <div class="form-row-2">
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon purple"><i class="fa-solid fa-graduation-cap"></i></span>
+                      Target Course <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-glow-wrap select-glow-wrap">
+                      <select class="form-control-premium form-select-premium" name="targetCourse" id="heroStream" required>
+                        <option value="MBBS Medical Admission" selected>MBBS (Allopathy)</option>
+                        <option value="BAMS / BHMS / BUMS (AYUSH)">BAMS / BHMS / BUMS</option>
+                        <option value="BSMS (Siddha Medicine & Surgery)">BSMS (Siddha Medicine)</option>
+                        <option value="BDS Dental Surgery">BDS (Dental)</option>
+                        <option value="MD / MS Postgraduate Medical">MD / MS Medical PG</option>
+                        <option value="Pharm.D (Doctor of Pharmacy)">Pharm.D (Doctor of Pharmacy)</option>
+                        <option value="B.Sc Nursing / Paramedical">B.Sc Nursing &amp; Paramedical</option>
+                        <option value="Pharmacy (B.Pharm/D.Pharm)">Pharmacy (B.Pharm)</option>
+                        <option value="Engineering &amp; Tech (B.Tech)">Engineering (B.Tech)</option>
+                        <option value="Management (BBA/MBA)">Management (BBA/MBA)</option>
+                        <option value="Law (BA LLB/LLB)">Law (BA LLB)</option>
+                        <option value="Scholarship Guidance">Scholarship Scheme (MMVY)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon cyan"><i class="fa-solid fa-location-dot"></i></span>
+                      Domicile State <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-glow-wrap select-glow-wrap">
+                      <select class="form-control-premium form-select-premium" name="domicileState" id="heroState" required>
+                        <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Delhi">Delhi NCR</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Other">Other State/UT</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon gold"><i class="fa-solid fa-chart-line"></i></span>
+                      NEET / 12th Score
+                    </label>
+                    <input type="text" class="form-control-premium" name="neetScore" placeholder="e.g. 580 or 85%" id="heroScore" />
+                  </div>
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon pink"><i class="fa-solid fa-id-card-clip"></i></span>
+                      Category / Quota
+                    </label>
+                    <div class="input-glow-wrap select-glow-wrap">
+                      <select class="form-control-premium form-select-premium" name="category" id="heroCategory">
+                        <option value="General / UR" selected>General / UR</option>
+                        <option value="OBC">OBC</option>
+                        <option value="EWS">EWS</option>
+                        <option value="SC">SC</option>
+                        <option value="ST">ST</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon indigo"><i class="fa-solid fa-building-columns"></i></span>
+                      College Preference
+                    </label>
+                    <div class="input-glow-wrap select-glow-wrap">
+                      <select class="form-control-premium form-select-premium" name="collegePref" id="heroQuota">
+                        <option value="Govt Seats Only (Merit)" selected>Govt Seats Only</option>
+                        <option value="Private Budget College">Private Budget College</option>
+                        <option value="MMVY 100% Scholarship">MMVY 100% Scholarship</option>
+                        <option value="Deemed University">Deemed University</option>
+                        <option value="Management / NRI Quota">Management / NRI Quota</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group-premium">
+                    <label class="form-label-premium">
+                      <span class="label-icon teal"><i class="fa-solid fa-city"></i></span>
+                      City / District
+                    </label>
+                    <input type="text" class="form-control-premium" name="city" placeholder="e.g. Bhopal, Indore" id="heroCity" />
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-entry-matcher-premium">
+                  <span class="btn-shine"></span>
+                  <span class="btn-content">
+                    <i class="fa-solid fa-paper-plane btn-icon"></i>
+                    <span class="btn-title">Get Instant College Match &amp; Free Call</span>
+                    <i class="fa-solid fa-arrow-right btn-arrow"></i>
+                  </span>
                 </button>
-                <div class="guarantee-text">
-                  <i class="fa-solid fa-lock"></i> 100% Confidential • Direct Guidance by Rahul Bhartiya
+                <div class="guarantee-text mt-2">
+                  <i class="fa-solid fa-lock text-emerald"></i> 100% Confidential • Direct Guidance by Rahul Bhartiya
                 </div>
               </form>
             </div>
@@ -369,6 +449,75 @@
 
           <div class="medical-boxes-grid" id="homeMedicalBoxesGrid">
             <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: PREMIER CAREER COURSES SHOWCASE (ULTRA-PREMIUM) -->
+      <section class="section home-courses-section" id="homeCoursesSection">
+        <div class="container">
+          <div class="section-title-wrap text-center">
+            <div class="section-badge-pill">
+              <span class="live-pulse-beacon"></span>
+              <span>EXPLORE 25+ CATEGORIES &bull; 500+ COURSES</span>
+            </div>
+            <h2 class="main-heading">
+              📖 Discover Top Career <span class="gradient-text">Courses &amp; Degrees</span>
+            </h2>
+            <p class="section-desc">
+              From premier Medical (MBBS/AYUSH) &amp; Paramedical degrees to B.Tech AI, MBA, Pharmacy &amp; Law. Discover eligibility, duration, fee estimates, and direct admission roadmaps.
+            </p>
+          </div>
+
+          <!-- Interactive Category Filter Chips -->
+          <div class="home-course-filters-wrap" id="homeCourseFilters">
+            <button class="home-course-filter-btn active" onclick="filterHomeCourses('all', this)">
+              <i class="fa-solid fa-sparkles text-gold"></i> All Top Courses
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('medical-dental', this)">
+              <i class="fa-solid fa-user-doctor text-cyan"></i> Medical &amp; Dental
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('ayush', this)">
+              <i class="fa-solid fa-leaf text-emerald"></i> AYUSH (BAMS/BHMS)
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('nursing', this)">
+              <i class="fa-solid fa-user-nurse text-pink"></i> Nursing
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('allied-health', this)">
+              <i class="fa-solid fa-heart-pulse text-purple"></i> Paramedical
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('pharmacy', this)">
+              <i class="fa-solid fa-capsules text-emerald"></i> Pharmacy
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('engineering', this)">
+              <i class="fa-solid fa-laptop-code text-blue"></i> Engineering (B.Tech)
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('management', this)">
+              <i class="fa-solid fa-chart-line text-gold"></i> Management (MBA/BBA)
+            </button>
+            <button class="home-course-filter-btn" onclick="filterHomeCourses('law', this)">
+              <i class="fa-solid fa-scale-balanced text-indigo"></i> Law (BA LLB)
+            </button>
+          </div>
+
+          <!-- Courses Grid Cards Container -->
+          <div class="home-courses-grid" id="homeCoursesGrid">
+            <!-- Dynamically populated with ultra-premium cards by JS -->
+          </div>
+
+          <!-- Bottom Action Bar -->
+          <div class="home-courses-bottom-bar text-center mt-5">
+            <div class="courses-action-group">
+              <button class="btn btn-primary btn-lg shadow-glow" onclick="navigateTo('courses')">
+                <i class="fa-solid fa-book-open"></i> View All 25+ Categories (500+ Courses)
+              </button>
+              <button class="btn btn-whatsapp btn-lg" onclick="openCounselModal()">
+                <i class="fa-brands fa-whatsapp"></i> Get 1-on-1 Course Guidance
+              </button>
+            </div>
+            <p class="courses-note-text mt-3">
+              <i class="fa-solid fa-shield-check text-emerald"></i> 100% Free Career Guidance &bull; Direct Counselling with Director Rahul Bhartiya
+            </p>
           </div>
         </div>
       </section>
@@ -455,6 +604,95 @@
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: VERIFIED STUDENT REVIEWS & TESTIMONIALS SLIDER (ULTRA-PREMIUM) -->
+      <section class="section home-reviews-section" id="homeReviewsSection">
+        <div class="container">
+          <!-- Section Title & Trust Header -->
+          <div class="section-title-wrap text-center">
+            <div class="section-badge-pill">
+              <span class="live-pulse-beacon"></span>
+              <span>⭐ 4.9/5 RATED BY 1,200+ STUDENTS &amp; PARENTS</span>
+            </div>
+            <h2 class="main-heading">
+              💬 Genuine Student &amp; Parent <span class="gradient-text">Success Stories</span>
+            </h2>
+            <p class="section-desc">
+              Real admission experiences from NEET qualifiers, MBBS doctors, AYUSH graduates, and 100% MMVY scholarship holders guided by Rahul Bhartiya.
+            </p>
+          </div>
+
+          <!-- Trust Proof Metrics Strip -->
+          <div class="reviews-proof-strip">
+            <div class="proof-pill">
+              <div class="proof-pill-icon"><i class="fa-solid fa-star text-gold"></i></div>
+              <div class="proof-pill-info">
+                <strong>4.9 / 5.0 Rating</strong>
+                <span>Google &amp; Justdial Verified</span>
+              </div>
+            </div>
+            <div class="proof-pill">
+              <div class="proof-pill-icon"><i class="fa-solid fa-shield-check text-emerald"></i></div>
+              <div class="proof-pill-info">
+                <strong>99.4% Success Rate</strong>
+                <span>Verified Seat Allotments</span>
+              </div>
+            </div>
+            <div class="proof-pill">
+              <div class="proof-pill-icon"><i class="fa-solid fa-hand-holding-dollar text-cyan"></i></div>
+              <div class="proof-pill-info">
+                <strong>₹4.2+ Crores</strong>
+                <span>MMVY &amp; NSP Waivers</span>
+              </div>
+            </div>
+            <div class="proof-pill">
+              <div class="proof-pill-icon"><i class="fa-solid fa-users text-purple"></i></div>
+              <div class="proof-pill-info">
+                <strong>1,000+ Students</strong>
+                <span>Admitted Across India</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ultra-Premium Automatic Side Slider -->
+          <div class="reviews-slider-wrapper" id="reviewsSliderWrapper">
+            <!-- Left & Right Arrow Controls -->
+            <button class="slider-control-btn slider-prev-btn" id="reviewsPrevBtn" onclick="slideReviewsPrev()" aria-label="Previous Review">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button class="slider-control-btn slider-next-btn" id="reviewsNextBtn" onclick="slideReviewsNext()" aria-label="Next Review">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <!-- Slider Viewport Window -->
+            <div class="reviews-slider-viewport" id="reviewsSliderViewport">
+              <div class="reviews-slider-track" id="reviewsSliderTrack">
+                <!-- Dynamically populated cards rendered by JS -->
+              </div>
+            </div>
+
+            <!-- Dots Indicator Container -->
+            <div class="slider-dots-container" id="reviewsSliderDots">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Bottom Actions & Share Review Button -->
+          <div class="reviews-bottom-bar text-center mt-5">
+            <div class="reviews-action-group">
+              <button class="btn btn-primary btn-lg shadow-glow" onclick="openCounselModal()">
+                <i class="fa-solid fa-user-doctor"></i> Start Your Success Journey Today
+              </button>
+              <button class="btn btn-outline-primary btn-lg" onclick="openAddReviewModal()">
+                <i class="fa-solid fa-pen-to-square"></i> ✍️ Share Your Review / Feedback
+              </button>
+            </div>
+            <p class="courses-note-text mt-3">
+              <i class="fa-solid fa-lock text-emerald"></i> All reviews verified via official allotment letters &amp; counselling roll numbers.
+            </p>
           </div>
         </div>
       </section>
@@ -1199,7 +1437,7 @@
           <span class="banner-badge"><i class="fa-solid fa-stethoscope"></i> APEX MEDICAL DEGREE DIRECTORY</span>
           <h1 class="page-title text-white">🩺 Medical Admissions Hub</h1>
           <p class="page-subtitle text-white-80">
-            Official roadmaps for MBBS, BDS, BAMS, BHMS, BUMS, BNYS, and MD/MS — Eligibility, NEET Cutoffs, Govt vs Pvt Fee Matrices, and Counselling Bodies.
+            Official roadmaps for MBBS, BDS, BAMS, BHMS, BUMS, BSMS, BNYS, MD/MS, and Pharm.D — Eligibility, NEET Cutoffs, Govt vs Pvt Fee Matrices, and Counselling Bodies.
           </p>
         </div>
       </div>
@@ -1291,11 +1529,9 @@
                     <option value="All India">All India / Any State</option>
                     <option value="Madhya Pradesh" selected>Madhya Pradesh (MP)</option>
                     <option value="Uttar Pradesh">Uttar Pradesh (UP)</option>
-                    <option value="Bihar">Bihar</option>
                     <option value="Maharashtra">Maharashtra</option>
                     <option value="Rajasthan">Rajasthan</option>
                     <option value="Karnataka">Karnataka</option>
-                    <option value="West Bengal">West Bengal</option>
                   </select>
                 </div>
 
@@ -1303,11 +1539,9 @@
                   <label><i class="fa-solid fa-book-open"></i> Stream</label>
                   <select id="schCourse" class="form-control" required>
                     <option value="all">All Streams</option>
-                    <option value="Medical">Medical (MBBS / BDS / BAMS / BHMS / Nursing)</option>
-                    <option value="Engineering">Engineering (B.Tech / Polytechnic Diploma)</option>
-                    <option value="Management">Management (BBA / MBA / PGDM)</option>
-                    <option value="Law">Law (B.A. LL.B / LL.B)</option>
-                    <option value="Science">Pure Science & Research (B.Sc / M.Sc)</option>
+                    <option value="Medical">Medical / MBBS / BAMS / Nursing</option>
+                    <option value="Engineering">Engineering / B.Tech / Diploma</option>
+                    <option value="Management">Management / BBA / MBA</option>
                   </select>
                 </div>
 
@@ -1330,7 +1564,6 @@
                     <option value="1to2.5lakh" selected>₹1.0 Lakh – ₹2.5 Lakh / yr</option>
                     <option value="2.5to5lakh">₹2.5 Lakh – ₹5.0 Lakh / yr</option>
                     <option value="5to8lakh">₹5.0 Lakh – ₹8.0 Lakh / yr</option>
-                    <option value="above8lakh">Above ₹8.0 Lakh / yr</option>
                   </select>
                 </div>
 
@@ -1342,7 +1575,6 @@
                 <div class="form-group">
                   <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
                   <select id="schGender" class="form-control" required>
-                    <option value="All" selected>All Genders</option>
                     <option value="Female">Female / Girl Student</option>
                     <option value="Male">Male</option>
                   </select>
@@ -1371,11 +1603,6 @@
           <div class="state-filter-buttons mb-4" id="schStatePills">
             <button class="state-pill-btn active" onclick="filterStateScholarships('Madhya Pradesh', this)">Madhya Pradesh (MP)</button>
             <button class="state-pill-btn" onclick="filterStateScholarships('Uttar Pradesh', this)">Uttar Pradesh (UP)</button>
-            <button class="state-pill-btn" onclick="filterStateScholarships('Bihar', this)">Bihar</button>
-            <button class="state-pill-btn" onclick="filterStateScholarships('Maharashtra', this)">Maharashtra</button>
-            <button class="state-pill-btn" onclick="filterStateScholarships('Rajasthan', this)">Rajasthan</button>
-            <button class="state-pill-btn" onclick="filterStateScholarships('Karnataka', this)">Karnataka</button>
-            <button class="state-pill-btn" onclick="filterStateScholarships('West Bengal', this)">West Bengal</button>
             <button class="state-pill-btn" onclick="filterStateScholarships('all', this)">All States</button>
           </div>
           <div class="scholarship-cards-grid" id="stateSchGrid"></div>
@@ -2307,6 +2534,11 @@
 
   <!-- Floating Quick Actions Bar -->
   <aside class="floating-quick-bar">
+    <button onclick="openEntryMatcherModal()" class="floating-btn matcher-float" title="Instant College Matcher">
+      <span class="float-pulse-dot"></span>
+      <i class="fa-solid fa-bullseye"></i>
+      <span class="float-tooltip">Instant College Matcher 🎯</span>
+    </button>
     <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20need%20quick%20counselling%20support" target="_blank" class="floating-btn whatsapp-float" title="Chat on WhatsApp">
       <i class="fa-brands fa-whatsapp"></i>
       <span class="float-tooltip">Chat with Rahul Sir (9752754404)</span>
@@ -2316,6 +2548,239 @@
       <span class="float-tooltip">Call: 9752754404</span>
     </a>
   </aside>
+
+  <!-- ==========================================================================
+       ENTRY POPUP: INSTANT CAREER & COLLEGE MATCHER (ULTRA-PREMIUM EDITION)
+       ========================================================================== -->
+  <div class="modal-overlay entry-popup-overlay" id="entryMatcherModalOverlay" role="dialog" aria-modal="true" aria-labelledby="entryPopupHeading">
+    <div class="modal-card entry-matcher-card">
+      <!-- Top Decorative Accent Gradient Bar -->
+      <div class="entry-card-accent-bar"></div>
+
+      <!-- Ambient Glow Orbs -->
+      <div class="entry-card-glow-1"></div>
+      <div class="entry-card-glow-2"></div>
+
+      <!-- Close Button -->
+      <button type="button" class="modal-close-btn entry-close-btn" onclick="closeEntryMatcherModal()" title="Skip & Start Website" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Top Utility / Status Row -->
+      <div class="entry-popup-top-bar">
+        <div class="entry-status-badge">
+          <span class="live-pulse-beacon"></span>
+          <span>LIVE 2026 ADMISSION DESK</span>
+        </div>
+        <div class="entry-speed-badge">
+          <i class="fa-solid fa-bolt-lightning text-gold"></i>
+          <span>15-Min Fast Callback</span>
+        </div>
+      </div>
+
+      <!-- Header Section -->
+      <div class="entry-modal-header">
+        <div class="entry-header-icon-box">
+          <div class="icon-inner-glow"></div>
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <div class="entry-header-text">
+          <h2 id="entryPopupHeading" class="entry-title">
+            Instant Career &amp; <span class="gradient-text-accent">College Matcher</span>
+          </h2>
+          <p class="entry-subtitle">
+            Get instant Cutoff Evaluation &amp; Seat Prediction with 
+            <span class="mentor-badge"><i class="fa-solid fa-award text-gold"></i> Director Rahul Bhartiya</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 Executive Micro Metric Tiles -->
+      <div class="entry-metrics-grid">
+        <div class="entry-metric-tile">
+          <div class="metric-icon gold"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="metric-text">
+            <strong>12,000+</strong>
+            <span>Guided</span>
+          </div>
+        </div>
+        <div class="entry-metric-tile">
+          <div class="metric-icon cyan"><i class="fa-solid fa-building-columns"></i></div>
+          <div class="metric-text">
+            <strong>800+</strong>
+            <span>Top Colleges</span>
+          </div>
+        </div>
+        <div class="entry-metric-tile">
+          <div class="metric-icon emerald"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="metric-text">
+            <strong>100%</strong>
+            <span>Verified</span>
+          </div>
+        </div>
+        <div class="entry-metric-tile">
+          <div class="metric-icon purple"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+          <div class="metric-text">
+            <strong>MMVY</strong>
+            <span>Full Waiver</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Body -->
+      <div class="entry-modal-body">
+        <form id="entryMatcherForm" onsubmit="handleLeadSubmit(event, 'Entry Popup Matcher')">
+          <div class="form-row-2">
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon blue"><i class="fa-solid fa-user"></i></span>
+                Student Full Name <span class="text-danger">*</span>
+              </label>
+              <div class="input-glow-wrap">
+                <input type="text" class="form-control-premium" name="studentName" id="entryName" placeholder="e.g. Aditi Sharma" required />
+              </div>
+            </div>
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon emerald"><i class="fa-solid fa-phone"></i></span>
+                Mobile / WhatsApp <span class="text-danger">*</span>
+              </label>
+              <div class="input-glow-wrap">
+                <input type="tel" class="form-control-premium" name="phone" id="entryPhone" placeholder="e.g. 9876543210" required pattern="[0-9]{10}" title="10 digit mobile number" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon purple"><i class="fa-solid fa-graduation-cap"></i></span>
+                Target Course / Stream <span class="text-danger">*</span>
+              </label>
+              <div class="input-glow-wrap select-glow-wrap">
+                <select class="form-control-premium form-select-premium" name="targetCourse" id="entryCourse" required>
+                  <option value="MBBS Medical Admission" selected>MBBS (Allopathy)</option>
+                  <option value="BAMS / BHMS / BUMS (AYUSH)">BAMS / BHMS / BUMS (AYUSH)</option>
+                  <option value="BSMS (Siddha Medicine & Surgery)">BSMS (Siddha Medicine)</option>
+                  <option value="BDS Dental Surgery">BDS (Dental Surgery)</option>
+                  <option value="MD / MS Postgraduate Medical">MD / MS Medical PG</option>
+                  <option value="Pharm.D (Doctor of Pharmacy)">Pharm.D (Doctor of Pharmacy)</option>
+                  <option value="B.Sc Nursing / Paramedical">B.Sc Nursing &amp; Paramedical</option>
+                  <option value="Pharmacy (B.Pharm/D.Pharm)">Pharmacy (B.Pharm)</option>
+                  <option value="Engineering &amp; Tech (B.Tech)">Engineering (B.Tech / AI &amp; DS)</option>
+                  <option value="Management (BBA/MBA)">Management (BBA / MBA)</option>
+                  <option value="Law (BA LLB/LLB)">Law (BA LLB / LLB)</option>
+                  <option value="Scholarship Guidance">Scholarship Scheme (MMVY / Medhavi)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon cyan"><i class="fa-solid fa-location-dot"></i></span>
+                Domicile State <span class="text-danger">*</span>
+              </label>
+              <div class="input-glow-wrap select-glow-wrap">
+                <select class="form-control-premium form-select-premium" name="domicileState" id="entryState" required>
+                  <option value="Madhya Pradesh" selected>Madhya Pradesh</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Delhi">Delhi NCR</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Other">Other State / UT</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon gold"><i class="fa-solid fa-chart-line"></i></span>
+                NEET / 12th Expected Score
+              </label>
+              <div class="input-glow-wrap">
+                <input type="text" class="form-control-premium" name="neetScore" id="entryScore" placeholder="e.g. 580 marks or 85%" />
+              </div>
+            </div>
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon pink"><i class="fa-solid fa-id-card-clip"></i></span>
+                Category / Reservation
+              </label>
+              <div class="input-glow-wrap select-glow-wrap">
+                <select class="form-control-premium form-select-premium" name="category" id="entryCategory">
+                  <option value="General / UR" selected>General / UR</option>
+                  <option value="OBC">OBC</option>
+                  <option value="EWS">EWS</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon indigo"><i class="fa-solid fa-building-columns"></i></span>
+                College Preference / Quota
+              </label>
+              <div class="input-glow-wrap select-glow-wrap">
+                <select class="form-control-premium form-select-premium" name="collegePref" id="entryQuota">
+                  <option value="Govt Seats Only (Merit)" selected>Govt Seats Only (Merit)</option>
+                  <option value="Private Budget College">Private Budget College</option>
+                  <option value="MMVY 100% Scholarship">MMVY 100% Scholarship Seat</option>
+                  <option value="Deemed University">Deemed University</option>
+                  <option value="Management / NRI Quota">Management / NRI Quota</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group-premium">
+              <label class="form-label-premium">
+                <span class="label-icon teal"><i class="fa-solid fa-city"></i></span>
+                City / District
+              </label>
+              <div class="input-glow-wrap">
+                <input type="text" class="form-control-premium" name="city" id="entryCity" placeholder="e.g. Bhopal, Indore, Lucknow" />
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-entry-matcher-premium">
+            <span class="btn-shine"></span>
+            <span class="btn-content">
+              <i class="fa-solid fa-paper-plane btn-icon"></i>
+              <span class="btn-title">Match My Colleges &amp; Get Free Counselling Call</span>
+              <i class="fa-solid fa-arrow-right btn-arrow"></i>
+            </span>
+          </button>
+
+          <div class="entry-footer-actions">
+            <button type="button" class="btn-skip-website-premium" onclick="closeEntryMatcherModal()">
+              <span>Explore Full Website First</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="entry-guarantee-bar">
+            <div class="guarantee-item">
+              <i class="fa-solid fa-shield-halved text-emerald"></i>
+              <span>100% Privacy Protected</span>
+            </div>
+            <span class="guarantee-sep">•</span>
+            <div class="guarantee-item">
+              <i class="fa-brands fa-whatsapp text-emerald"></i>
+              <span>Direct WhatsApp with Director Rahul Bhartiya</span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Consultation Modal -->
   <div class="modal-overlay" id="counselModalOverlay">
@@ -2432,12 +2897,16 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="container footer-bottom-content">
-        <p class="mb-0">© 2026 <strong>Education Sathi</strong>. All Rights Reserved. Your Dream, Our Guidance, Your Success! ✨</p>
-        <div class="footer-creator-credit">
-          Made by <a href="https://onlinethekedaar.com/" target="_blank" rel="noopener noreferrer" class="creator-link"><strong>thekedaar.com</strong> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-        </div>
+      <div class="container footer-bottom-flex">
+        <p>
+          © 2026 <strong>Education Sathi</strong>. All Rights Reserved. Your Dream, Our Guidance, Your Success! ✨
+          <span class="footer-credit-sep">•</span>
+          Made by <a href="https://onlinethekedaar.com/" target="_blank" rel="noopener noreferrer" class="thekedar-credit-link" title="Visit thekedar.com"><strong>thekedar.com</strong> <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>
+        </p>
         <div class="footer-bottom-links">
+          <a href="https://onlinethekedaar.com/" target="_blank" rel="noopener noreferrer" class="thekedar-badge-btn" title="Website Designed & Developed by thekedar.com">
+            <i class="fa-solid fa-laptop-code text-cyan"></i> Made by <strong>thekedar.com</strong>
+          </a>
           <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Counselling</a>
           <a href="mailto:hn247educationsthi@gmail.com"><i class="fa-solid fa-envelope"></i> Email Us</a>
         </div>
@@ -2687,6 +3156,77 @@
           </div>
           <button type="submit" class="btn btn-primary w-100 btn-lg shadow-glow mt-2">
             <i class="fa-solid fa-user-check"></i> Register Counselor to System
+          </button>
+        </form>
+      </div>
+    </div>
+  <!-- 5. Share Review / Testimonial Modal -->
+  <div class="modal-overlay" id="addReviewModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="badge-tag emerald">✍️ STUDENT VOICE</span>
+          <h3>Share Your Review &amp; Experience</h3>
+          <p>Help future medical &amp; college aspirants make the right decision</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeAddReviewModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="userReviewForm" onsubmit="handleReviewSubmit(event)">
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Your Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="revAuthorName" placeholder="e.g. Aditi Sharma" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>City / State <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="revCity" placeholder="e.g. Bhopal, MP" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>Course / Stream <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="revCourse" placeholder="e.g. MBBS / BAMS / B.Tech" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>College Allotted / Target <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="revAllotment" placeholder="e.g. GMC Bhopal / Private MBBS" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label>NEET / Exam Score (Optional)</label>
+              <input type="text" class="form-control" id="revScore" placeholder="e.g. NEET: 610/720" />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Rating <span class="text-danger">*</span></label>
+              <select class="form-control" id="revRating">
+                <option value="5" selected>⭐⭐⭐⭐⭐ (5.0 - Outstanding)</option>
+                <option value="4">⭐⭐⭐⭐ (4.0 - Very Good)</option>
+                <option value="3">⭐⭐⭐ (3.0 - Good)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Key Highlight / Headline</label>
+            <input type="text" class="form-control" id="revHighlight" placeholder="e.g. Rahul Sir made our choice filling 100% stress-free!" />
+          </div>
+
+          <div class="form-group">
+            <label>Your Detailed Feedback / Experience <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="revText" rows="3" placeholder="Share how Education Sathi helped in your counselling, cutoff prediction, scholarship (MMVY), or admission process..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn-entry-matcher-premium mt-2">
+            <span class="btn-shine"></span>
+            <span class="btn-content">
+              <i class="fa-solid fa-paper-plane btn-icon"></i>
+              <span class="btn-title">Submit Review &amp; Join Hall of Fame</span>
+              <i class="fa-solid fa-arrow-right btn-arrow"></i>
+            </span>
           </button>
         </form>
       </div>

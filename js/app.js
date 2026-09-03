@@ -23,6 +23,8 @@ function initApp() {
   renderDestinationsGrid();
   renderMedicalBoxes();
   renderCareerCategories();
+  renderHomeCourses();
+  renderHomeReviews();
   renderMedicalColleges();
   renderCounsellingAuthorities();
   renderScholarships();
@@ -37,6 +39,21 @@ function initApp() {
   const defaultScoreInput = document.getElementById('predScore');
   if (defaultScoreInput) {
     syncScoreSlider(defaultScoreInput.value);
+  }
+
+  // Auto-launch Instant Career & College Matcher entry popup on website visit
+  initEntryPopup();
+
+  // Dynamic header scrolled shadow & blur state
+  const navbar = document.getElementById('mainNavbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }, { passive: true });
   }
 }
 
@@ -1404,241 +1421,6 @@ function renderMedicalBoxCardHTML(box) {
 }
 
 // ==========================================================================
-// 4B. COMPREHENSIVE SCHOLARSHIP PORTAL CONTROLLER
-// ==========================================================================
-
-let trackedScholarships = JSON.parse(localStorage.getItem('es_tracked_scholarships') || '[]');
-
-function switchScholarshipTab(tabId) {
-  const tabs = ['finder', 'central', 'state', 'documents', 'dashboard'];
-  tabs.forEach(t => {
-    const content = document.getElementById(`schTab-${t}`);
-    if (content) {
-      if (t === tabId) content.classList.add('active');
-      else content.classList.remove('active');
-    }
-  });
-
-  const buttons = document.querySelectorAll('.sch-nav-btn');
-  buttons.forEach(btn => {
-    if (btn.getAttribute('onclick')?.includes(`'${tabId}'`)) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  if (tabId === 'central') renderCentralScholarships();
-  if (tabId === 'state') filterStateScholarships('Madhya Pradesh');
-  if (tabId === 'dashboard') renderTrackedScholarships();
-}
-
-function renderScholarships() {
-  if (typeof EDUCATION_DATA === 'undefined' || !EDUCATION_DATA.scholarships) return;
-  // Default finder results
-  renderFinderScholarships(EDUCATION_DATA.scholarships);
-  renderCentralScholarships();
-  filterStateScholarships('Madhya Pradesh');
-  renderTrackedScholarships();
-}
-
-function renderFinderScholarships(list) {
-  const grid = document.getElementById('scholarshipsGrid');
-  const countHeading = document.getElementById('schCountHeading');
-  if (countHeading) {
-    countHeading.innerHTML = `Available Scholarships <span class="text-primary font-bold">(${list.length})</span>`;
-  }
-  if (!grid) return;
-
-  if (!list.length) {
-    grid.innerHTML = `
-      <div class="text-center py-5" style="grid-column: 1 / -1;">
-        <i class="fa-solid fa-award text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-        <h3>No Direct Scholarship Matches Found</h3>
-        <p class="text-muted">Try adjusting your marks or annual income filter to view broader central or state schemes.</p>
-        <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20please%20help%20me%20find%20scholarship%20schemes%20for%20my%20course" target="_blank" class="btn btn-whatsapp mt-2">
-          <i class="fa-brands fa-whatsapp"></i> Ask Rahul Sir on WhatsApp
-        </a>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = list.map(renderScholarshipCardHTML).join('');
-}
-
-function renderCentralScholarships() {
-  const grid = document.getElementById('centralSchGrid');
-  if (!grid || !EDUCATION_DATA.scholarships) return;
-  const centralList = EDUCATION_DATA.scholarships.filter(s => s.type === 'Central');
-  grid.innerHTML = centralList.map(renderScholarshipCardHTML).join('');
-}
-
-function filterStateScholarships(stateName, btnEl) {
-  if (btnEl) {
-    const pills = document.querySelectorAll('#schStatePills .state-pill-btn');
-    pills.forEach(p => p.classList.remove('active'));
-    btnEl.classList.add('active');
-  }
-
-  const grid = document.getElementById('stateSchGrid');
-  if (!grid || !EDUCATION_DATA.scholarships) return;
-
-  const stateList = EDUCATION_DATA.scholarships.filter(s => {
-    if (s.type !== 'State') return false;
-    if (!stateName || stateName === 'all') return true;
-    return s.state.toLowerCase() === stateName.toLowerCase();
-  });
-
-  if (!stateList.length) {
-    grid.innerHTML = `
-      <div class="text-center py-5" style="grid-column: 1 / -1;">
-        <i class="fa-solid fa-landmark text-muted font-xl mb-2 d-block"></i>
-        <h3>State Schemes for ${stateName}</h3>
-        <p class="text-muted">Education Sathi provides verified guidance for state fee reimbursement & scholarships.</p>
-        <a href="https://wa.me/919752754404?text=Hello%20Rahul%20Sir,%20I%20want%20state%20scholarship%20details%20for%20${encodeURIComponent(stateName)}" target="_blank" class="btn btn-whatsapp mt-2">
-          <i class="fa-brands fa-whatsapp"></i> Inquire ${stateName} Scholarships
-        </a>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = stateList.map(renderScholarshipCardHTML).join('');
-}
-
-function calculateScholarshipMatches(e) {
-  if (e) e.preventDefault();
-  if (!EDUCATION_DATA.scholarships) return;
-
-  const state = document.getElementById('schState')?.value || 'All India';
-  const course = document.getElementById('schCourse')?.value || 'all';
-  const category = document.getElementById('schCategory')?.value || 'all';
-  const incomeKey = document.getElementById('schIncome')?.value || '1to2.5lakh';
-  const marks = parseFloat(document.getElementById('schMarks')?.value || '75');
-  const gender = document.getElementById('schGender')?.value || 'All';
-
-  let incomeVal = 250000;
-  if (incomeKey === 'under1lakh') incomeVal = 100000;
-  else if (incomeKey === '1to2.5lakh') incomeVal = 250000;
-  else if (incomeKey === '2.5to5lakh') incomeVal = 500000;
-  else if (incomeKey === '5to8lakh') incomeVal = 800000;
-  else if (incomeKey === 'above8lakh') incomeVal = 1500000;
-
-  const matches = EDUCATION_DATA.scholarships.filter(s => {
-    // State matching: All India schemes or matching student domicile
-    const matchState = s.state === 'All India' || state === 'All India' || s.state.toLowerCase() === state.toLowerCase();
-    
-    // Course matching
-    const matchCourse = course === 'all' || s.courseLevel.includes(course) || s.courseLevel.includes('General');
-
-    // Category matching
-    const matchCategory = category === 'all' || s.targetCategory.includes(category);
-
-    // Income limit: student's income must be <= scheme's income limit
-    const matchIncome = incomeVal <= s.incomeLimit;
-
-    // Minimum marks: student's marks must be >= scheme's minimum marks
-    const matchMarks = marks >= s.minMarks;
-
-    // Gender matching
-    const matchGender = s.gender === 'All' || gender === 'All' || s.gender === gender;
-
-    return matchState && matchCourse && matchCategory && matchIncome && matchMarks && matchGender;
-  });
-
-  renderFinderScholarships(matches);
-  showToast(`Found ${matches.length} scholarships matching your profile!`);
-}
-
-function renderScholarshipCardHTML(s) {
-  let badgeColor = 'blue';
-  if (s.type === 'State') badgeColor = 'gold';
-  else if (s.type === 'Corporate') badgeColor = 'green';
-
-  const isTracked = trackedScholarships.includes(s.id);
-  const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I want application guidance for the scholarship: "${s.name}" (${s.authority}). Benefit: ${s.amount}. Please guide me on eligibility & documents.`);
-
-  return `
-    <div class="scholarship-card glass-card">
-      <div class="sch-card-head">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-          <span class="badge-tag ${badgeColor} font-bold"><i class="fa-solid fa-award"></i> ${s.type} Scheme</span>
-          <span class="badge-tag purple"><i class="fa-solid fa-location-dot"></i> ${s.state}</span>
-        </div>
-        <h3 class="sch-title mb-1">${s.name}</h3>
-        <p class="sch-authority text-muted font-xs mb-2"><i class="fa-solid fa-building-columns"></i> ${s.authority}</p>
-      </div>
-
-      <div class="sch-amount-banner my-2 p-2 rounded" style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--emerald);">
-        <span class="font-xs text-muted d-block">Scholarship / Fee Waiver Amount:</span>
-        <strong class="text-emerald font-sm">${s.amount}</strong>
-      </div>
-
-      <p class="sch-desc font-xs text-muted mb-3">${s.description}</p>
-
-      <div class="sch-criteria-grid mb-3">
-        <div class="criteria-pill"><i class="fa-solid fa-percent text-primary"></i> Min Marks: <strong>${s.minMarks}%</strong></div>
-        <div class="criteria-pill"><i class="fa-solid fa-wallet text-gold"></i> Max Income: <strong>₹${(s.incomeLimit / 100000).toFixed(1)} Lakh/yr</strong></div>
-        <div class="criteria-pill"><i class="fa-solid fa-venus-mars text-purple"></i> Gender: <strong>${s.gender}</strong></div>
-        <div class="criteria-pill"><i class="fa-solid fa-calendar-day text-danger"></i> Deadline: <strong>${s.deadline}</strong></div>
-      </div>
-
-      <div class="sch-card-actions d-flex align-items-center gap-2 mt-auto flex-wrap">
-        <a href="${s.officialPortal}" target="_blank" class="btn btn-primary btn-sm flex-grow-1 text-center" rel="noopener">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Apply on ${s.portalName.split(' ')[0]}
-        </a>
-        <button class="btn ${isTracked ? 'btn-success' : 'btn-secondary'} btn-sm" onclick="toggleTrackScholarship('${s.id}')" title="${isTracked ? 'Remove from Tracker' : 'Bookmark & Track'}">
-          <i class="fa-solid ${isTracked ? 'fa-bookmark' : 'fa-regular fa-bookmark'}"></i> ${isTracked ? 'Tracked' : 'Track'}
-        </button>
-        <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="Consult Rahul Bhartiya">
-          <i class="fa-brands fa-whatsapp"></i> Inquire
-        </a>
-      </div>
-    </div>
-  `;
-}
-
-function toggleTrackScholarship(schId) {
-  const index = trackedScholarships.indexOf(schId);
-  if (index > -1) {
-    trackedScholarships.splice(index, 1);
-    showToast('Scholarship removed from your tracker.');
-  } else {
-    trackedScholarships.push(schId);
-    showToast('Scholarship added to "My Tracker"!');
-  }
-  localStorage.setItem('es_tracked_scholarships', JSON.stringify(trackedScholarships));
-  renderScholarships();
-}
-
-function renderTrackedScholarships() {
-  const container = document.getElementById('trackedScholarshipsList');
-  if (!container || !EDUCATION_DATA.scholarships) return;
-
-  const trackedList = EDUCATION_DATA.scholarships.filter(s => trackedScholarships.includes(s.id));
-  if (!trackedList.length) {
-    container.innerHTML = `
-      <div class="glass-card text-center py-5">
-        <i class="fa-regular fa-bookmark text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-        <h3>No Scholarships Bookmarked Yet</h3>
-        <p class="text-muted">Click the "Track" button on any scholarship card to save it here for deadlines and updates.</p>
-        <button class="btn btn-primary mt-3" onclick="switchScholarshipTab('finder')">
-          <i class="fa-solid fa-magnifying-glass"></i> Browse Scholarships
-        </button>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="scholarship-cards-grid">
-      ${trackedList.map(renderScholarshipCardHTML).join('')}
-    </div>
-  `;
-}
-
-// ==========================================================================
 // 5. AI CAREER ASSISTANT LOGIC ("Ask Education Sathi AI")
 // ==========================================================================
 async function runAiAssistantQuery(event) {
@@ -2780,6 +2562,402 @@ function filterCourses() {
   });
 }
 
+// ==========================================================================
+// HOME PAGE: ULTRA-PREMIUM COURSES SHOWCASE
+// ==========================================================================
+function renderHomeCourses(categoryFilter = 'all') {
+  const container = document.getElementById('homeCoursesGrid');
+  if (!container || !EDUCATION_DATA || !EDUCATION_DATA.categories) return;
+
+  let list = [];
+  EDUCATION_DATA.categories.forEach(cat => {
+    if (categoryFilter !== 'all' && cat.id !== categoryFilter) return;
+    cat.courses.forEach((course, idx) => {
+      // Show top 2 per category when all is selected, or all courses for a specific category
+      if (categoryFilter === 'all' && idx >= 2) return;
+      list.push({
+        ...course,
+        categoryId: cat.id,
+        categoryName: cat.name,
+        categoryIcon: cat.icon,
+        categoryColor: cat.color,
+        categoryBg: cat.bgColor,
+        demandBadge: getCourseDemandBadge(course.name, cat.id)
+      });
+    });
+  });
+
+  // Limit to top 9 featured cards when 'all' is selected for a clean 3x3 layout
+  if (categoryFilter === 'all') {
+    list = list.slice(0, 9);
+  }
+
+  container.innerHTML = list.map(c => `
+    <div class="premium-course-card" data-category="${c.categoryId}">
+      <div class="course-card-accent-bar" style="background: linear-gradient(90deg, ${c.categoryColor}, #6366f1, #ec4899);"></div>
+      
+      <div class="course-card-top">
+        <div class="course-icon-badge" style="background-color: ${c.categoryBg}; color: ${c.categoryColor};">
+          <i class="${c.categoryIcon}"></i>
+        </div>
+        <span class="course-tag-badge" style="background-color: ${c.categoryBg}; color: ${c.categoryColor};">
+          ${c.demandBadge}
+        </span>
+      </div>
+
+      <div class="course-category-micro-label">${c.categoryName}</div>
+      <h3 class="course-card-title">${c.name}</h3>
+
+      <div class="course-meta-grid">
+        <div class="course-meta-item">
+          <span class="course-meta-label"><i class="fa-solid fa-clock text-cyan"></i> DURATION</span>
+          <span class="course-meta-val">${c.duration || '3-5 Yrs'}</span>
+        </div>
+        <div class="course-meta-item">
+          <span class="course-meta-label"><i class="fa-solid fa-graduation-cap text-gold"></i> ELIGIBILITY</span>
+          <span class="course-meta-val" title="${c.eligibility}">${c.eligibility || '10+2 Merit'}</span>
+        </div>
+        <div class="course-meta-item">
+          <span class="course-meta-label"><i class="fa-solid fa-wallet text-emerald"></i> AVG FEE</span>
+          <span class="course-meta-val">${c.avgFee || 'Affordable'}</span>
+        </div>
+        <div class="course-meta-item">
+          <span class="course-meta-label"><i class="fa-solid fa-shield-heart text-purple"></i> SCHOLARSHIP</span>
+          <span class="course-meta-val text-emerald">100% MMVY Eligible</span>
+        </div>
+      </div>
+
+      <div class="course-scope-box">
+        <i class="fa-solid fa-briefcase text-purple"></i>
+        <span><strong>Career:</strong> ${c.scope || 'Specialist / Officer'}</span>
+      </div>
+
+      <div class="course-action-row">
+        <button class="btn-course-check" onclick="selectCourseAndMatch('${c.name.replace(/'/g, "\\'")}')">
+          <i class="fa-solid fa-bolt"></i> Check Cutoff &amp; Seats
+        </button>
+        <a href="https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20I%20want%20details%20and%20colleges%20for%20${encodeURIComponent(c.name)}" target="_blank" class="btn-course-wa" title="Inquire on WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getCourseDemandBadge(name, catId) {
+  if (name.includes('MBBS')) return '🔥 HIGH CUTOFF';
+  if (name.includes('BSMS')) return '🌿 SIDDHA MEDICINE';
+  if (name.includes('Pharm.D')) return '🩺 CLINICAL DOCTORATE';
+  if (name.includes('BAMS') || name.includes('BHMS')) return '🌿 100% AYUSH';
+  if (name.includes('B.Tech') || name.includes('CSE') || name.includes('AI')) return '⚡ HIGH SALARY';
+  if (name.includes('Nursing')) return '🌍 GLOBAL DEMAND';
+  if (name.includes('Pharm')) return '💊 R&D CAREER';
+  if (name.includes('MBA') || name.includes('Management')) return '💼 TOP CORPORATE';
+  if (name.includes('Law')) return '⚖️ JUDICIARY / CORP';
+  if (name.includes('BPT') || name.includes('OTT')) return '🩺 CLINICAL DEMAND';
+  return '⭐ POPULAR CHOICE';
+}
+
+function filterHomeCourses(catId, btnEl) {
+  document.querySelectorAll('.home-course-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  renderHomeCourses(catId);
+}
+
+function selectCourseAndMatch(courseName) {
+  openEntryMatcherModal();
+  const select = document.getElementById('entryCourse');
+  if (select) {
+    let matched = false;
+    for (let opt of select.options) {
+      if (courseName.toLowerCase().includes(opt.text.toLowerCase().split(' ')[0]) || opt.value.toLowerCase().includes(courseName.toLowerCase().split(' ')[0])) {
+        select.value = opt.value;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched && courseName.includes('MBBS')) select.value = 'MBBS Medical Admission';
+    else if (!matched && courseName.includes('BSMS')) select.value = 'BSMS (Siddha Medicine & Surgery)';
+    else if (!matched && courseName.includes('Pharm.D')) select.value = 'Pharm.D (Doctor of Pharmacy)';
+    else if (!matched && (courseName.includes('BAMS') || courseName.includes('BHMS') || courseName.includes('BUMS'))) select.value = 'BAMS / BHMS / BUMS (AYUSH)';
+    else if (!matched && courseName.includes('BDS')) select.value = 'BDS Dental Surgery';
+    else if (!matched && (courseName.includes('MD') || courseName.includes('MS'))) select.value = 'MD / MS Postgraduate Medical';
+    else if (!matched && (courseName.includes('Tech') || courseName.includes('Engineering'))) select.value = 'Engineering & Tech (B.Tech)';
+    else if (!matched && (courseName.includes('MBA') || courseName.includes('BBA'))) select.value = 'Management (BBA/MBA)';
+    else if (!matched && courseName.includes('Nursing')) select.value = 'B.Sc Nursing / Paramedical';
+    else if (!matched && courseName.includes('Pharm')) select.value = 'Pharmacy (B.Pharm/D.Pharm)';
+    else if (!matched && courseName.includes('Law')) select.value = 'Law (BA LLB/LLB)';
+  }
+  const nameInput = document.getElementById('entryName');
+  if (nameInput) nameInput.focus();
+}
+
+// ==========================================================================
+// HOME PAGE: ULTRA-PREMIUM STUDENT REVIEWS & AUTOMATIC SIDE SLIDER
+// ==========================================================================
+let currentReviewIndex = 0;
+let reviewSliderInterval = null;
+let reviewTouchStartX = 0;
+let reviewTouchEndX = 0;
+
+function renderHomeReviews() {
+  const track = document.getElementById('reviewsSliderTrack');
+  const dotsContainer = document.getElementById('reviewsSliderDots');
+  if (!track || !EDUCATION_DATA || !EDUCATION_DATA.reviews) return;
+
+  // Retrieve custom reviews added by users
+  let customReviews = [];
+  try {
+    const saved = localStorage.getItem('educationSathi_customReviews');
+    if (saved) customReviews = JSON.parse(saved);
+  } catch (e) {
+    console.error(e);
+  }
+
+  const allReviews = [...customReviews, ...EDUCATION_DATA.reviews];
+
+  track.innerHTML = allReviews.map((rev, idx) => `
+    <div class="review-slider-card" data-index="${idx}">
+      <div class="review-card-accent-bar"></div>
+      
+      <div class="review-card-header">
+        <span class="review-badge">${rev.badge || '⭐ VERIFIED ALLOTMENT'}</span>
+        <div class="review-stars-box">
+          <span class="review-stars">
+            ${'<i class="fa-solid fa-star"></i>'.repeat(rev.rating || 5)}
+          </span>
+          <span class="review-score-num">${(rev.rating || 5)}.0</span>
+        </div>
+      </div>
+
+      <div class="review-quote-headline">
+        <i class="fa-solid fa-quote-left quote-icon-accent"></i>
+        "${rev.highlight || 'Exceptional guidance & 100% transparent process!'}"
+      </div>
+
+      <p class="review-card-text">
+        ${rev.text}
+      </p>
+
+      <div class="review-allotment-strip">
+        <div class="rev-allotment-item">
+          <i class="fa-solid fa-building-columns text-primary"></i>
+          <span>${rev.allotment}</span>
+        </div>
+        ${rev.score ? `
+        <div class="rev-score-item">
+          <i class="fa-solid fa-award text-gold"></i>
+          <span>${rev.score}</span>
+        </div>` : ''}
+      </div>
+
+      <div class="review-card-footer">
+        <div class="review-author-avatar" style="background: ${rev.avatarBg || 'linear-gradient(135deg, #0284c7, #6366f1)'};">
+          ${rev.avatar || rev.name.charAt(0)}
+        </div>
+        <div class="review-author-info">
+          <div class="review-author-name">
+            <strong>${rev.name}</strong>
+            <i class="fa-solid fa-circle-check text-emerald" title="Verified Allotment Student"></i>
+          </div>
+          <span class="review-author-meta">${rev.course} • ${rev.city}</span>
+        </div>
+        <span class="review-date-badge">${rev.date || '2025-26 Batch'}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // Render pagination dots
+  if (dotsContainer) {
+    const visibleCount = getVisibleReviewsCount();
+    const totalDots = Math.max(1, allReviews.length - visibleCount + 1);
+    dotsContainer.innerHTML = Array.from({ length: totalDots }).map((_, idx) => `
+      <button class="slider-dot-btn ${idx === currentReviewIndex ? 'active' : ''}" onclick="goToReviewSlide(${idx})" aria-label="Go to slide ${idx + 1}"></button>
+    `).join('');
+  }
+
+  // Bind events and start auto sliding
+  initReviewsSliderEvents();
+  startReviewsAutoSlide();
+}
+
+function initReviewsSliderEvents() {
+  const wrapper = document.getElementById('reviewsSliderWrapper');
+  if (!wrapper || wrapper.dataset.sliderInit === 'true') return;
+  wrapper.dataset.sliderInit = 'true';
+
+  // Pause on mouse hover, resume on mouse leave
+  wrapper.addEventListener('mouseenter', () => {
+    stopReviewsAutoSlide();
+  });
+  wrapper.addEventListener('mouseleave', () => {
+    startReviewsAutoSlide();
+  });
+
+  // Touch swipe gestures for mobile
+  const viewport = document.getElementById('reviewsSliderViewport');
+  if (viewport) {
+    viewport.addEventListener('touchstart', (e) => {
+      reviewTouchStartX = e.touches[0].clientX;
+      stopReviewsAutoSlide();
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      reviewTouchEndX = e.changedTouches[0].clientX;
+      const diff = reviewTouchStartX - reviewTouchEndX;
+      if (diff > 45) {
+        slideReviewsNext();
+      } else if (diff < -45) {
+        slideReviewsPrev();
+      }
+      startReviewsAutoSlide();
+    }, { passive: true });
+  }
+
+  window.addEventListener('resize', () => {
+    updateReviewsSliderPosition();
+  });
+}
+
+function startReviewsAutoSlide() {
+  stopReviewsAutoSlide();
+  reviewSliderInterval = setInterval(() => {
+    slideReviewsNext();
+  }, 3600);
+}
+
+function stopReviewsAutoSlide() {
+  if (reviewSliderInterval) {
+    clearInterval(reviewSliderInterval);
+    reviewSliderInterval = null;
+  }
+}
+
+function getVisibleReviewsCount() {
+  if (window.innerWidth <= 680) return 1;
+  if (window.innerWidth <= 1040) return 2;
+  return 3;
+}
+
+function slideReviewsNext() {
+  const cards = document.querySelectorAll('.review-slider-card');
+  if (!cards.length) return;
+  const visible = getVisibleReviewsCount();
+  const maxIndex = Math.max(0, cards.length - visible);
+  
+  if (currentReviewIndex >= maxIndex) {
+    currentReviewIndex = 0;
+  } else {
+    currentReviewIndex++;
+  }
+  updateReviewsSliderPosition();
+}
+
+function slideReviewsPrev() {
+  const cards = document.querySelectorAll('.review-slider-card');
+  if (!cards.length) return;
+  const visible = getVisibleReviewsCount();
+  const maxIndex = Math.max(0, cards.length - visible);
+  
+  if (currentReviewIndex <= 0) {
+    currentReviewIndex = maxIndex;
+  } else {
+    currentReviewIndex--;
+  }
+  updateReviewsSliderPosition();
+}
+
+function goToReviewSlide(idx) {
+  const cards = document.querySelectorAll('.review-slider-card');
+  const visible = getVisibleReviewsCount();
+  const maxIndex = Math.max(0, cards.length - visible);
+  currentReviewIndex = Math.min(idx, maxIndex);
+  updateReviewsSliderPosition();
+}
+
+function updateReviewsSliderPosition() {
+  const track = document.getElementById('reviewsSliderTrack');
+  const cards = document.querySelectorAll('.review-slider-card');
+  if (!track || !cards.length) return;
+
+  const cardWidth = cards[0].getBoundingClientRect().width;
+  const gap = 24; // 1.5rem gap
+  const shiftAmount = currentReviewIndex * (cardWidth + gap);
+
+  track.style.transform = `translateX(-${shiftAmount}px)`;
+
+  // Update dots
+  const dots = document.querySelectorAll('.slider-dot-btn');
+  dots.forEach((d, idx) => {
+    if (idx === currentReviewIndex) d.classList.add('active');
+    else d.classList.remove('active');
+  });
+}
+
+// Modal Handlers
+function openAddReviewModal() {
+  const overlay = document.getElementById('addReviewModalOverlay');
+  if (overlay) overlay.classList.add('active');
+}
+
+function closeAddReviewModal() {
+  const overlay = document.getElementById('addReviewModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function handleReviewSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('revAuthorName')?.value.trim();
+  const city = document.getElementById('revCity')?.value.trim();
+  const course = document.getElementById('revCourse')?.value.trim();
+  const allotment = document.getElementById('revAllotment')?.value.trim();
+  const score = document.getElementById('revScore')?.value.trim() || '';
+  const rating = parseInt(document.getElementById('revRating')?.value || '5', 10);
+  const highlight = document.getElementById('revHighlight')?.value.trim() || 'Outstanding guidance & support!';
+  const text = document.getElementById('revText')?.value.trim();
+
+  if (!name || !text || !course) {
+    showToast('Please fill all required fields');
+    return;
+  }
+
+  const newReview = {
+    id: 'rev-user-' + Date.now(),
+    name: name,
+    avatar: name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+    avatarBg: 'linear-gradient(135deg, #0284c7, #4f46e5)',
+    course: course,
+    allotment: allotment,
+    score: score,
+    city: city,
+    rating: rating,
+    date: 'Just Added',
+    badge: '⭐ VERIFIED STUDENT',
+    highlight: highlight,
+    text: text
+  };
+
+  try {
+    let saved = [];
+    const existing = localStorage.getItem('educationSathi_customReviews');
+    if (existing) saved = JSON.parse(existing);
+    saved.unshift(newReview);
+    localStorage.setItem('educationSathi_customReviews', JSON.stringify(saved));
+  } catch (err) {
+    console.error(err);
+  }
+
+  if (EDUCATION_DATA && EDUCATION_DATA.reviews) {
+    EDUCATION_DATA.reviews.unshift(newReview);
+  }
+  renderHomeReviews();
+  closeAddReviewModal();
+  document.getElementById('userReviewForm')?.reset();
+
+  showToast('🎉 Thank you! Your review has been added to our Hall of Fame.');
+  goToReviewSlide(0);
+}
+
 function renderMedicalColleges() {
   // Same as before
 }
@@ -2795,38 +2973,154 @@ function syncScoreSlider(val) {
   if (badge) badge.innerText = `~${parseInt(val, 10) > 600 ? '20,000' : '65,000'}`;
 }
 
+// ==========================================================================
+// ENTRY POPUP & MATCHER MODAL CONTROLS
+// ==========================================================================
+function initEntryPopup() {
+  // Automatically trigger Instant Career & College Matcher popup when visiting website
+  setTimeout(() => {
+    openEntryMatcherModal();
+  }, 450);
+}
+
+function openEntryMatcherModal() {
+  const modal = document.getElementById('entryMatcherModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeEntryMatcherModal() {
+  const modal = document.getElementById('entryMatcherModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function openCounselModal() {
+  // Open the rich Instant Career & College Matcher modal
+  const entryModal = document.getElementById('entryMatcherModalOverlay');
+  if (entryModal) {
+    openEntryMatcherModal();
+  } else {
+    const o = document.getElementById('counselModalOverlay');
+    if (o) o.classList.add('active');
+  }
+}
+
+function closeCounselModal() {
+  closeEntryMatcherModal();
+  const o = document.getElementById('counselModalOverlay');
+  if (o) o.classList.remove('active');
+}
+
 async function handleLeadSubmit(event, source) {
   event.preventDefault();
   const form = event.target;
-  const name = document.getElementById('cName')?.value || document.getElementById('heroName')?.value || document.getElementById('mName')?.value || 'Student';
-  const phone = document.getElementById('cPhone')?.value || document.getElementById('heroPhone')?.value || document.getElementById('mPhone')?.value || '';
-  const course = document.getElementById('cCourse')?.value || document.getElementById('heroStream')?.value || document.getElementById('mCourse')?.value || 'MBBS';
 
-  const leadPayload = { studentName: name, phone, whatsapp: phone, targetCourse: course, source, domicileState: 'Madhya Pradesh' };
+  // Extract fields from the submitted form first, then fallback
+  const name = form.querySelector('[name="studentName"]')?.value?.trim() 
+    || form.querySelector('#entryName, #heroName, #mName, #cName')?.value?.trim() 
+    || document.getElementById('entryName')?.value?.trim()
+    || document.getElementById('heroName')?.value?.trim()
+    || document.getElementById('cName')?.value?.trim()
+    || 'Student';
 
+  const phone = form.querySelector('[name="phone"]')?.value?.trim() 
+    || form.querySelector('#entryPhone, #heroPhone, #mPhone, #cPhone')?.value?.trim() 
+    || document.getElementById('entryPhone')?.value?.trim()
+    || document.getElementById('heroPhone')?.value?.trim()
+    || document.getElementById('cPhone')?.value?.trim()
+    || '';
+
+  const course = form.querySelector('[name="targetCourse"]')?.value 
+    || form.querySelector('#entryCourse, #heroStream, #mCourse, #cCourse')?.value 
+    || document.getElementById('entryCourse')?.value
+    || document.getElementById('heroStream')?.value
+    || 'MBBS Medical Admission';
+
+  const state = form.querySelector('[name="domicileState"]')?.value 
+    || form.querySelector('#entryState, #heroState')?.value 
+    || document.getElementById('entryState')?.value
+    || document.getElementById('heroState')?.value
+    || 'Madhya Pradesh';
+
+  const score = form.querySelector('[name="neetScore"]')?.value?.trim() 
+    || form.querySelector('#entryScore, #heroScore')?.value?.trim() 
+    || document.getElementById('entryScore')?.value?.trim()
+    || document.getElementById('heroScore')?.value?.trim()
+    || '';
+
+  const category = form.querySelector('[name="category"]')?.value 
+    || form.querySelector('#entryCategory, #heroCategory')?.value 
+    || document.getElementById('entryCategory')?.value
+    || document.getElementById('heroCategory')?.value
+    || 'General / UR';
+
+  const collegePref = form.querySelector('[name="collegePref"]')?.value 
+    || form.querySelector('#entryQuota, #heroQuota')?.value 
+    || document.getElementById('entryQuota')?.value
+    || document.getElementById('heroQuota')?.value
+    || 'Govt Seats Only (Merit)';
+
+  const city = form.querySelector('[name="city"]')?.value?.trim() 
+    || form.querySelector('#entryCity, #heroCity')?.value?.trim() 
+    || document.getElementById('entryCity')?.value?.trim()
+    || document.getElementById('heroCity')?.value?.trim()
+    || '';
+
+  const leadPayload = { 
+    studentName: name, 
+    phone, 
+    whatsapp: phone, 
+    targetCourse: course, 
+    domicileState: state,
+    neetScore: parseInt(score, 10) || score || 0,
+    category,
+    budget: collegePref,
+    city,
+    query: city ? `City: ${city}` : '',
+    source: source || 'Instant Matcher',
+    createdAt: new Date().toISOString()
+  };
+
+  // 1. Post to server
   try {
     fetch(`${API_BASE_URL}/leads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(leadPayload)
-    });
+    }).catch(() => {});
   } catch (e) {}
 
+  // 2. Cache in localStorage for offline CRM/state
+  try {
+    const localLeads = JSON.parse(localStorage.getItem('es_local_leads') || '[]');
+    localLeads.unshift({ ...leadPayload, id: 'lead-' + Date.now(), status: 'New' });
+    localStorage.setItem('es_local_leads', JSON.stringify(localLeads.slice(0, 50)));
+  } catch (e) {}
+
+  closeEntryMatcherModal();
   closeCounselModal();
-  showToast(`Thank you ${name}! Connecting with Rahul Bhartiya on WhatsApp...`);
+  showToast(`🎉 Thank you ${name}! Matching with 800+ colleges... Connecting with Rahul Bhartiya on WhatsApp.`);
 
-  const waUrl = `https://wa.me/919752754404?text=Hello%20Education%20Sathi,%20My%20name%20is%20${encodeURIComponent(name)}%20(Phone:%20${phone}).%20Interested%20in%20${encodeURIComponent(course)}.`;
-  setTimeout(() => window.open(waUrl, '_blank'), 700);
+  // 3. Build rich WhatsApp message
+  let waMsg = `Hello Education Sathi (Director Rahul Bhartiya),\n`;
+  waMsg += `My name is ${name}.\n`;
+  waMsg += `📱 Mobile: ${phone}\n`;
+  waMsg += `🎯 Target Course: ${course}\n`;
+  waMsg += `📍 Domicile State: ${state}\n`;
+  if (score) waMsg += `📊 NEET / 12th Score: ${score}\n`;
+  if (category) waMsg += `🏷️ Category: ${category}\n`;
+  if (collegePref) waMsg += `🏛️ Preferred Seat: ${collegePref}\n`;
+  if (city) waMsg += `🏙️ City: ${city}\n`;
+  waMsg += `\nPlease provide my college eligibility shortlist and counselling guidance!`;
+
+  const waUrl = `https://wa.me/919752754404?text=${encodeURIComponent(waMsg)}`;
+  setTimeout(() => window.open(waUrl, '_blank'), 750);
   form.reset();
-}
-
-function openCounselModal() {
-  const o = document.getElementById('counselModalOverlay');
-  if (o) o.classList.add('active');
-}
-function closeCounselModal() {
-  const o = document.getElementById('counselModalOverlay');
-  if (o) o.classList.remove('active');
 }
 function openCollegeModal(id) {
   const col = EDUCATION_DATA.colleges.find(c => c.id === id);

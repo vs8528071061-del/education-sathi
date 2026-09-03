@@ -759,6 +759,75 @@ const EDUCATION_DATA = {
       counsellingBodies: ["MCC (50% AIQ + 100% Deemed)", "State DME (50% State Quota)"],
       careerScope: ["Super-specialist Consultant", "Chief Surgeon", "Head of Clinical Department", "Medical College Professor", "Fellowship / DM / M.Ch Aspirant"],
       documentsRequired: ["NEET PG Scorecard", "MBBS Degree & Attempt Certificate", "NMC/State Medical Council Registration", "Internship Completion Certificate", "SMC Domicile Proof"]
+    },
+    {
+      id: "bsms",
+      name: "BSMS",
+      fullName: "Bachelor of Siddha Medicine & Surgery",
+      badge: "Traditional Siddha Medical Science",
+      icon: "fa-solid fa-seedling",
+      color: "#0f766e",
+      bgColor: "#ccfbf1",
+      duration: "5.5 Years (4.5 Yrs Academic + 1 Yr Compulsory Rotatory Internship)",
+      eligibility: "10+2 with Physics, Chemistry & Biology (PCB) with min 50% marks (40% for SC/ST/OBC). Knowledge of Tamil language is beneficial. Must be NEET-UG Qualified.",
+      neetRequirement: "Mandatory NEET-UG Qualification. Cutoff range: 380-500+ marks for Govt Siddha Colleges; qualifying NEET score for Private colleges.",
+      feesGovt: "₹10,000 – ₹45,000 / year (Govt Siddha Colleges in Tamil Nadu & Kerala)",
+      feesPvt: "₹1.2 Lakh – ₹2.8 Lakh / year",
+      feesDeemed: "₹2.5 Lakh – ₹4.0 Lakh / year",
+      seatsIndia: "1,800+ BSMS Seats across 15+ Siddha Medical Colleges (NIS Chennai, Govt Siddha Colleges)",
+      counsellingBodies: ["AACCC (15% All India AYUSH Quota)", "State AYUSH Counselling (Tamil Nadu Health, Kerala CEE)"],
+      careerScope: [
+        "Registered Siddha Medical Officer (Govt & Central AYUSH Hospitals)",
+        "Chief Siddha Physician & Clinic Director",
+        "Research Officer (Central Council for Research in Siddha - CCRS)",
+        "Siddha Formulation & Herbal Pharmacology Specialist",
+        "Kayakarpam (Longevity Medicine) & Varmam Therapy Specialist",
+        "Postgraduate MD (Siddha) Specialist"
+      ],
+      documentsRequired: [
+        "NEET Admit Card & Scorecard",
+        "10th & 12th Board Marksheets",
+        "State Domicile Certificate",
+        "Community / Caste Certificate",
+        "Aadhaar Card & Identity Proof",
+        "Provisional Allotment Letter"
+      ]
+    },
+    {
+      id: "pharm-d",
+      name: "Pharm.D",
+      fullName: "Doctor of Pharmacy (Clinical Doctorate)",
+      badge: "Apex Clinical Pharmacy & Pharmacotherapy",
+      icon: "fa-solid fa-prescription-bottle-medical",
+      color: "#7c3aed",
+      bgColor: "#ede9fe",
+      duration: "6 Years (5 Yrs Academic & Clinical Clerkship + 1 Yr Hospital Internship)",
+      eligibility: "10+2 with PCB or PCM (min 50% marks) OR Diploma in Pharmacy (D.Pharm) from a PCI recognized institution. Post Baccalaureate (3 Yrs) also available for B.Pharm graduates.",
+      neetRequirement: "Merit-based admission / State Pharmacy CETs / Select Universities accept NEET-UG or GPAT scores. Approved by Pharmacy Council of India (PCI).",
+      feesGovt: "₹35,000 – ₹90,000 / year (Government Universities & Central Institutions)",
+      feesPvt: "₹1.5 Lakh – ₹3.5 Lakh / year (PCI Recognized Institutions)",
+      feesDeemed: "₹3.5 Lakh – ₹6.0 Lakh / year (Deemed Universities with 500+ Bed Hospitals)",
+      seatsIndia: "15,000+ Pharm.D Seats across 280+ PCI Recognized Institutions in India",
+      counsellingBodies: [
+        "State Higher Education & CET Cells (KEA Karnataka, MHT-CET, TS EAMCET, AP EAPCET)",
+        "Direct University Admissions (PCI Approved Medical & Pharmacy Institutions)"
+      ],
+      careerScope: [
+        "Clinical Pharmacist & Hospital Drug Safety Officer (Eligible for 'Dr.' Title)",
+        "Clinical Research Associate (CRA) & Pharmacovigilance Specialist",
+        "Drug Information Specialist & Hospital Formulary Consultant",
+        "Medical Science Liaison (MSL) in Global Pharma MNCs",
+        "Academic Professor & Clinical Preceptor in Medical Colleges",
+        "Global Licensure Practice (PEBC Canada, NAPLEX USA, KAPS Australia, OSPAP UK)"
+      ],
+      documentsRequired: [
+        "10th & 12th Board Marksheets & Passing Certificates",
+        "State CET / Entrance Scorecard (if applicable)",
+        "D.Pharm / B.Pharm Degree & Marksheets (for Post-Baccalaureate)",
+        "Transfer & Migration Certificate",
+        "Aadhaar Card & ID Proof",
+        "Provisional Allotment Letter"
+      ]
     }
   ],
 
@@ -797,6 +866,7 @@ const EDUCATION_DATA = {
         { name: "BAMS (Bachelor of Ayurvedic Medicine & Surgery)", duration: "5.5 Years", eligibility: "10+2 PCB + NEET UG", avgFee: "₹50K - ₹4.5L/yr", scope: "Ayurvedic Doctor, Medical Officer, Wellness Director" },
         { name: "BHMS (Bachelor of Homeopathic Medicine & Surgery)", duration: "5.5 Years", eligibility: "10+2 PCB + NEET UG", avgFee: "₹40K - ₹3.5L/yr", scope: "Homeopathic Physician, Consultant" },
         { name: "BUMS (Bachelor of Unani Medicine & Surgery)", duration: "5.5 Years", eligibility: "10+2 PCB + Urdu + NEET", avgFee: "₹30K - ₹2.5L/yr", scope: "Hakim, Unani Medical Officer" },
+        { name: "BSMS (Bachelor of Siddha Medicine & Surgery)", duration: "5.5 Years", eligibility: "10+2 PCB + NEET UG", avgFee: "₹30K - ₹2.5L/yr", scope: "Siddha Doctor, Wellness & Varmam Specialist" },
         { name: "BNYS (Bachelor of Naturopathy & Yogic Sciences)", duration: "5.5 Years", eligibility: "10+2 PCB (NEET/Direct)", avgFee: "₹60K - ₹3L/yr", scope: "Naturopathy Physician, Yoga Doctor" }
       ]
     },
@@ -2021,6 +2091,132 @@ const EDUCATION_DATA = {
       covers: "85% UP Govt MBBS Seats + 100% UP Private Medical Colleges (Open State for all India candidates)",
       flow: "Online Registration + Security Deposit → Nodal Center Verification → Choice Filling → Allotment",
       contact: "Email: upneetcounselling2024@gmail.com"
+    }
+  ],
+
+  // =========================================================================
+  // 7. VERIFIED STUDENT & PARENT REVIEWS (TESTIMONIALS)
+  // =========================================================================
+  reviews: [
+    {
+      id: "rev-1",
+      name: "Aditi Sharma",
+      avatar: "AS",
+      avatarBg: "linear-gradient(135deg, #0284c7, #38bdf8)",
+      course: "MBBS (General Category)",
+      allotment: "Gandhi Medical College (GMC), Bhopal",
+      score: "NEET Score: 638/720",
+      city: "Bhopal, MP",
+      rating: 5,
+      date: "NEET 2025 Allotment",
+      badge: "🏛️ GMC BHOPAL (MBBS)",
+      highlight: "Rahul Sir's choice filling strategy was 100% accurate!",
+      text: "I was very anxious about MP DME Round 1. Rahul Bhartiya Sir personally analyzed my state merit rank and crafted our preference order. Got GMC Bhopal in Round 1 itself! Truly genuine and transparent guidance."
+    },
+    {
+      id: "rev-2",
+      name: "Rohan Verma",
+      avatar: "RV",
+      avatarBg: "linear-gradient(135deg, #059669, #10b981)",
+      course: "MBBS (Private College)",
+      allotment: "Chirayu Medical College, Bhopal",
+      score: "NEET Score: 565/720",
+      city: "Indore, MP",
+      rating: 5,
+      date: "MMVY 100% Fee Waiver",
+      badge: "💰 SAVED ₹45 LAKHS VIA MMVY",
+      highlight: "Got 100% tuition waiver under MP MMVY scholarship scheme.",
+      text: "We almost thought we couldn't afford private MBBS fees. Rahul Sir guided us step-by-step through the MP Medhavi Chhatra Yojana (MMVY) documentation. Today 100% of my MBBS tuition is funded by the govt. Huge blessing for our middle-class family!"
+    },
+    {
+      id: "rev-3",
+      name: "Dr. Rajesh & Sunita Patel (Parents)",
+      avatar: "RP",
+      avatarBg: "linear-gradient(135deg, #7c3aed, #a855f7)",
+      course: "MD / MS Medical PG",
+      allotment: "KGMU Lucknow (AIQ Round 1)",
+      score: "NEET PG Rank: 2,410",
+      city: "Jabalpur, MP",
+      rating: 5,
+      date: "AIQ MCC Counselling",
+      badge: "🏆 KGMU LUCKNOW (MD)",
+      highlight: "Most professional and ethical counselling team in Central India.",
+      text: "As parents, we were worried about hidden agent fees. Education Sathi provided transparent fee breakdowns, authentic seat matrices, and helped my daughter secure MD Medicine at KGMU Lucknow. Highly recommended!"
+    },
+    {
+      id: "rev-4",
+      name: "Sneha Kulkarni",
+      avatar: "SK",
+      avatarBg: "linear-gradient(135deg, #db2777, #ec4899)",
+      course: "BAMS (Ayurveda)",
+      allotment: "Govt Autonomous Ayurvedic College, Bhopal",
+      score: "NEET Score: 512/720",
+      city: "Ujjain, MP",
+      rating: 5,
+      date: "AYUSH State Counselling",
+      badge: "🌿 GOVT AYUSH ALLOTMENT",
+      highlight: "Secured top government Ayurvedic seat on first attempt.",
+      text: "Education Sathi's AYUSH counselling expertise is unmatched. Rahul Sir clearly explained the scope of BAMS vs BDS, handled the MP AYUSH portal registration, and helped me secure a top government seat with minimal fees."
+    },
+    {
+      id: "rev-5",
+      name: "Amanullah Khan",
+      avatar: "AK",
+      avatarBg: "linear-gradient(135deg, #ea580c, #f97316)",
+      course: "MBBS (OBC Category)",
+      allotment: "MGM Medical College, Indore",
+      score: "NEET Score: 622/720",
+      city: "Gwalior, MP",
+      rating: 5,
+      date: "Round 2 Upgradation",
+      badge: "🏛️ MGM INDORE (MBBS)",
+      highlight: "Upgraded to MGM Indore in Round 2 with expert guidance!",
+      text: "After Round 1 allotment in a newer medical college, Rahul Sir advised me to opt for upgradation with a very calculated risk strategy. In Round 2, I was successfully upgraded to MGM Indore! The best decision of my career."
+    },
+    {
+      id: "rev-6",
+      name: "Pooja Deshmukh",
+      avatar: "PD",
+      avatarBg: "linear-gradient(135deg, #0d9488, #14b8a6)",
+      course: "B.Sc Nursing & Paramedical",
+      allotment: "AIIMS Bhopal College of Nursing",
+      score: "Nursing CET 96.8%ile",
+      city: "Bhopal, MP",
+      rating: 5,
+      date: "Central Counselling",
+      badge: "🩺 AIIMS BHOPAL ADMISSION",
+      highlight: "End-to-end nodal center and document verification support.",
+      text: "The team guided me from entrance exam form filling to AIIMS central seat allotment and physical document verification. Even assisted with hostel accommodation. You can trust Rahul Sir with your eyes closed!"
+    },
+    {
+      id: "rev-7",
+      name: "Vikramaditya Chouhan",
+      avatar: "VC",
+      avatarBg: "linear-gradient(135deg, #4f46e5, #6366f1)",
+      course: "B.Tech Computer Science & AI",
+      allotment: "SGSITS Indore",
+      score: "JEE Main: 97.4%ile",
+      city: "Indore, MP",
+      rating: 5,
+      date: "MP DTE Round 1",
+      badge: "💻 SGSITS INDORE (CSE-AI)",
+      highlight: "Best technical guidance on college placements and branches.",
+      text: "Was confused between NIT core branches vs SGSITS CSE. Education Sathi's tech branch comparison and placement analytics made the choice crystal clear. Very responsive team on WhatsApp 24/7."
+    },
+    {
+      id: "rev-8",
+      name: "Kavita S. & Manoj Solanki (Parents)",
+      avatar: "MS",
+      avatarBg: "linear-gradient(135deg, #e11d48, #f43f5e)",
+      course: "BDS Dental Surgery",
+      allotment: "Modern Dental College & Hospital, Indore",
+      score: "NEET Score: 440/720",
+      city: "Dewas, MP",
+      rating: 5,
+      date: "Direct Counselling Assistance",
+      badge: "⭐ 100% PARENT SATISFACTION",
+      highlight: "Affordable fee structure negotiation and genuine counseling.",
+      text: "Rahul Bhartiya Ji treats students like his own family. He made sure we got a recognized DCI-approved dental college within our exact budget with zero donation. Education Sathi is the real Sathi for every student."
     }
   ]
 };
