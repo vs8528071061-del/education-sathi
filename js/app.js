@@ -246,31 +246,44 @@ function openStateDetail(destId) {
   const isMP = dest.id === 'madhya-pradesh' || dest.code === 'MP';
   const isMH = dest.id === 'maharashtra' || dest.code === 'MH';
   const isUP = dest.id === 'uttar-pradesh' || dest.code === 'UP';
+  const isBihar = dest.id === 'bihar' || dest.code === 'BR';
   const mh200Block = document.getElementById('mh200ExplorerBlock');
   const up500Block = document.getElementById('up500ExplorerBlock');
+  const biharBlock = document.getElementById('biharExplorerBlock');
 
   if (isMP) {
     if (mp500Block) mp500Block.classList.remove('d-none');
     if (mh200Block) mh200Block.classList.add('d-none');
     if (up500Block) up500Block.classList.add('d-none');
+    if (biharBlock) biharBlock.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initMp500Explorer();
   } else if (isMH) {
     if (mp500Block) mp500Block.classList.add('d-none');
     if (mh200Block) mh200Block.classList.remove('d-none');
     if (up500Block) up500Block.classList.add('d-none');
+    if (biharBlock) biharBlock.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initMh200Explorer();
   } else if (isUP) {
     if (mp500Block) mp500Block.classList.add('d-none');
     if (mh200Block) mh200Block.classList.add('d-none');
     if (up500Block) up500Block.classList.remove('d-none');
+    if (biharBlock) biharBlock.classList.add('d-none');
     if (standardBlock) standardBlock.classList.add('d-none');
     initUp500Explorer();
+  } else if (isBihar) {
+    if (mp500Block) mp500Block.classList.add('d-none');
+    if (mh200Block) mh200Block.classList.add('d-none');
+    if (up500Block) up500Block.classList.add('d-none');
+    if (biharBlock) biharBlock.classList.remove('d-none');
+    if (standardBlock) standardBlock.classList.add('d-none');
+    initBiharExplorer();
   } else {
     if (mp500Block) mp500Block.classList.add('d-none');
     if (mh200Block) mh200Block.classList.add('d-none');
     if (up500Block) up500Block.classList.add('d-none');
+    if (biharBlock) biharBlock.classList.add('d-none');
     if (standardBlock) standardBlock.classList.remove('d-none');
 
     // Filter colleges for other states
@@ -973,6 +986,238 @@ function exportUp500CSV() {
   link.click();
   link.remove();
   showToast('Downloaded complete Uttar Pradesh Medical Colleges spreadsheet!');
+}
+
+// ==========================================================================
+// 3E. BIHAR STATE COLLEGES & UNIVERSITIES DIRECTORY CONTROLLER
+// ==========================================================================
+
+let biharActiveCategory = 'all';
+let biharCurrentPage = 1;
+const BIHAR_PAGE_SIZE = 50;
+let biharFilteredList = [];
+
+function initBiharExplorer() {
+  biharActiveCategory = 'all';
+  biharCurrentPage = 1;
+
+  const tabs = ['All', 'Mbbs', 'Bds', 'Ayush', 'Eng', 'Mgmt'];
+  tabs.forEach(t => {
+    const b = document.getElementById(`brTab${t}`);
+    if (b) {
+      if (t === 'All') b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  });
+
+  const searchInp = document.getElementById('biharSearchInput');
+  const courseSel = document.getElementById('biharCourseFilter');
+  const typeSel = document.getElementById('biharTypeFilter');
+  const citySel = document.getElementById('biharCityFilter');
+  if (searchInp) searchInp.value = '';
+  if (courseSel) courseSel.value = 'all';
+  if (typeSel) typeSel.value = 'all';
+  if (citySel) citySel.value = 'all';
+
+  filterBiharCollegesList();
+}
+
+function filterBiharCategory(cat) {
+  biharActiveCategory = cat;
+  biharCurrentPage = 1;
+
+  const tabMap = {
+    'all': 'brTabAll',
+    'MBBS Medical': 'brTabMbbs',
+    'BDS Dental': 'brTabBds',
+    'AYUSH (BAMS & BHMS)': 'brTabAyush',
+    'Engineering & Tech': 'brTabEng',
+    'Management & Law': 'brTabMgmt'
+  };
+
+  Object.keys(tabMap).forEach(k => {
+    const btn = document.getElementById(tabMap[k]);
+    if (btn) {
+      if (k === cat) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  filterBiharCollegesList();
+}
+
+function filterBiharCollegesList() {
+  if (typeof BIHAR_COLLEGES_DATA === 'undefined' || !BIHAR_COLLEGES_DATA.length) return;
+
+  const search = (document.getElementById('biharSearchInput')?.value || '').toLowerCase().trim();
+  const course = document.getElementById('biharCourseFilter')?.value || 'all';
+  const type = document.getElementById('biharTypeFilter')?.value || 'all';
+  const city = document.getElementById('biharCityFilter')?.value || 'all';
+
+  biharFilteredList = BIHAR_COLLEGES_DATA.filter(c => {
+    const matchSearch = !search || 
+      c.name.toLowerCase().includes(search) || 
+      c.city.toLowerCase().includes(search) || 
+      c.course.toLowerCase().includes(search) ||
+      (c.category && c.category.toLowerCase().includes(search)) ||
+      (c.notes && c.notes.toLowerCase().includes(search)) ||
+      String(c.rank) === search;
+
+    const matchCategory = biharActiveCategory === 'all' || c.category === biharActiveCategory;
+    const matchCourse = course === 'all' || c.course.toLowerCase().includes(course.toLowerCase());
+    const matchType = type === 'all' || c.type.toLowerCase().includes(type.toLowerCase());
+    const matchCity = city === 'all' || c.city.toLowerCase().includes(city.toLowerCase());
+
+    return matchSearch && matchCategory && matchCourse && matchType && matchCity;
+  });
+
+  renderBiharTable();
+}
+
+function changeBiharPage(direction) {
+  const totalPages = Math.ceil(biharFilteredList.length / BIHAR_PAGE_SIZE) || 1;
+  const newPage = biharCurrentPage + direction;
+  if (newPage >= 1 && newPage <= totalPages) {
+    biharCurrentPage = newPage;
+    renderBiharTable();
+    const tableEl = document.getElementById('biharMasterTable');
+    if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderBiharTable() {
+  const tbody = document.getElementById('biharMasterTbody');
+  const countEl = document.getElementById('biharDisplayCount');
+  const pageNumEl = document.getElementById('brCurrentPageNum');
+  const totalPagesEl = document.getElementById('brTotalPagesNum');
+  const prevBtn = document.getElementById('btnBrPrev');
+  const nextBtn = document.getElementById('btnBrNext');
+  const paginationWrap = document.getElementById('biharPaginationWrap');
+
+  if (countEl) countEl.innerText = biharFilteredList.length;
+
+  const totalPages = Math.ceil(biharFilteredList.length / BIHAR_PAGE_SIZE) || 1;
+  if (biharCurrentPage > totalPages) biharCurrentPage = totalPages;
+
+  if (pageNumEl) pageNumEl.innerText = biharCurrentPage;
+  if (totalPagesEl) totalPagesEl.innerText = totalPages;
+
+  if (prevBtn) prevBtn.disabled = biharCurrentPage <= 1;
+  if (nextBtn) nextBtn.disabled = biharCurrentPage >= totalPages;
+
+  if (paginationWrap) {
+    if (totalPages <= 1) paginationWrap.classList.add('d-none');
+    else paginationWrap.classList.remove('d-none');
+  }
+
+  if (!tbody) return;
+
+  if (!biharFilteredList.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center text-muted p-5">
+          <i class="fa-solid fa-graduation-cap font-xl mb-2 d-block"></i>
+          <h4>No Bihar institutions found matching your filter criteria.</h4>
+          <p class="font-sm text-muted">Try changing the category, course filter, or search keywords.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const start = (biharCurrentPage - 1) * BIHAR_PAGE_SIZE;
+  const pageItems = biharFilteredList.slice(start, start + BIHAR_PAGE_SIZE);
+
+  tbody.innerHTML = pageItems.map(c => {
+    let typeClass = 'blue';
+    if (c.type.includes('Central')) typeClass = 'purple';
+    else if (c.type.includes('Private')) typeClass = 'gold';
+    else if (c.type.includes('Autonomous')) typeClass = 'green';
+
+    let courseBadgeClass = 'blue';
+    if (c.course.includes('BDS')) courseBadgeClass = 'gold';
+    else if (c.course.includes('BAMS') || c.course.includes('BHMS')) courseBadgeClass = 'green';
+    else if (c.course.includes('B.Tech') || c.course.includes('Engineering')) courseBadgeClass = 'purple';
+    else if (c.course.includes('MBA') || c.course.includes('Law')) courseBadgeClass = 'red';
+
+    const waText = encodeURIComponent(`Hello Rahul Sir (Education Sathi), I want admission & counselling guidance for Bihar Rank #${c.rank}: ${c.name} (${c.city}, Bihar). Course: ${c.course}. Please guide me on BCECEB UGMAC/UGEAC cutoff, seats & fees.`);
+
+    return `
+      <tr>
+        <td>
+          <div class="d-flex flex-column align-items-center">
+            <span class="badge-tag gold font-bold" style="font-size: 0.85rem; padding: 0.35rem 0.6rem;">#${c.rank}</span>
+            <span class="text-xs text-muted mt-1">${c.category.split(' ')[0]}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-md text-main">${c.name}</strong>
+            <span class="text-xs text-muted"><i class="fa-solid fa-circle-check text-emerald"></i> ${c.notes || 'Verified Bihar Institution'}</span>
+          </div>
+        </td>
+        <td>
+          <span class="font-bold"><i class="fa-solid fa-location-dot text-danger"></i> ${c.city}</span>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="badge-tag ${courseBadgeClass}">${c.course}</span>
+            <span class="text-xs text-muted mt-1">${c.duration}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="badge-tag ${typeClass}">${c.type}</span>
+            <strong class="text-xs text-primary mt-1">${c.seats || 'Standard Seats'}</strong>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <span class="font-xs font-bold text-primary">${c.entrance}</span>
+            <span class="text-xs text-muted">${c.eligibility}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column">
+            <strong class="font-xs text-emerald">${c.estFee}</strong>
+            <span class="text-xs text-muted mt-1 font-bold">${c.counsellingBody}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-1">
+            <a href="https://wa.me/919752754404?text=${waText}" target="_blank" class="btn btn-whatsapp btn-sm" title="WhatsApp Rahul Bhartiya">
+              <i class="fa-brands fa-whatsapp"></i> Inquire
+            </a>
+            <a href="tel:9752754404" class="btn btn-outline-primary btn-sm" title="Helpline Call">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportBiharCSV() {
+  if (typeof BIHAR_COLLEGES_DATA === 'undefined' || !BIHAR_COLLEGES_DATA.length) {
+    showToast('Bihar Colleges data is loading...');
+    return;
+  }
+
+  let csv = "Rank,College Name,Location/City,State,Course,Duration,Management Type,Seats 2026,Eligibility,Entrance Exam,Estimated Fee,Counselling Authority,Highlights\n";
+  BIHAR_COLLEGES_DATA.forEach(c => {
+    csv += `"${c.rank}","${c.name.replace(/"/g, '""')}","${c.city}","Bihar","${c.course}","${c.duration}","${c.type}","${c.seats || ''}","${c.eligibility}","${c.entrance}","${c.estFee}","${c.counsellingBody}","${(c.notes || '').replace(/"/g, '""')}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Bihar_Top_Colleges_Directory_Education_Sathi.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  showToast('Downloaded complete Bihar Colleges spreadsheet!');
 }
 
 // ==========================================================================

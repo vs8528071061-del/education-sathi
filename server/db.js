@@ -28,6 +28,7 @@ const ADMISSIONS_FILE = path.join(DATA_DIR, 'admissions.json');
 const MP_500_FILE = path.join(DATA_DIR, 'mp_colleges_500.json');
 const MH_200_FILE = path.join(DATA_DIR, 'maharashtra_colleges_200.json');
 const UP_500_FILE = path.join(DATA_DIR, 'up_colleges_500.json');
+const BIHAR_COLLEGES_FILE = path.join(DATA_DIR, 'bihar_colleges.json');
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -608,7 +609,10 @@ const DB = {
   getMhTop200Colleges: () => readJson(MH_200_FILE, []),
 
   // Top 500 Uttar Pradesh Medical & Healthcare Colleges Master Dataset
-  getUpTop500Colleges: () => readJson(UP_500_FILE, [])
+  getUpTop500Colleges: () => readJson(UP_500_FILE, []),
+
+  // Bihar State Medical & Professional Colleges Master Dataset
+  getBiharColleges: () => readJson(BIHAR_COLLEGES_FILE, [])
 };
 
 initAndSeed();
